@@ -5,7 +5,9 @@ import { theme as originOptions } from "@configs/theme";
 
 const getTheme = (themeOptions: ThemeOptions) => {
     return createTheme({
-        cssVariables: true,
+        cssVariables: {
+            cssVarPrefix: ""
+        },
         ...originOptions,
         ...themeOptions
     });
@@ -15,21 +17,21 @@ const themes = {
     super: getTheme({
         palette: {
             primary: {
-                main: "#ff5252"
+                main: "#0074FF"
             }
         }
     }),
     admin: getTheme({
         palette: {
             primary: {
-                main: "#ff5252"
+                main: "#FFC821"
             }
         }
     }),
     user: getTheme({
         palette: {
             primary: {
-                main: "#ff5252"
+                main: "#30B689"
             }
         }
     })

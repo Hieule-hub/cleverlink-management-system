@@ -3,17 +3,7 @@
 import { useState } from "react";
 
 import { EmailOutlined, LockOutlined, Visibility, VisibilityOff } from "@mui/icons-material";
-import {
-    Box,
-    CircularProgress,
-    CssBaseline,
-    Grid2 as Grid,
-    IconButton,
-    InputAdornment,
-    TextField,
-    Typography,
-    useMediaQuery
-} from "@mui/material";
+import { CircularProgress, IconButton, InputAdornment } from "@mui/material";
 import { useTranslations } from "next-intl";
 
 import { ContactInformationDialog } from "@components/ContactInformationDialog";
@@ -28,7 +18,6 @@ interface FormValues {
 }
 
 const Login = () => {
-    const isFlexWindows = useMediaQuery("(max-width:1024px)");
     const t = useTranslations("LoginPage");
     const [isLoading, setIsLoading] = useState(false);
     // visible password
@@ -152,8 +141,9 @@ const Login = () => {
                         color='primary'
                         type='submit'
                         disabled={isLoading}
+                        loading={isLoading}
                     >
-                        {isLoading ? <CircularProgress size={24} /> : t("Login")}
+                        {t("Login")}
                     </Button>
 
                     <button className='btn-contact-link' onClick={handleClickOpenDialog}>
@@ -162,14 +152,7 @@ const Login = () => {
                 </div>
             </form>
 
-            <div
-                style={
-                    {
-                        // display: !isFlexWindows ? "none" : "block"
-                    }
-                }
-                className='right-part'
-            />
+            <div className='right-part' />
             <ContactInformationDialog openDialog={openDialog} closeDialog={handleCloseDialog} />
         </StyledLoginPage>
     );

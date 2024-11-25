@@ -21,7 +21,7 @@ const StyledButton = styled("button")`
     transition: all 0.3s ease;
     padding: 4px 15px;
     font-size: 0.875rem;
-    height: 40px;
+    height: var(--button-height);
     box-sizing: border-box;
     font-weight: 600;
     display: inline-flex;
@@ -37,6 +37,10 @@ const StyledButton = styled("button")`
     overflow: hidden;
     text-overflow: ellipsis;
 
+    &:hover {
+        opacity: 0.9;
+    }
+
     &.default {
         background-color: white;
         color: #000;
@@ -45,38 +49,29 @@ const StyledButton = styled("button")`
 
     &.primary {
         border: none;
-        background-color: #0074ff;
+        background-color: var(--palette-primary-main);
 
-        &:hover {
-            background-color: #448aff;
-        }
+        /* &:hover {
+            background-color: var(--palette-primary-dark);
+        } */
     }
 
     &.danger {
         border: none;
-        background-color: #ff1744;
+        background-color: var(--palette-danger-main);
 
-        &:hover {
-            background-color: #ff5252;
-        }
+        /* &:hover {
+            background-color: var(--palette-danger-light);
+        } */
     }
 
     &.success {
         border: none;
-        background-color: #4caf50;
+        background-color: var(--palette-success-main);
 
-        &:hover {
-            background-color: #388e3c;
-        }
-    }
-
-    &.brown {
-        border: none;
-        background-color: #666666;
-
-        &:hover {
-            background-color: #333333;
-        }
+        /* &:hover {
+            background-color: var(--palette-success-light);
+        } */
     }
 
     .icon {
@@ -91,12 +86,6 @@ const StyledButton = styled("button")`
     .spin {
         box-sizing: border-box;
         line-height: 1;
-    }
-
-    &.loading {
-        .spin {
-            animation: spin 0.8s linear infinite;
-        }
     }
 
     opacity: ${(props: ButtonProps) => (props.disabled ? 0.6 : 1)};
@@ -115,7 +104,7 @@ export const Button = ({
     return (
         <StyledButton disabled={loading || props.disabled} className={className + " " + color} {...props}>
             {loading && (
-                <span className='spin'>
+                <span className='spin spinning'>
                     <SpinIcon color='inherit' sx={{ fontSize: "14px" }} />
                 </span>
             )}

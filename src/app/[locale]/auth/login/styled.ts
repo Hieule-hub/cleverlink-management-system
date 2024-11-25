@@ -60,10 +60,9 @@ export const StyledLoginPage = styled("div")`
         outline: none;
         position: relative;
         display: inline-flex;
-        gap: var(--ant-margin-xs);
         align-items: center;
         justify-content: center;
-        font-weight: var(--ant-button-font-weight);
+        font-weight: var(--button-font-weight);
         white-space: nowrap;
         text-align: center;
         background-image: none;

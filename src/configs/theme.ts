@@ -40,12 +40,6 @@ export const theme: ThemeOptions = {
         },
         fontFamily: ["var(--font-poppins)", "Roboto", '"Helvetica Neue"', "Arial", "sans-serif"].join(",")
     },
-    palette: {
-        // mode: 'dark',
-        // primary: {
-        // 	main: '#ff5252',
-        // },
-    },
     components: {
         // MuiDrawer: {
         // 	styleOverrides: {
