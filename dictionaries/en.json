@@ -1,0 +1,19 @@
+{
+    "HomePage": {
+        "title": "Hello world!",
+        "about": "Go to the about page"
+    },
+
+    "LoginPage": {
+        "Clever link": "Clever link",
+        "Login": "Login",
+        "title": "Login",
+        "email": "Email",
+        "password": "Password",
+        "login": "Login",
+        "forgotPassword": "Forgot password?",
+        "Thank you for your visit": "Thank you for your visit",
+        "Email address": "Email address",
+        "Enter username": "Enter username"
+    }
+}
