@@ -1,32 +1,27 @@
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import Link from "@mui/material/Link";
-import NextLink from "next/link";
-import ProTip from "@components/ProTip";
-import Copyright from "@components/Copyright";
+import PageLayout from "@components/Layout/PageLayout";
+import { useTranslations } from "next-intl";
 
-export default function Home() {
+// import { setRequestLocale } from "next-intl/server";
+
+type Props = {
+    params: { locale: string };
+};
+
+export default function IndexPage({ params }: Props) {
+    const t = useTranslations("IndexPage");
+
+    // const { locale } = await params;
+
+    // Enable static rendering
+    // setRequestLocale(locale);
+
     return (
-        <Container maxWidth='lg'>
-            <Box
-                sx={{
-                    my: 4,
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center"
-                }}
-            >
-                <Typography variant='h4' component='h1' sx={{ mb: 2 }}>
-                    Material UI - Next.js App Router example in TypeScript
-                </Typography>
-                <Link href='/about' color='secondary' component={NextLink}>
-                    Go to the about page
-                </Link>
-                <ProTip />
-                <Copyright />
-            </Box>
-        </Container>
+        <PageLayout title={t("title")}>
+            <p className='max-w-[590px]'>
+                {t.rich("description", {
+                    code: (chunks) => <code className='font-mono text-white'>{chunks}</code>
+                })}
+            </p>
+        </PageLayout>
     );
 }

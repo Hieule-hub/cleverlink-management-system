@@ -41,6 +41,31 @@ export const theme: ThemeOptions = {
         fontFamily: ["var(--font-poppins)", "Roboto", '"Helvetica Neue"', "Arial", "sans-serif"].join(",")
     },
     components: {
+        MuiTextField: {
+            styleOverrides: {
+                root: {
+                    "& .MuiOutlinedInput-root": {
+                        height: "var(--input-height)",
+                        borderRadius: "var(--input-border-radius)",
+                        fieldset: {
+                            transition: "all 0.2s ease-in-out"
+                        },
+                        input: {
+                            color: "var(--input-color)",
+                            fontSize: "var(--input-font-size)"
+                        },
+
+                        "&:hover fieldset": {
+                            borderColor: "var(--input-border-active-color)"
+                        },
+                        "&.Mui-focused fieldset": {
+                            borderColor: "var(--input-border-active-color)",
+                            borderWidth: 1
+                        }
+                    }
+                }
+            }
+        }
         // MuiDrawer: {
         // 	styleOverrides: {
         // 		paper: {

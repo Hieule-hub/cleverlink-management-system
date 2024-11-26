@@ -7,6 +7,7 @@ import { SpinIcon } from "../Icon";
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     color?: "default" | "primary" | "danger" | "success" | "brown";
     loading?: boolean;
+    height?: string;
     fullWidth?: boolean;
     startIcon?: React.ReactNode;
     endIcon?: React.ReactNode;
@@ -21,7 +22,7 @@ const StyledButton = styled("button")`
     transition: all 0.3s ease;
     padding: 4px 15px;
     font-size: 0.875rem;
-    height: var(--button-height);
+    height: ${(props: ButtonProps) => (props.height === undefined ? "var(--button-height)" : props.height)};
     box-sizing: border-box;
     font-weight: 600;
     display: inline-flex;

@@ -1,7 +1,7 @@
-import { create } from "zustand";
-
-import { createTheme, Theme, ThemeOptions } from "@mui/material/styles";
 import { theme as originOptions } from "@configs/theme";
+import { Theme, ThemeOptions, createTheme } from "@mui/material/styles";
+import { RoleCode, UserInfo } from "User";
+import { create } from "zustand";
 
 const getTheme = (themeOptions: ThemeOptions) => {
     return createTheme({
@@ -13,40 +13,52 @@ const getTheme = (themeOptions: ThemeOptions) => {
     });
 };
 
-const themes = {
-    super: getTheme({
+type Themes = {
+    [key in RoleCode]: Theme;
+};
+
+const themes: Themes = {
+    CIP: getTheme({
         palette: {
             primary: {
                 main: "#0074FF"
             }
         }
     }),
-    admin: getTheme({
+    BU: getTheme({
         palette: {
             primary: {
                 main: "#FFC821"
             }
         }
     }),
-    user: getTheme({
+    GU: getTheme({
         palette: {
             primary: {
                 main: "#30B689"
             }
         }
+    }),
+    TU: getTheme({
+        palette: {
+            primary: {
+                main: "#FF6C00"
+            }
+        }
     })
 };
 
-type UserRole = keyof typeof themes;
-
 interface AppStore {
-    role: UserRole;
+    role: RoleCode;
     theme: Theme;
-    setRole: (role: UserRole) => void;
+    userInfo?: UserInfo;
+    setUserInfo: (info: UserInfo) => void;
+    setRole: (role: RoleCode) => void;
 }
 
 export const useAppStore = create<AppStore>((set) => ({
-    role: "super",
-    theme: themes.super,
+    role: "CIP",
+    theme: themes.CIP,
+    setUserInfo: (userInfo) => set((state) => ({ ...state, userInfo })),
     setRole: (role) => set((state) => ({ ...state, role, theme: themes[role] }))
 }));

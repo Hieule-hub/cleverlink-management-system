@@ -1,4 +1,10 @@
-import { styled } from "@mui/material";
+import { TextField as TextFieldMui, styled } from "@mui/material";
+
+export const TextField = styled(TextFieldMui)`
+    .MuiInputBase-root {
+        height: 56px;
+    }
+`;
 
 export const StyledLoginPage = styled("div")`
     display: flex;
@@ -13,7 +19,7 @@ export const StyledLoginPage = styled("div")`
     }
 
     .right-part {
-        background: url("/assets/images/login_bg.png") no-repeat center center;
+        background-image: url("/assets/images/login_bg.png");
         background-size: cover;
         width: 100%;
         flex: 1;
@@ -51,27 +57,30 @@ export const StyledLoginPage = styled("div")`
     }
 
     .login-logo {
-        background: url("/assets/images/clever_link_logo.png") no-repeat center center;
+        background-image: url("/assets/images/clever_link_logo.png");
+        background-size: contain;
         height: 36px;
         width: 175px;
     }
 
-    .btn-contact-link {
+    .btn-link {
         outline: none;
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: var(--button-font-weight);
-        white-space: nowrap;
         text-align: center;
         background-image: none;
         background: transparent;
-        border: var(--ant-line-width) var(--ant-line-type) transparent;
         cursor: pointer;
-        transition: all var(--ant-motion-duration-mid) var(--ant-motion-ease-in-out);
-        user-select: none;
-        touch-action: manipulation;
-        color: var(--ant-color-text);
+        border: none;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px;
+        letter-spacing: -0.5px;
+        text-decoration-line: underline;
+        text-decoration-style: solid;
+        margin: auto;
+        transition: color 0.3s ease;
+
+        &:hover {
+            color: var(--palette-info-main);
+        }
     }
 `;

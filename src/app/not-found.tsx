@@ -1,13 +1,15 @@
-"use client";
+import BaseLayout from "@components/Layout/BaseLayout";
+import NotFoundPage from "@components/Layout/NotFoundPage";
+import { routing } from "@libs/i18n/routing";
 
-import Link from "next/link";
+// This page renders when a route like `/unknown.txt` is requested.
+// In this case, the layout at `app/[locale]/layout.tsx` receives
+// an invalid value as the `[locale]` param and calls `notFound()`.
 
-export default function NotFound() {
+export default function GlobalNotFound() {
     return (
-        <div>
-            <h2>Not Found</h2>
-            <p>Could not find requested resource</p>
-            <Link href='/'>Return Home</Link>
-        </div>
+        <BaseLayout locale={routing.defaultLocale}>
+            <NotFoundPage />
+        </BaseLayout>
     );
 }

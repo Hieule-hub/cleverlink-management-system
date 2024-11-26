@@ -8,7 +8,7 @@ interface ContactInformationDialogProps {
 }
 
 export const ContactInformationDialog = ({ openDialog, closeDialog }: ContactInformationDialogProps) => {
-    const t = useTranslations("HomePage");
+    const t = useTranslations();
     const ContactComponent = ({ icon, text }: { icon: JSX.Element; text: string }) => {
         return (
             <Box

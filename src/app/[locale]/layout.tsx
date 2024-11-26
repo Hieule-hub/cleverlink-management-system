@@ -1,36 +1,31 @@
-import type { Metadata } from "next";
+import { ReactNode } from "react";
 
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
-import { ThemeProvider } from "@providers/ThemeProvider";
-import { InternationalProvider } from "@providers/InternationalProvider";
-
-import "@styles/globals.css";
-import { Poppins } from "next/font/google";
-
-import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
+
+import BaseLayout from "@components/Layout/BaseLayout";
 import { routing } from "@libs/i18n/routing";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
-const poppins = Poppins({
-    subsets: ["latin"],
-    weight: ["100", "200", "300", "400", "500", "600", "700", "800"],
-    display: "swap",
-    adjustFontFallback: false,
-    variable: "--font-poppins"
-});
-
-export const metadata: Metadata = {
-    title: "Clever-link Management System",
-    description: "Clever-link Management System"
+type Props = {
+    children: ReactNode;
+    params: { locale: string };
 };
 
-export default async function RootLayout({
-    children,
-    params
-}: Readonly<{
-    children: React.ReactNode;
-    params: { locale: string };
-}>) {
+export function generateStaticParams() {
+    return routing.locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({ params }: Omit<Props, "children">) {
+    const { locale } = await params;
+
+    const t = await getTranslations({ locale, namespace: "LocaleLayout" });
+
+    return {
+        title: t("title")
+    };
+}
+
+export default async function LocaleLayout({ children, params }: Props) {
     const { locale } = await params;
 
     // Ensure that the incoming `locale` is valid
@@ -38,19 +33,8 @@ export default async function RootLayout({
         notFound();
     }
 
-    // Providing all messages to the client
-    // side is the easiest way to get started
-    const messages = await getMessages();
+    // Enable static rendering
+    setRequestLocale(locale);
 
-    return (
-        <html lang={locale}>
-            <body className={poppins.variable}>
-                <InternationalProvider locale={locale} message={messages}>
-                    <AppRouterCacheProvider>
-                        <ThemeProvider>{children}</ThemeProvider>
-                    </AppRouterCacheProvider>
-                </InternationalProvider>
-            </body>
-        </html>
-    );
+    return <BaseLayout locale={locale}>{children}</BaseLayout>;
 }

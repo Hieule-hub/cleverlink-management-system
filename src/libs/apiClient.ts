@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { toast } from "@store/toastStore";
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
@@ -7,12 +8,13 @@ interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
 
 // DEBUG
 const isDebug = process.env.NODE_ENV !== "production";
-const baseUrl = process.env.API_URL;
+const baseUrl = "/api";
+const secretKey = "clever-link";
 
 const apiClient = axios.create({
     baseURL: baseUrl,
     timeout: 5000,
-    headers: { "Content-Type": "application/json" }
+    headers: { "Content-Type": "application/json", secret: secretKey }
 });
 
 let isRefreshing = false; // Flag to keep track of the token refresh status
@@ -52,19 +54,30 @@ apiClient.interceptors.request.use(
 
 // Add a response interceptor
 apiClient.interceptors.response.use(
-    function (response) {
+    async function (response) {
         // Do something with the response data
         if (isDebug) {
             // can output log here
             // console.log('Response:', response);
         }
 
-        return response;
+        if (response.data?.err === 1) {
+            toast.error({
+                title: "API Error",
+                description: response.data.msg?.message || "Unknown error"
+            });
+        }
+
+        return response.data;
     },
     async function (error: AxiosError) {
         // Handle the response error
         if (isDebug) {
             // console.log('Error:', error);
+            toast.error({
+                title: "API Error",
+                description: error.message
+            });
         }
 
         const originalRequest = error.config as CustomAxiosRequestConfig;
