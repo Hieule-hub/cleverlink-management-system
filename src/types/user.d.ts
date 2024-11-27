@@ -20,7 +20,7 @@ declare module "User" {
     interface UserInfo {
         _id: string;
         userId: string;
-        roleId: string;
+        roleId: Role;
         name: string;
         status: string;
         __v: number;

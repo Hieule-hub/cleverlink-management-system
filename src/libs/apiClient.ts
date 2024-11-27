@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { toast } from "@store/toastStore";
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
+import Cookies from "js-cookie";
 
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
     _retry?: boolean;
@@ -40,7 +41,7 @@ apiClient.interceptors.request.use(
         }
 
         // Do something before the request is sent
-        const token = localStorage.getItem("accessToken"); // Retrieve auth token from localStorage
+        const token = Cookies.get("access-token"); // Retrieve auth token from localStorage
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
@@ -89,7 +90,7 @@ apiClient.interceptors.response.use(
                 isRefreshing = true;
 
                 try {
-                    const refreshToken = localStorage.getItem("refreshToken");
+                    const refreshToken = Cookies.get("refresh-token");
                     if (!refreshToken) {
                         throw new Error("No refresh token available");
                     }

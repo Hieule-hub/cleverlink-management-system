@@ -9,6 +9,7 @@ import { IconButton, InputAdornment } from "@mui/material";
 import userService from "@services/user";
 import { useAppStore } from "@store/appStore";
 import { UserLoginReq } from "User";
+import Cookies from "js-cookie";
 import { useTranslations } from "next-intl";
 import { Controller, useForm } from "react-hook-form";
 
@@ -40,18 +41,23 @@ const Login = () => {
 
                     if (!response.err) {
                         // login success
+                        const { data } = response;
+
                         setUserInfo({
-                            _id: response.data._id,
-                            userId: response.data.userId,
-                            roleId: response.data.roleId.code,
-                            name: response.data.name,
-                            status: response.data.status,
-                            __v: response.data.__v,
-                            createdAt: response.data.createdAt,
-                            updatedAt: response.data.updatedAt
+                            _id: data._id,
+                            userId: data.userId,
+                            roleId: data.roleId,
+                            name: data.name,
+                            status: data.status,
+                            __v: data.__v,
+                            createdAt: data.createdAt,
+                            updatedAt: data.updatedAt
                         });
 
-                        setRole(response.data.roleId.code);
+                        Cookies.set("access-token", data.access, { expires: 0.01 }); // Lưu trong vài giờ
+                        Cookies.set("refresh-token", data.refresh, { expires: 7 }); // Lưu trong 7 ngày
+
+                        // setRole(data.roleId.code);
                     }
                 } catch (error) {
                     console.log("🚀 ~ handleSubmit ~ error:", error);

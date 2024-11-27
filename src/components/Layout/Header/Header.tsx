@@ -1,7 +1,7 @@
 import { LanguageButton } from "@components/Button/LanguageButton";
 import { DateTimeGroup } from "@components/DateTimeGroup";
 import { Profile } from "@components/Profile";
-import { Button, Toolbar, Typography as TypographyMUI, useMediaQuery } from "@mui/material";
+import { Toolbar, Typography as TypographyMUI, useMediaQuery } from "@mui/material";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import { Theme, styled } from "@mui/material/styles";
 import { useTranslations } from "next-intl";
@@ -50,7 +50,7 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 export const Header = ({ isMenuCollapse }: CProps) => {
-    const t = useTranslations();
+    const t = useTranslations("App");
     const matches = useMediaQuery((theme: Theme) => theme.breakpoints.up("md"));
 
     return (
@@ -67,7 +67,7 @@ export const Header = ({ isMenuCollapse }: CProps) => {
                     height: "4.5rem"
                 }}
             >
-                <Typography noWrap>CleverLink</Typography>
+                <Typography noWrap>{t("logo-text")}</Typography>
 
                 <DateTimeGroup
                     sx={{

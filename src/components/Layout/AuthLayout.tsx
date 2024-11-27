@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 
 import { redirect, useSelectedLayoutSegment } from "next/navigation";
 
@@ -11,10 +11,16 @@ type AuthLayoutProps = {
 };
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
-    const { userInfo } = useAppStore();
+    const { isFetching, userInfo, fetUserInfo } = useAppStore();
     const selectedLayoutSegment = useSelectedLayoutSegment();
     console.log("🚀 ~ AuthLayout ~ selectedLayoutSegment:", selectedLayoutSegment);
     console.log("🚀 ~ AuthLayout ~ userInfo:", userInfo);
+
+    useEffect(() => {
+        if (!userInfo) fetUserInfo();
+    }, [userInfo, selectedLayoutSegment]);
+
+    if (isFetching) return <div>Loading...</div>;
 
     if (userInfo) {
         if (selectedLayoutSegment === "login") redirect("/dashboard");

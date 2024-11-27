@@ -32,68 +32,43 @@ export const routeConfig: RouteConfig[] = [
     {
         path: "/company",
         key: "company",
-        label: "Company Management",
+        label: "Company",
         private: false,
         icon: MonitorOutlined
     },
     {
         path: "/scene",
         key: "scene",
-        label: "Scene Management",
+        label: "Scene",
         private: false,
         icon: FilePresentRounded
     },
     {
         path: "/user",
         key: "user",
-        label: "User Management",
+        label: "User",
         private: false,
         icon: AiIcon
     },
     {
         path: "/device",
         key: "device",
-        label: "Device Management",
+        label: "Device",
         private: false,
         icon: SmartToy
     },
     {
         path: "/camera",
         key: "camera",
-        label: "Camera Management",
+        label: "Camera",
         private: false,
         icon: Cloud
     },
     {
         path: "/event",
         key: "event",
-        label: "Event Management",
+        label: "Event",
         private: false,
         icon: Settings
     }
-
-    // {
-    // 	path: '/fullscreen',
-    // 	key: 'fullscreen',
-    // 	label: 'Fullscreen',
-    // 	private: false,
-    // 	icon: Fullscreen,
-    // },
-    // {
-    // 	path: '/output/snapshot-quality',
-    // 	key: 'output-snapshot-quality',
-    // 	label: 'Snapshot-quality',
-    // 	private: false,
-    // 	icon: ScreenshotMonitor,
-    // },
-    // {
-    //     path: "/network/ip-settings",
-    // label: '',
-    //     private:false
-    // },
-    // {
-    //     path: "/network/ip-filter",
-    // label: '',
-    //     private:false
-    // },
 ];
