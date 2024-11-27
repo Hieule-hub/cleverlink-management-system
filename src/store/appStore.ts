@@ -1,7 +1,7 @@
 import { theme as originOptions } from "@configs/theme";
+import { RoleCode, UserInfo } from "@interfaces/user";
 import { Theme, ThemeOptions, createTheme } from "@mui/material/styles";
 import userService from "@services/user";
-import { RoleCode, UserInfo } from "User";
 import { create } from "zustand";
 
 const getTheme = (themeOptions: ThemeOptions) => {
