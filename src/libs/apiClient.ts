@@ -43,7 +43,7 @@ apiClient.interceptors.request.use(
         // Do something before the request is sent
         const token = Cookies.get("access-token"); // Retrieve auth token from localStorage
         if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+            config.headers.token = token;
         }
         return config;
     },

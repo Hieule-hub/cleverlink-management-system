@@ -7,4 +7,10 @@ declare module "common" {
             message: string;
         };
     }
+
+    interface Pagination {
+        currentPage: number;
+        totalPages: number;
+        totalItems: number;
+    }
 }
