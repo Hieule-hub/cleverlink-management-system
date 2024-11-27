@@ -11,22 +11,20 @@ type AuthLayoutProps = {
 };
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
-    const { isFetching, userInfo, fetUserInfo } = useAppStore();
-    const selectedLayoutSegment = useSelectedLayoutSegment();
-    console.log("🚀 ~ AuthLayout ~ selectedLayoutSegment:", selectedLayoutSegment);
-    console.log("🚀 ~ AuthLayout ~ userInfo:", userInfo);
+    // const { isFetching, userInfo, fetUserInfo } = useAppStore();
+    // const selectedLayoutSegment = useSelectedLayoutSegment();
 
-    useEffect(() => {
-        if (!userInfo) fetUserInfo();
-    }, [userInfo, selectedLayoutSegment]);
+    // useEffect(() => {
+    //     if (!userInfo) fetUserInfo();
+    // }, [userInfo, selectedLayoutSegment]);
 
-    if (isFetching) return <div>Loading...</div>;
+    // if (isFetching) return <div>Loading...</div>;
 
-    if (userInfo) {
-        if (selectedLayoutSegment === "login") redirect("/dashboard");
-    } else {
-        if (selectedLayoutSegment !== "login") redirect("/login");
-    }
+    // if (userInfo) {
+    //     if (selectedLayoutSegment === "login") redirect("/dashboard");
+    // } else {
+    //     if (selectedLayoutSegment !== "login") redirect("/login");
+    // }
 
     return children;
 }

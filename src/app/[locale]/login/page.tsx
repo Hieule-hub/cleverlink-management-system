@@ -4,11 +4,11 @@ import { useState } from "react";
 
 import { Button } from "@components/Button";
 import { ContactInformationDialog } from "@components/ContactInformationDialog";
+import { UserLoginReq } from "@interfaces/user";
 import { EmailOutlined, LockOutlined, Visibility, VisibilityOff } from "@mui/icons-material";
 import { IconButton, InputAdornment } from "@mui/material";
 import userService from "@services/user";
 import { useAppStore } from "@store/appStore";
-import { UserLoginReq } from "User";
 import Cookies from "js-cookie";
 import { useTranslations } from "next-intl";
 import { Controller, useForm } from "react-hook-form";
@@ -54,8 +54,8 @@ const Login = () => {
                             updatedAt: data.updatedAt
                         });
 
-                        Cookies.set("access-token", data.access, { expires: 0.01 }); // Lưu trong vài giờ
-                        Cookies.set("refresh-token", data.refresh, { expires: 7 }); // Lưu trong 7 ngày
+                        Cookies.set("access-token", data.access, { expires: 4 });
+                        Cookies.set("refresh-token", data.refresh, { expires: 7 });
 
                         // setRole(data.roleId.code);
                     }

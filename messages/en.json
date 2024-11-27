@@ -2,6 +2,22 @@
     "App": {
         "logo-text": "AI CLEVER-LINK Integrated Management System"
     },
+
+    "Common": {
+        "Add new user": "Add new user",
+        "Add": "Add",
+        "Delete": "Delete",
+        "Edit": "Edit",
+        "Search": "Search",
+        "Previous": "Previous",
+        "Next": "Next",
+        "selected": "selected"
+    },
+
+    "UserPage": {
+        "Add new user": "Add new user"
+    },
+
     "Error": {
         "description": "<p>We've unfortunately encountered an error.</p><p>You can try to <retry>reload the page</retry> you were visiting.</p>",
         "title": "Something went wrong!"

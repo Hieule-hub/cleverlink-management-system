@@ -36,77 +36,6 @@ interface TableProps {
     data: DataType[];
 }
 
-// const columns: readonly Column[] = [
-//     {
-//         id: "time",
-//         label: "Log title time",
-//         align: "left",
-//         minWidth: 170
-//     },
-//     {
-//         id: "channelId",
-//         label: "Log event title channel",
-//         align: "center"
-//         // minWidth: 100,
-//     },
-//     {
-//         id: "aiName",
-//         label: "Function type",
-//         align: "center"
-//         // minWidth: 170,
-//     },
-//     // {
-//     // 	id: 'eventName',
-//     // 	label: 'Log event title event name',
-//     // 	align: 'center',
-//     // 	// minWidth: 170,
-//     // },
-//     // {
-//     // 	id: 'count',
-//     // 	label: 'Log event title event count',
-//     // 	align: 'center',
-//     // 	// minWidth: 170,
-//     // },
-//     {
-//         id: "action",
-//         label: "Log event title actions",
-//         align: "center"
-//         // minWidth: 170,
-//     },
-//     {
-//         id: "res",
-//         label: "Log event title result",
-//         align: "center",
-//         minWidth: 80,
-//         render: (value?: string) => {
-//             const success = value === "<OK>";
-
-//             return success ? (
-//                 <Box
-//                     borderRadius={"16px"}
-//                     padding={0.5}
-//                     bgcolor={"#ECFDF3"}
-//                     display={"flex"}
-//                     alignItems={"center"}
-//                     justifyContent={"center"}
-//                 >
-//                     <Box width={6} height={6} borderRadius={"100px"} bgcolor={"#12B76A"} mx={0.5} />
-//                     <Typography
-//                         sx={{
-//                             fontSize: "14px",
-//                             fontWeight: 500
-//                         }}
-//                     >
-//                         {success ? t("Success") : t("Failed")}
-//                     </Typography>
-//                 </Box>
-//             ) : (
-//                 "-"
-//             );
-//         }
-//     }
-// ];
-
 export const Table = ({ columns, data }: TableProps) => {
     if (columns.length === 0) {
         return "";
@@ -150,7 +79,11 @@ export const Table = ({ columns, data }: TableProps) => {
                             })}
                         </TableRow>
                     ))}
-                    {data.length === 0 && <TableRow>-</TableRow>}
+                    {data.length === 0 && (
+                        <TableRow>
+                            <StyledTableCell colSpan={columns.length} align='center' />
+                        </TableRow>
+                    )}
                 </TableBody>
             </TableMui>
         </TableContainer>
