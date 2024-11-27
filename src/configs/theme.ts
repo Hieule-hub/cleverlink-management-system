@@ -52,7 +52,8 @@ export const theme: ThemeOptions = {
                         },
                         input: {
                             color: "var(--input-color)",
-                            fontSize: "var(--input-font-size)"
+                            fontSize: "var(--input-font-size)",
+                            padding: "var(--input-padding)"
                         },
 
                         "&:hover fieldset": {
