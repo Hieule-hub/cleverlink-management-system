@@ -7,7 +7,7 @@ import { useSelectedLayoutSegment } from "next/navigation";
 import { Link } from "@libs/i18n/routing";
 import clsx from "clsx";
 
-export default function NavigationLink({ href, ...rest }: ComponentProps<typeof Link>) {
+export const NavigationLink = ({ href, ...rest }: ComponentProps<typeof Link>) => {
     const selectedLayoutSegment = useSelectedLayoutSegment();
     const pathname = selectedLayoutSegment ? `/${selectedLayoutSegment}` : "/";
     const isActive = pathname === href;
@@ -23,4 +23,4 @@ export default function NavigationLink({ href, ...rest }: ComponentProps<typeof 
             {...rest}
         />
     );
-}
+};

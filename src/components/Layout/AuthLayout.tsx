@@ -2,7 +2,7 @@
 
 import { ReactNode } from "react";
 
-import { redirect } from "next/navigation";
+import { redirect, useSelectedLayoutSegment } from "next/navigation";
 
 import { useAppStore } from "@store/appStore";
 
@@ -12,10 +12,14 @@ type AuthLayoutProps = {
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
     const { userInfo } = useAppStore();
+    const selectedLayoutSegment = useSelectedLayoutSegment();
+    console.log("🚀 ~ AuthLayout ~ selectedLayoutSegment:", selectedLayoutSegment);
     console.log("🚀 ~ AuthLayout ~ userInfo:", userInfo);
 
     if (userInfo) {
-        redirect("/");
+        if (selectedLayoutSegment === "login") redirect("/dashboard");
+    } else {
+        if (selectedLayoutSegment !== "login") redirect("/login");
     }
 
     return children;

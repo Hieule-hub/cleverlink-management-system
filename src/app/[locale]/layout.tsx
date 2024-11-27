@@ -8,15 +8,17 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 type Props = {
     children: ReactNode;
-    params: { locale: string };
+    params: Promise<{ locale: string }>;
 };
 
 export function generateStaticParams() {
     return routing.locales.map((locale) => ({ locale }));
 }
 
-export async function generateMetadata({ params }: Omit<Props, "children">) {
-    const { locale } = await params;
+export async function generateMetadata(props: Omit<Props, "children">) {
+    const params = await props.params;
+
+    const { locale } = params;
 
     const t = await getTranslations({ locale, namespace: "LocaleLayout" });
 
@@ -25,8 +27,12 @@ export async function generateMetadata({ params }: Omit<Props, "children">) {
     };
 }
 
-export default async function LocaleLayout({ children, params }: Props) {
-    const { locale } = await params;
+export default async function LocaleLayout(props: Props) {
+    const params = await props.params;
+
+    const { locale } = params;
+
+    const { children } = props;
 
     // Ensure that the incoming `locale` is valid
     if (!routing.locales.includes(locale as any)) {

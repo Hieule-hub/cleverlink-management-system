@@ -1,5 +1,5 @@
 import BaseLayout from "@components/Layout/BaseLayout";
-import NotFoundPage from "@components/Layout/NotFoundPage";
+import NotFoundPage from "@components/NotFoundPage";
 import { routing } from "@libs/i18n/routing";
 
 // This page renders when a route like `/unknown.txt` is requested.

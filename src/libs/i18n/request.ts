@@ -6,7 +6,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     // This typically corresponds to the `[locale]` segment
     let locale = await requestLocale;
 
-    // Ensure that a valid locale is used
+    // Ensure that the incoming `locale` is valid
     if (!locale || !routing.locales.includes(locale as any)) {
         locale = routing.defaultLocale;
     }
@@ -16,9 +16,8 @@ export default getRequestConfig(async ({ requestLocale }) => {
         messages: (
             await (locale === "en"
                 ? // When using Turbopack, this will enable HMR for `en`
-                  import("../../../dictionaries/en.json")
-                : import(`../../../dictionaries/${locale}.json`))
-        ).default,
-        timezone: "UTC"
+                  import("../../../messages/en.json")
+                : import(`../../../messages/${locale}.json`))
+        ).default
     };
 });

@@ -12,7 +12,7 @@ type Props = {
     title: ReactNode;
 };
 
-export default function PageLayout({ children, title }: Props) {
+export default function MainLayout({ children, title }: Props) {
     const [isMenuCollapse, setIsMenuCollapse] = useState(true);
 
     const handleResize = () => {

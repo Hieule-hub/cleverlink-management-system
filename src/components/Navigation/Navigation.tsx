@@ -1,9 +1,9 @@
 import { useTranslations } from "next-intl";
 
 import { LanguageButton } from "../Button/LanguageButton";
-import NavigationLink from "./NavigationLink";
+import { NavigationLink } from "./NavigationLink";
 
-export default function Navigation() {
+export const Navigation = () => {
     const t = useTranslations("Navigation");
 
     return (
@@ -17,4 +17,4 @@ export default function Navigation() {
             </nav>
         </div>
     );
-}
+};

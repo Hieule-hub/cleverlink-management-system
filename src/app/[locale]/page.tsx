@@ -1,27 +1,34 @@
-import PageLayout from "@components/Layout/PageLayout";
-import { useTranslations } from "next-intl";
+import { use } from "react";
 
-// import { setRequestLocale } from "next-intl/server";
+import { redirect } from "next/navigation";
+
+import MainLayout from "@components/Layout/MainLayout";
+import { useTranslations } from "next-intl";
+import { setRequestLocale } from "next-intl/server";
 
 type Props = {
-    params: { locale: string };
+    params: Promise<{ locale: string }>;
 };
 
-export default function IndexPage({ params }: Props) {
-    const t = useTranslations("IndexPage");
+export default function IndexPage(props: Props) {
+    redirect("/dashboard");
 
-    // const { locale } = await params;
+    const params = use(props.params);
+
+    const { locale } = params;
 
     // Enable static rendering
-    // setRequestLocale(locale);
+    setRequestLocale(locale);
+
+    const t = useTranslations("IndexPage");
 
     return (
-        <PageLayout title={t("title")}>
+        <MainLayout title={t("title")}>
             <p className='max-w-[590px]'>
                 {t.rich("description", {
-                    code: (chunks) => <code className='font-mono text-white'>{chunks}</code>
+                    code: (chunks) => <code>{chunks}</code>
                 })}
             </p>
-        </PageLayout>
+        </MainLayout>
     );
 }

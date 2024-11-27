@@ -4,14 +4,15 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
-import { InternationalProvider } from "@providers/InternationalProvider";
 import { ThemeProvider } from "@providers/ThemeProvider";
+import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
+
+import { IntErrorProvider } from "@/providers/IntErrorProvider";
 
 import "@styles/globals.css";
 
-import Navigation from "./Navigation";
-import ProtectedLayout from "./ProtectedLayout";
+import AuthLayout from "./AuthLayout";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -42,11 +43,13 @@ export default async function BaseLayout({ children, locale }: Readonly<LayoutPr
     return (
         <html lang={locale}>
             <body className={poppins.variable}>
-                <InternationalProvider locale={locale} message={messages}>
+                <IntErrorProvider locale={locale} messages={messages}>
                     <AppRouterCacheProvider>
-                        <ThemeProvider>{children}</ThemeProvider>
+                        <ThemeProvider>
+                            <AuthLayout>{children}</AuthLayout>
+                        </ThemeProvider>
                     </AppRouterCacheProvider>
-                </InternationalProvider>
+                </IntErrorProvider>
             </body>
         </html>
     );

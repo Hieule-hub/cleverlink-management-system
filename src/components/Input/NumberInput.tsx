@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
+import { colorsFormControl } from "@configs/theme";
 import { KeyboardArrowDownOutlined, KeyboardArrowUpOutlined } from "@mui/icons-material";
 import { InputBase, InputProps, styled } from "@mui/material";
-import { colorsFormControl } from "@configs/theme";
 
 const StyledNumberInput = styled(InputBase)<InputProps>`
     &:hover {
