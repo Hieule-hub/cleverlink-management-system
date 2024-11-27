@@ -46,7 +46,8 @@ export default function MainLayout({ children, title }: Props) {
                 sx={{
                     flexGrow: 1,
                     height: "100%",
-                    minHeight: "100vh"
+                    minHeight: "100vh",
+                    backgroundColor: "#F1F3F6"
                 }}
             >
                 <DrawerHeader />
@@ -56,7 +57,6 @@ export default function MainLayout({ children, title }: Props) {
                         my: 3
                     }}
                 >
-                    <Breadcrumbs />
                     {children}
                 </Container>
             </Box>
