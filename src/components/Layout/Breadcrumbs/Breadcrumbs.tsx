@@ -3,10 +3,10 @@ import React from "react";
 import { routeConfig } from "@configs/routeConfig";
 import { Link } from "@libs/i18n/routing";
 import { ArrowForwardIosOutlined, HomeOutlined } from "@mui/icons-material";
-import { Breadcrumbs as MUIBreadcrumbs, Typography } from "@mui/material";
+import { BreadcrumbsProps, Breadcrumbs as MUIBreadcrumbs, Typography } from "@mui/material";
 import { useTranslations } from "next-intl";
 
-export const Breadcrumbs = () => {
+export const Breadcrumbs = (props: BreadcrumbsProps) => {
     const t = useTranslations();
     const pathnames = location.pathname.split("/").filter((x) => x);
 
@@ -39,9 +39,13 @@ export const Breadcrumbs = () => {
     }, {});
 
     return (
-        <MUIBreadcrumbs separator={<ArrowForwardIosOutlined sx={{ fontSize: 16 }} />} aria-label='breadcrumb'>
+        <MUIBreadcrumbs
+            separator={<ArrowForwardIosOutlined sx={{ fontSize: 16 }} />}
+            aria-label='breadcrumb'
+            {...props}
+        >
             <Link href='/' style={{ display: "flex", alignItems: "center" }}>
-                <HomeOutlined sx={{ fontSize: 24 }} />
+                <HomeOutlined color='inherit' sx={{ fontSize: 24 }} />
             </Link>
             {pathnames.splice(0, 1).map((value, index) => {
                 const last = index === pathnames.length - 1;
