@@ -1,9 +1,13 @@
-import { GetUserListReq, GetUserListRes, UserInfo, UserLoginReq, UserLoginRes } from "@interfaces/user";
+import { DeleteUsersReq, GetUserListReq, GetUserListRes, UserInfo, UserLoginReq, UserLoginRes } from "@interfaces/user";
 import apiClient from "@libs/apiClient";
 import { DataResponse } from "common";
 
 const userLogin = async (data: UserLoginReq) => {
     return apiClient.post<UserLoginReq, UserLoginRes>("/user/login", data);
+};
+
+const userLogout = async () => {
+    return apiClient.post<unknown, unknown>("/user/logout");
 };
 
 const getUserInfo = async () => {
@@ -16,6 +20,12 @@ const getUserList = async (params: GetUserListReq) => {
     });
 };
 
-const userService = { userLogin, getUserInfo, getUserList };
+const deleteUsers = async (params: DeleteUsersReq) => {
+    return apiClient.delete<unknown, DataResponse<unknown>>(`/user/deletes`, {
+        data: params
+    });
+};
+
+const userService = { userLogin, getUserInfo, getUserList, userLogout, deleteUsers };
 
 export default userService;

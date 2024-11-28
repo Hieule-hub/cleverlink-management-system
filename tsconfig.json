@@ -27,6 +27,7 @@
             "@utils/*": ["./src/utils/*"],
             "@libs/*": ["./src/libs/*"],
             "@services/*": ["./src/services/*"],
+            "@modules/*": ["./src/modules/*"],
             "@interfaces/*": ["./src/interfaces/*"]
         },
         "strict": false

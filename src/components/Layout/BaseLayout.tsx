@@ -3,16 +3,14 @@ import { ReactNode } from "react";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 
+import Auth from "@components/AuthUser";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
+import { AppStoreProvider } from "@providers/AppStoreProvider";
+import { IntErrorProvider } from "@providers/IntErrorProvider";
 import { ThemeProvider } from "@providers/ThemeProvider";
-import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
-
-import { IntErrorProvider } from "@/providers/IntErrorProvider";
+import { getMessages, getTimeZone } from "next-intl/server";
 
 import "@styles/globals.css";
-
-import AuthLayout from "./AuthLayout";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -39,15 +37,18 @@ export default async function BaseLayout({ children, locale }: Readonly<LayoutPr
     // Providing all messages to the client
     // side is the easiest way to get started
     const messages = await getMessages();
+    const timeZone = await getTimeZone();
 
     return (
         <html lang={locale}>
             <body className={poppins.variable}>
-                <IntErrorProvider locale={locale} messages={messages}>
+                <IntErrorProvider timeZone={timeZone} locale={locale} messages={messages}>
                     <AppRouterCacheProvider>
-                        <ThemeProvider>
-                            <AuthLayout>{children}</AuthLayout>
-                        </ThemeProvider>
+                        <AppStoreProvider>
+                            <Auth>
+                                <ThemeProvider>{children}</ThemeProvider>
+                            </Auth>
+                        </AppStoreProvider>
                     </AppRouterCacheProvider>
                 </IntErrorProvider>
             </body>

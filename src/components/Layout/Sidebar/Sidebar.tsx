@@ -94,7 +94,7 @@ const Drawer = styled(MuiDrawer, {
 const DrawerContent = styled("div")`
     display: flex;
     flex-direction: column;
-    background-color: #0e1250;
+    background-color: var(--palette-primary-dark);
     height: 100vh;
 `;
 

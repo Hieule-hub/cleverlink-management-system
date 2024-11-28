@@ -29,7 +29,7 @@ const AppBar = styled(MuiAppBar, {
     marginLeft: "4rem",
     width: `calc(100% - 4rem)`,
     background: "white",
-    zIndex: theme.zIndex.drawer + 1,
+    // zIndex: theme.zIndex.drawer,
     transition: theme.transitions.create(["width", "margin"], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen

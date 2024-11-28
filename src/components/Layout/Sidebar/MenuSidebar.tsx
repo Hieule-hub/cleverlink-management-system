@@ -26,9 +26,9 @@ const SubMenu = styled(RcSubMenu)`
     &.rc-menu-submenu-active,
     &.rc-menu-submenu-open,
     :hover {
-        background: #5a61f1;
+        background: var(--palette-primary-main);
         .active-icon {
-            background-color: #5a61f1;
+            background-color: var(--palette-primary-main);
         }
 
         .icon {
@@ -38,9 +38,9 @@ const SubMenu = styled(RcSubMenu)`
 
     &.rc-menu-item-active,
     &.rc-menu-submenu-active > .rc-menu-submenu-title {
-        background-color: #5a61f1;
+        background-color: var(--palette-primary-main);
         .active-icon {
-            background-color: #5a61f1;
+            background-color: var(--palette-primary-main);
         }
 
         .icon {
@@ -58,14 +58,26 @@ const MenuItem = styled(RcMenuItem)`
 
     &.rc-menu-item-selected,
     :hover {
-        background: #5a61f1;
+        background: var(--palette-primary-main);
+
         .active-icon {
-            background-color: #5a61f1;
+            background-color: var(--palette-primary-main);
         }
 
         .icon {
             color: #fff;
         }
+    }
+
+    position: relative;
+    &::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background-color: rgba(255, 255, 255, 0.05);
     }
 `;
 
@@ -86,8 +98,7 @@ export const MenuItemContent = styled("div")`
         align-items: center;
         height: 100%;
         width: 4rem;
-        background-color: #040849;
-        border-bottom: 2px solid #0e1250;
+        background-color: var(--palette-primary-dark);
     }
 `;
 
@@ -97,8 +108,8 @@ const MenuItemLabel = styled("span")`
 `;
 
 export const MenuItemIcon = styled("div")`
-    color: #646582;
-    background-color: #1d215b;
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
     border-radius: 4px;
     height: 2rem;
     width: 2rem;
@@ -113,7 +124,7 @@ export const MenuItemIcon = styled("div")`
     }
 
     :hover {
-        background-color: #5a61f1;
+        background-color: var(--palette-primary-main);
         color: #fff;
     }
 `;

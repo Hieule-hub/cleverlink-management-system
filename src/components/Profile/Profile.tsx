@@ -1,20 +1,26 @@
 import React, { useCallback } from "react";
 
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 
-import { Dropdown } from "@components/Dropdown";
+import { Dropdown, IDropdownOption } from "@components/Dropdown";
 import { PowerSettingsNew, SettingsOutlined } from "@mui/icons-material";
 import { Avatar, IconButton } from "@mui/material";
+import userService from "@services/user";
 import { triggerToastDev } from "@utils/index";
+import Cookies from "js-cookie";
 
 export const Profile = () => {
-    const router = useRouter();
-
     const handleLogout = useCallback(async () => {
-        // await logout();
-    }, [router]);
+        await userService.userLogout();
 
-    const handleSelectItem = (item: any) => {
+        //clear token
+        localStorage.removeItem("access-token");
+        Cookies.remove("refresh-token");
+
+        redirect("/login");
+    }, []);
+
+    const handleSelectItem = (item: IDropdownOption) => {
         switch (item.key) {
             case "logout":
                 handleLogout();
@@ -25,7 +31,7 @@ export const Profile = () => {
         }
     };
 
-    const items = [
+    const items: IDropdownOption[] = [
         {
             key: "User-Management",
             label: "User Management",
@@ -40,7 +46,7 @@ export const Profile = () => {
 
     return (
         <React.Fragment>
-            <Dropdown menu={items} onClick={handleSelectItem}>
+            <Dropdown menu={items} onSelectItem={handleSelectItem}>
                 <IconButton sx={{ padding: 0 }}>
                     <Avatar
                         alt='avatar'

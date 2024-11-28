@@ -7,10 +7,12 @@ import { AbstractIntlMessages, IntlError, NextIntlClientProvider } from "next-in
 export const IntErrorProvider = ({
     children,
     locale,
+    timeZone,
     messages
 }: {
     children: ReactNode;
     locale: string;
+    timeZone: string;
     messages: AbstractIntlMessages;
 }) => {
     const onError = (error: IntlError) => {
@@ -18,7 +20,7 @@ export const IntErrorProvider = ({
         console.error(error);
     };
     return (
-        <NextIntlClientProvider locale={locale} messages={messages} onError={onError}>
+        <NextIntlClientProvider timeZone={timeZone} locale={locale} messages={messages} onError={onError}>
             {children}
         </NextIntlClientProvider>
     );

@@ -18,7 +18,6 @@ const StyledButton = styled("button")`
     border: none;
     border-radius: 0.5rem;
     padding: 0.5rem 1rem;
-    cursor: pointer;
     color: white;
     transition: all 0.3s ease;
     padding: 4px 15px;
@@ -91,7 +90,9 @@ const StyledButton = styled("button")`
         line-height: 1;
     }
 
-    opacity: ${(props: ButtonProps) => (props.disabled ? 0.6 : 1)};
+    opacity: ${(props: ButtonProps) => (props.disabled ? 0.6 : 1)} !important;
+    pointer-events: ${(props: ButtonProps) => (props.disabled ? "" : "auto")} !important;
+    cursor: ${(props: ButtonProps) => (props.disabled ? "not-allowed" : "pointer")} !important;
     width: ${(props: ButtonProps) => (props.fullWidth ? "100%" : "auto")};
 `;
 

@@ -11,10 +11,12 @@
         "Search": "Search",
         "Previous": "Previous",
         "Next": "Next",
-        "selected": "selected"
+        "selected": "selected",
+        "Filter": "Filter"
     },
 
     "UserPage": {
+        "title": "User Management",
         "Add new user": "Add new user"
     },
 

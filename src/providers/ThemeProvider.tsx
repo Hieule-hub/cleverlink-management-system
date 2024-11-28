@@ -4,10 +4,10 @@ import { ReactNode } from "react";
 
 import { Toast } from "@components/Toast";
 import { CssBaseline, ThemeProvider as ThemeProviderMui } from "@mui/material";
-import { useAppStore } from "@store/appStore";
+import { useAppStore } from "@providers/AppStoreProvider";
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-    const { theme } = useAppStore();
+    const { theme } = useAppStore((state) => state);
 
     return (
         <ThemeProviderMui theme={theme}>

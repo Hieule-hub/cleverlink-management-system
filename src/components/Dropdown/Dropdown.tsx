@@ -16,7 +16,7 @@ export type IDropdownOption = {
 export type IDropdownProps = {
     menu: IDropdownOption[];
     menuProps?: Partial<MenuProps>;
-    onClick?: (i: IDropdownOption) => void;
+    onSelectItem?: (i: IDropdownOption) => void;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 const MenuItem = styled(MuiMenuItem)`
@@ -48,7 +48,7 @@ const MenuItem = styled(MuiMenuItem)`
     }
 `;
 
-export const Dropdown = ({ menu, children, onClick, menuProps, ...props }: IDropdownProps) => {
+export const Dropdown = ({ menu, children, onSelectItem, menuProps, ...props }: IDropdownProps) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
 
@@ -67,8 +67,8 @@ export const Dropdown = ({ menu, children, onClick, menuProps, ...props }: IDrop
     };
 
     const handleSelectItem = (item: IDropdownOption) => {
-        if (onClick) {
-            onClick(item);
+        if (onSelectItem) {
+            onSelectItem(item);
         }
         handleClose();
     };

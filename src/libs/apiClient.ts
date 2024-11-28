@@ -41,7 +41,7 @@ apiClient.interceptors.request.use(
         }
 
         // Do something before the request is sent
-        const token = Cookies.get("access-token"); // Retrieve auth token from localStorage
+        const token = localStorage.getItem("access-token"); // Retrieve auth token from localStorage
         if (token) {
             config.headers.token = token;
         }
@@ -101,9 +101,11 @@ apiClient.interceptors.response.use(
                     });
 
                     const newAccessToken = response.data.accessToken;
+                    const newRefreshToken = response.data.refreshToken;
 
                     // Update the token in local storage
-                    localStorage.setItem("accessToken", newAccessToken);
+                    localStorage.setItem("access-token", newAccessToken);
+                    Cookies.set("refresh-token", newRefreshToken);
 
                     // Process the failed requests
                     processQueue(null, newAccessToken);

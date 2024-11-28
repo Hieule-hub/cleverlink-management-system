@@ -1,13 +1,11 @@
+"use client";
+
 import MainLayout from "@components/Layout/MainLayout";
+import withProtectedRoute from "@components/withProtectedRoute";
 import { useTranslations } from "next-intl";
 
-export default function DashboardPage() {
+const Page = () => {
     const t = useTranslations("IndexPage");
-
-    // const { locale } = await params;
-
-    // Enable static rendering
-    // setRequestLocale(locale);
 
     return (
         <MainLayout title={t("title")}>
@@ -18,4 +16,6 @@ export default function DashboardPage() {
             </p>
         </MainLayout>
     );
-}
+};
+
+export default withProtectedRoute(Page);

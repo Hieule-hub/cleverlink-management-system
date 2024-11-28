@@ -1,5 +1,7 @@
 import { DataResponse, Pagination } from "common";
 
+import { Scene } from "./scene";
+
 export interface UserLoginReq {
     userId: string;
     password: string;
@@ -24,12 +26,17 @@ export type GetUserListReq = Partial<{
     name: string;
     sortField: string;
     sortOrder: string;
+    filters: string;
 }>;
 
 export type GetUserListRes = DataResponse<{
     paging: Pagination;
     users: UserInfo[];
 }>;
+
+export type DeleteUsersReq = {
+    ids: string[];
+};
 
 export interface UserInfo {
     _id: string;
@@ -40,6 +47,7 @@ export interface UserInfo {
     __v: number;
     createdAt: string;
     updatedAt: string;
+    scene?: Scene;
 }
 
 export interface Role {
