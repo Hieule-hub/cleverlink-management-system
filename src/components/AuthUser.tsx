@@ -4,6 +4,8 @@ import { type ReactNode, useEffect } from "react";
 
 import { useAppStore } from "@/providers/AppStoreProvider";
 
+import { Loading } from "./Layout/Loading";
+
 const Auth = ({ children }: { children: ReactNode }) => {
     const { isFetching, fetUserInfo } = useAppStore((state) => state);
 
@@ -12,7 +14,7 @@ const Auth = ({ children }: { children: ReactNode }) => {
     }, []);
 
     if (isFetching) {
-        return <div>Loading...</div>;
+        return <Loading />;
     }
 
     return children;

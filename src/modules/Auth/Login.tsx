@@ -11,9 +11,12 @@ import { useAppStore } from "@providers/AppStoreProvider";
 import userService from "@services/user";
 import Cookies from "js-cookie";
 import { useTranslations } from "next-intl";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
-import { StyledLoginPage, TextField } from "./styled";
+import { ControllerInput } from "@/components/Controller";
+import { Label } from "@/components/Label";
+
+import { StyledLoginPage } from "./styled";
 
 export const LoginPage = () => {
     const t = useTranslations("LoginPage");
@@ -87,62 +90,63 @@ export const LoginPage = () => {
                     <span className='login-des'>{t("Thank you for your visit")}.</span>
 
                     <div className='field'>
-                        <label htmlFor='userId'>{t("Email address")}</label>
-                        <Controller
+                        <Label htmlFor='userId' label={t("Email address")} />
+                        <ControllerInput
+                            keyName='userId'
                             control={control}
-                            name='userId'
-                            render={({ field }) => (
-                                <TextField
-                                    {...field}
-                                    id='userId'
-                                    placeholder={t("Enter username")}
-                                    slotProps={{
-                                        input: {
-                                            startAdornment: (
-                                                <InputAdornment position='start'>
-                                                    <EmailOutlined sx={{ fontSize: 20 }} />
-                                                </InputAdornment>
-                                            )
-                                        }
-                                    }}
-                                />
-                            )}
+                            placeholder={t("Enter username")}
+                            inputProps={{
+                                sx: {
+                                    ".MuiInputBase-root": {
+                                        height: "56px"
+                                    }
+                                },
+                                slotProps: {
+                                    input: {
+                                        startAdornment: (
+                                            <InputAdornment position='start'>
+                                                <EmailOutlined sx={{ fontSize: 20 }} />
+                                            </InputAdornment>
+                                        )
+                                    }
+                                }
+                            }}
                         />
                     </div>
 
                     <div className='field'>
-                        <label htmlFor='password'> {t("Password")}</label>
-                        <Controller
+                        <Label htmlFor='password' label={t("Password")} />
+                        <ControllerInput
+                            keyName='password'
                             control={control}
-                            name='password'
-                            render={({ field }) => (
-                                <TextField
-                                    {...field}
-                                    id='password'
-                                    placeholder={t("Enter password")}
-                                    type={showPassword ? "text" : "password"}
-                                    slotProps={{
-                                        input: {
-                                            startAdornment: (
-                                                <InputAdornment position='start'>
-                                                    <LockOutlined sx={{ fontSize: 20 }} />
-                                                </InputAdornment>
-                                            ),
-                                            endAdornment: (
-                                                <InputAdornment position='end'>
-                                                    <IconButton onClick={handleShowPassword}>
-                                                        {showPassword ? (
-                                                            <Visibility sx={{ fontSize: 20 }} />
-                                                        ) : (
-                                                            <VisibilityOff sx={{ fontSize: 20 }} />
-                                                        )}
-                                                    </IconButton>
-                                                </InputAdornment>
-                                            )
-                                        }
-                                    }}
-                                />
-                            )}
+                            placeholder={t("Enter password")}
+                            inputProps={{
+                                sx: {
+                                    ".MuiInputBase-root": {
+                                        height: "56px"
+                                    }
+                                },
+                                slotProps: {
+                                    input: {
+                                        startAdornment: (
+                                            <InputAdornment position='start'>
+                                                <LockOutlined sx={{ fontSize: 20 }} />
+                                            </InputAdornment>
+                                        ),
+                                        endAdornment: (
+                                            <InputAdornment position='end'>
+                                                <IconButton onClick={handleShowPassword}>
+                                                    {showPassword ? (
+                                                        <Visibility sx={{ fontSize: 20 }} />
+                                                    ) : (
+                                                        <VisibilityOff sx={{ fontSize: 20 }} />
+                                                    )}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        )
+                                    }
+                                }
+                            }}
                         />
                     </div>
 

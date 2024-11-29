@@ -1,4 +1,6 @@
 :root {
+    --primary-color: #0074ff;
+
     --button-font-weight: 600;
     --button-border-radius: 0.5rem;
     --button-height: 40px;
@@ -13,4 +15,6 @@
 
     --modal-z-index: 1300;
     --drawer-z-index: 1200;
+
+    --dialog-box-shadow: 0px 8px 8px -4px #1018280a;
 }

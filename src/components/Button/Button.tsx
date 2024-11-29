@@ -52,27 +52,27 @@ const StyledButton = styled("button")`
         border: none;
         background-color: var(--palette-primary-main);
 
-        /* &:hover {
-            background-color: var(--palette-primary-dark);
-        } */
+        &:hover {
+            background-color: var(--palette-primary-light);
+        }
     }
 
     &.danger {
         border: none;
         background-color: var(--palette-danger-main);
 
-        /* &:hover {
+        &:hover {
             background-color: var(--palette-danger-light);
-        } */
+        }
     }
 
     &.success {
         border: none;
         background-color: var(--palette-success-main);
 
-        /* &:hover {
+        &:hover {
             background-color: var(--palette-success-light);
-        } */
+        }
     }
 
     .icon {

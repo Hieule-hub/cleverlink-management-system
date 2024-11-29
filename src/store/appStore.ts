@@ -2,7 +2,6 @@ import { theme as originOptions } from "@configs/theme";
 import { RoleCode, UserInfo } from "@interfaces/user";
 import { Theme, ThemeOptions, createTheme } from "@mui/material/styles";
 import userService from "@services/user";
-// import { create } from "zustand";
 import { createStore } from "zustand/vanilla";
 
 const getTheme = (themeOptions: ThemeOptions) => {

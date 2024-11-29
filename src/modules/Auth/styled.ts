@@ -47,12 +47,6 @@ export const StyledLoginPage = styled("div")`
             display: flex;
             flex-direction: column;
             gap: 8px;
-
-            label {
-                font-size: 14px;
-                font-weight: 400;
-                line-height: 20px;
-            }
         }
     }
 

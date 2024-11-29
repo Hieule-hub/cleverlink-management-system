@@ -4,7 +4,6 @@ import { ReactNode, useEffect, useState } from "react";
 
 import { Box, Container } from "@mui/material";
 
-import { Breadcrumbs } from "./Breadcrumbs";
 import { Header } from "./Header";
 import { DrawerHeader, Sidebar } from "./Sidebar";
 
