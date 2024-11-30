@@ -12,7 +12,13 @@
         "Previous": "Previous",
         "Next": "Next",
         "selected": "selected",
-        "Filter": "Filter"
+        "Filter": "Filter",
+        "Close": "Close",
+        "Save": "Save",
+        "Cancel": "Cancel",
+        "Yes": "Yes",
+        "No": "No",
+        "Reset": "Reset"
     },
 
     "UserPage": {
@@ -26,17 +32,17 @@
     },
     "IndexPage": {
         "description": "This is a basic example that demonstrates the usage of <code>next-intl</code> with the Next.js App Router. Try changing the locale in the top right corner and see how the content changes.",
-        "title": "next-intl example"
+        "title": "Clever Link System"
     },
     "LocaleLayout": {
-        "title": "next-intl example"
+        "title": "Clever Link System"
     },
     "LocaleSwitcher": {
         "label": "Change language",
         "locale": "{locale, select, ko {🇩🇪 Korean} en {🇺🇸 English} other {Unknown}}"
     },
     "Manifest": {
-        "name": "next-intl example"
+        "name": "Clever Link System"
     },
     "Navigation": {
         "home": "Home",
@@ -72,14 +78,23 @@
 
     "LoginPage": {
         "Clever link": "Clever link",
+        "Login title": "CLEVER-LINK Cloud Service",
         "Login": "Login",
         "title": "Login",
         "email": "Email",
-        "password": "Password",
+        "Password": "Password",
         "login": "Login",
         "forgotPassword": "Forgot password?",
         "Thank you for your visit": "Thank you for your visit",
         "Email address": "Email address",
-        "Enter username": "Enter username"
+        "Enter username": "Enter username",
+        "Contact Us": "Contact Us"
+    },
+
+    "Contact": {
+        "Address": "606, Building B, Gasan Public, Digital 178 Street, Geumcheon District, Seoul City",
+        "Phone": "02-3472-3577",
+        "Email": "cip@cip.co.kr",
+        "Website": "https://www.cipsystem.co.kr"
     }
 }

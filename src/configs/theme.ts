@@ -41,6 +41,16 @@ export const theme: ThemeOptions = {
         fontFamily: ["var(--font-poppins)", "Roboto", '"Helvetica Neue"', "Arial", "sans-serif"].join(",")
     },
     components: {
+        MuiDialog: {
+            styleOverrides: {
+                root: {
+                    "& .MuiDialog-paper": {
+                        borderRadius: "var(--input-border-radius)",
+                        boxShadow: "var(--dialog-box-shadow)"
+                    }
+                }
+            }
+        },
         MuiTextField: {
             styleOverrides: {
                 root: {
