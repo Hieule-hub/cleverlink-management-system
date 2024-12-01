@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 
 import Auth from "@components/AuthUser";
+import { OverLoading } from "@components/Loading";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { AppStoreProvider } from "@providers/AppStoreProvider";
 import { IntErrorProvider } from "@providers/IntErrorProvider";
@@ -45,6 +46,7 @@ export default async function BaseLayout({ children, locale }: Readonly<LayoutPr
                 <IntErrorProvider timeZone={timeZone} locale={locale} messages={messages}>
                     <AppRouterCacheProvider>
                         <AppStoreProvider>
+                            <OverLoading />
                             <Auth>
                                 <ThemeProvider>{children}</ThemeProvider>
                             </Auth>

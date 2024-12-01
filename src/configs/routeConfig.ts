@@ -1,12 +1,12 @@
-import { AiIcon } from "@components/Icon";
 import {
-    Cloud,
-    Dashboard as DashboardIcon,
-    FilePresentRounded,
-    MonitorOutlined,
-    Settings,
-    SmartToy,
-    SvgIconComponent
+    BugReportSharp,
+    BusinessSharp,
+    ConstructionSharp,
+    DashboardSharp,
+    GroupSharp,
+    MapSharp,
+    SvgIconComponent,
+    VideocamSharp
 } from "@mui/icons-material";
 
 export interface RouteConfig {
@@ -27,48 +27,48 @@ export const routeConfig: RouteConfig[] = [
         key: "dashboard",
         label: "Dashboard",
         private: false,
-        icon: DashboardIcon
+        icon: DashboardSharp
     },
     {
         path: "/company",
         key: "company",
         label: "Company",
         private: false,
-        icon: MonitorOutlined
+        icon: BusinessSharp
     },
     {
         path: "/scene",
         key: "scene",
         label: "Scene",
         private: false,
-        icon: FilePresentRounded
+        icon: MapSharp
     },
     {
         path: "/user",
         key: "user",
         label: "User",
         private: false,
-        icon: AiIcon
+        icon: GroupSharp
     },
     {
         path: "/device",
         key: "device",
         label: "Device",
         private: false,
-        icon: SmartToy
+        icon: ConstructionSharp
     },
     {
         path: "/camera",
         key: "camera",
         label: "Camera",
         private: false,
-        icon: Cloud
+        icon: VideocamSharp
     },
     {
         path: "/event",
         key: "event",
         label: "Event",
         private: false,
-        icon: Settings
+        icon: BugReportSharp
     }
 ];

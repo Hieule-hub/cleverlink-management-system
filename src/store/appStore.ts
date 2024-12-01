@@ -68,7 +68,7 @@ export type AppStore = AppState & AppActions;
 
 export const initAppStore = (): AppState => {
     return {
-        isFetching: false,
+        isFetching: true,
         role: "CIP",
         theme: themes.CIP
     };
@@ -103,7 +103,9 @@ export const createAppStore = (initState: AppState = defaultInitAppState) => {
             } catch (error) {
                 console.log("🚀 ~ fetUserInfo: ~ error:", error);
             } finally {
-                set((state) => ({ ...state, isFetching: false }));
+                setTimeout(() => {
+                    set((state) => ({ ...state, isFetching: false }));
+                }, 2000);
             }
         }
     }));
