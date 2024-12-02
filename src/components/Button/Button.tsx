@@ -44,15 +44,20 @@ const StyledButton = styled("button")`
 
     &.default {
         background-color: white;
-        color: #000;
-        border: 1px solid #d0d5dd;
+        color: #344054;
+        border: 1px solid var(--input-border-color);
+
+        :hover {
+            border-color: var(--palette-primary-main);
+            color: var(--palette-primary-main);
+        }
     }
 
     &.primary {
         border: none;
         background-color: var(--palette-primary-main);
 
-        &:hover {
+        :hover {
             background-color: var(--palette-primary-light);
         }
     }
@@ -61,7 +66,7 @@ const StyledButton = styled("button")`
         border: none;
         background-color: var(--palette-danger-main);
 
-        &:hover {
+        :hover {
             background-color: var(--palette-danger-light);
         }
     }
@@ -70,7 +75,7 @@ const StyledButton = styled("button")`
         border: none;
         background-color: var(--palette-success-main);
 
-        &:hover {
+        :hover {
             background-color: var(--palette-success-light);
         }
     }

@@ -1,15 +1,22 @@
+import { DataResponse, Pagination } from "common";
+
+import { Company } from "./company";
+import { User } from "./user";
+
 export interface Scene {
     _id: string;
-    sceneId: string;
-    companyId: string;
     name: string;
-    areaId: string;
     address: string;
-    phone: string;
-    website: string;
-    userId: string;
-    status: string;
-    createdAt: string;
-    updatedAt: string;
-    __v: number;
+    company: Company;
+    user: User;
 }
+
+//Request type Scene
+export type GetSceneIdReq = {
+    sceneId: string;
+};
+
+export type GetSceneListRes = DataResponse<{
+    paging: Pagination;
+    scenes: Scene[];
+}>;

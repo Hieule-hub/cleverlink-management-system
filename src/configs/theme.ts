@@ -41,6 +41,29 @@ export const theme: ThemeOptions = {
         fontFamily: ["var(--font-poppins)", "Roboto", '"Helvetica Neue"', "Arial", "sans-serif"].join(",")
     },
     components: {
+        MuiSelect: {
+            styleOverrides: {
+                root: {
+                    "&:hover": {
+                        ".MuiSelect-select": {
+                            borderColor: "var(--input-border-active-color)"
+                        }
+                    },
+                    "& .MuiSelect-select": {
+                        transition: "all 0.3s ease",
+                        border: "1px solid var(--input-border-color)",
+                        color: "var(--input-color)",
+                        borderRadius: "var(--input-border-radius) !important",
+                        boxSizing: "border-box",
+                        height: "var(--input-height) !important",
+                        padding: "11px 12px"
+                    },
+                    "& .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "transparent !important"
+                    }
+                }
+            }
+        },
         MuiDialog: {
             styleOverrides: {
                 root: {
@@ -58,7 +81,8 @@ export const theme: ThemeOptions = {
                         height: "var(--input-height)",
                         borderRadius: "var(--input-border-radius)",
                         fieldset: {
-                            transition: "all 0.2s ease-in-out"
+                            transition: "all 0.2s ease-in-out",
+                            borderColor: "var(--input-border-color)"
                         },
                         input: {
                             color: "var(--input-color)",
@@ -67,23 +91,32 @@ export const theme: ThemeOptions = {
                         },
 
                         "&:hover fieldset": {
-                            borderColor: "var(--input-border-active-color)"
+                            borderColor: (props) => (props.disabled ? "transparent" : "var(--input-border-hover-color)")
                         },
                         "&.Mui-focused fieldset": {
                             borderColor: "var(--input-border-active-color)",
                             borderWidth: 1
+                        },
+                        "&.Mui-disabled fieldset": {
+                            backgroundColor: "var(--bg-container-disabled)"
+                        }
+                    }
+                }
+            }
+        },
+        MuiAutocomplete: {
+            styleOverrides: {
+                root: {
+                    "& .MuiInputLabel-root": {
+                        display: "none"
+                    },
+                    "& .MuiAutocomplete-inputRoot": {
+                        legend: {
+                            display: "none"
                         }
                     }
                 }
             }
         }
-        // MuiDrawer: {
-        // 	styleOverrides: {
-        // 		paper: {
-        // 			backgroundColor: '#040849',
-        // 			color: 'white',
-        // 		},
-        // 	},
-        // },
     }
 };

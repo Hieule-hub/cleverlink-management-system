@@ -1,4 +1,14 @@
-import { DeleteUsersReq, GetUserListReq, GetUserListRes, UserInfo, UserLoginReq, UserLoginRes } from "@interfaces/user";
+import {
+    CreateUserReq,
+    DeleteUsersReq,
+    GetUserIdReq,
+    GetUserIdRes,
+    GetUserListReq,
+    GetUserListRes,
+    UserInfo,
+    UserLoginReq,
+    UserLoginRes
+} from "@interfaces/user";
 import apiClient from "@libs/apiClient";
 import { DataResponse } from "common";
 
@@ -16,7 +26,22 @@ const getUserInfo = async () => {
 
 const getUserList = async (params: GetUserListReq) => {
     return apiClient.get<unknown, GetUserListRes>("/user/findAll", {
-        params: params
+        params
+    });
+};
+
+const getUserId = async (params: GetUserIdReq) => {
+    return apiClient.get<GetUserIdReq, GetUserIdRes>(`/user/getUserId`, {
+        params
+    });
+};
+
+const createUser = async (params: CreateUserReq) => {
+    const { token, ...otherParams } = params;
+    return apiClient.post<CreateUserReq, DataResponse<unknown>>("/user/create", otherParams, {
+        headers: {
+            encrypted: token
+        }
     });
 };
 
@@ -26,6 +51,6 @@ const deleteUsers = async (params: DeleteUsersReq) => {
     });
 };
 
-const userService = { userLogin, getUserInfo, getUserList, userLogout, deleteUsers };
+const userService = { userLogin, getUserInfo, getUserList, userLogout, deleteUsers, getUserId, createUser };
 
 export default userService;

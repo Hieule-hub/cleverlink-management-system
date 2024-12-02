@@ -1,7 +1,9 @@
 import { theme as originOptions } from "@configs/theme";
-import { RoleCode, UserInfo } from "@interfaces/user";
+import { UserInfo } from "@interfaces/user";
 import { Theme, ThemeOptions, createTheme } from "@mui/material/styles";
+import resourceService from "@services/resource";
 import userService from "@services/user";
+import { Area, Organization, Role, RoleCode } from "common";
 import { createStore } from "zustand/vanilla";
 
 const getTheme = (themeOptions: ThemeOptions) => {
@@ -57,11 +59,15 @@ export type AppState = {
     role: RoleCode;
     theme: Theme;
     userInfo?: UserInfo;
+    roles: Role[];
+    organizations: Organization[];
+    areas: Area[];
 };
 
 export type AppActions = {
     setUserInfo: (info: UserInfo) => void;
-    fetUserInfo: () => void;
+    fetUserInfo: () => Promise<void>;
+    fetResources: () => Promise<void>;
 };
 
 export type AppStore = AppState & AppActions;
@@ -70,14 +76,20 @@ export const initAppStore = (): AppState => {
     return {
         isFetching: true,
         role: "CIP",
-        theme: themes.CIP
+        theme: themes.CIP,
+        roles: [],
+        organizations: [],
+        areas: []
     };
 };
 
 export const defaultInitAppState: AppState = {
     isFetching: false,
     role: "CIP",
-    theme: themes.CIP
+    theme: themes.CIP,
+    roles: [],
+    organizations: [],
+    areas: []
 };
 
 export const createAppStore = (initState: AppState = defaultInitAppState) => {
@@ -99,6 +111,8 @@ export const createAppStore = (initState: AppState = defaultInitAppState) => {
                         role: data.roleId.code,
                         theme: themes[data.roleId.code]
                     }));
+
+                    await get().fetResources();
                 }
             } catch (error) {
                 console.log("🚀 ~ fetUserInfo: ~ error:", error);
@@ -106,6 +120,14 @@ export const createAppStore = (initState: AppState = defaultInitAppState) => {
                 setTimeout(() => {
                     set((state) => ({ ...state, isFetching: false }));
                 }, 2000);
+            }
+        },
+        fetResources: async () => {
+            try {
+                const [roles, organizations, areas] = await resourceService.getResources();
+                set((state) => ({ ...state, roles: roles, organizations: organizations, areas: areas }));
+            } catch (error) {
+                console.log("🚀 ~ fetResources: ~ error:", error);
             }
         }
     }));

@@ -1,22 +1,22 @@
+import { User } from "@interfaces/user";
 import { create } from "zustand";
-
-import { UserInfo } from "@/interfaces/user";
 
 type UserState = {
     open: boolean;
-    user?: UserInfo;
+    user: User | null;
 };
 
 type UserActions = {
-    openUserDialog: (user?: UserInfo) => void;
+    openUserDialog: (user?: User) => void;
     closeUserDialog: () => void;
-    setUser: (user: Partial<UserInfo>) => void;
+    setUser: (user: Partial<User>) => void;
 };
 
 type UserStore = UserState & UserActions;
 
 const defaultUserState: UserState = {
-    open: false
+    open: false,
+    user: null
 };
 
 export const useUserStore = create<UserStore>()((set) => ({

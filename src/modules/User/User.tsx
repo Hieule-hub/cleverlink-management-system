@@ -9,7 +9,6 @@ import { type Column, Table } from "@components/Table";
 import { AddCircleOutlineOutlined, DeleteOutline, DescriptionOutlined, FilterList, Search } from "@mui/icons-material";
 import { Box, IconButton, TextField } from "@mui/material";
 import userService from "@services/user";
-import { triggerToastDev } from "@utils/index";
 import { useTranslations } from "next-intl";
 
 import { useUserStore } from "@/store/userStore";
@@ -38,11 +37,6 @@ export const UserPage = () => {
         filters: ""
     });
 
-    useEffect(() => {
-        // Fetch data
-        fetchUserList(filter);
-    }, [filter]);
-
     const fetchUserList = useCallback(async (params: typeof filter) => {
         setIsFetching(true);
         try {
@@ -56,6 +50,11 @@ export const UserPage = () => {
             setIsFetching(false);
         }
     }, []);
+
+    useEffect(() => {
+        // Fetch data
+        fetchUserList(filter);
+    }, [filter, fetchUserList]);
 
     const handleDeleteUsers = async (ids: string[]) => {
         if (!confirm("Are you sure you want to delete the selected users: " + ids.join(", "))) {
@@ -176,7 +175,7 @@ export const UserPage = () => {
                         height='48px'
                         color='primary'
                         startIcon={AddCircleOutlineOutlined}
-                        onClick={triggerToastDev}
+                        onClick={() => openUserDialog()}
                     >
                         {t("Add new user")}
                     </Button>

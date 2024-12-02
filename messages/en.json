@@ -23,7 +23,8 @@
 
     "UserPage": {
         "title": "User Management",
-        "Add new user": "Add new user"
+        "Add new user": "Add new user",
+        "Edit user": "Edit user"
     },
 
     "Error": {

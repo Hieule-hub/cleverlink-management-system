@@ -1,6 +1,17 @@
-import { DataResponse, Pagination } from "common";
+import { DataResponse, GetParams, Organization, Pagination, RoleCode } from "common";
 
+import { Company } from "./company";
 import { Scene } from "./scene";
+
+export type User = {
+    _id: string;
+    userId: string;
+    name: string;
+    roleId: Role;
+    company: Company;
+    scene: Scene;
+    createdAt: string;
+};
 
 export interface UserLoginReq {
     userId: string;
@@ -20,23 +31,41 @@ export type UserLoginRes = DataResponse<{
     access: string;
 }>;
 
-export type GetUserListReq = Partial<{
-    page: number;
-    limit: number;
-    name: string;
-    sortField: string;
-    sortOrder: string;
-    filters: string;
-}>;
+export type GetUserListReq = Partial<GetParams>;
 
 export type GetUserListRes = DataResponse<{
     paging: Pagination;
-    users: UserInfo[];
+    users: User[];
 }>;
 
 export type DeleteUsersReq = {
     ids: string[];
 };
+
+export type CreateUserReq = {
+    userId: string;
+    password: string;
+    name: string;
+    roleId: string;
+    companyId: string;
+    sceneId: string;
+    task: string;
+    phone: string;
+    email: string;
+    kakao: string;
+    telegram: string;
+    token: string;
+};
+
+export type GetUserIdReq = {
+    prefix: RoleCode;
+};
+
+export type GetUserIdRes = DataResponse<{
+    userId: string;
+    password: string;
+    token: string;
+}>;
 
 export interface UserInfo {
     _id: string;
@@ -56,5 +85,3 @@ export interface Role {
     code: RoleCode;
     __v: number;
 }
-
-export type RoleCode = "CIP" | "TU" | "BU" | "GU"; // CIP: Customer Information Provider, TU: Technical User, BU: Business User, GU: Guest User
