@@ -79,7 +79,7 @@ export const UserPage = () => {
 
     const handleSearch = useCallback(() => {
         setFilter((pre) => {
-            return { ...pre, filters: keyword };
+            return { ...pre, page: 1, filters: keyword };
         });
     }, [keyword]);
 
@@ -90,14 +90,15 @@ export const UserPage = () => {
                 title: t("Name"),
                 dataIndex: "name",
                 width: 200,
-                render: (text) => text
+                render: (value) => value
             },
             {
                 key: "userId",
                 title: t("ID"),
-                dataIndex: "UserId",
+                dataIndex: "userId",
+                align: "center",
                 width: 200,
-                render: (text) => text
+                render: (value) => value
             },
             {
                 key: "roleId",
@@ -105,18 +106,14 @@ export const UserPage = () => {
                 dataIndex: "roleId",
                 align: "center",
                 width: 200,
-                render: (value) => {
-                    return value?.code;
-                }
+                render: (value) => value?.code
             },
             {
                 key: "scene",
                 title: t("Scene name"),
                 dataIndex: "scene",
                 width: 200,
-                render: (value) => {
-                    return value.name;
-                }
+                render: (value) => value?.name
             },
             {
                 title: tCommon("Edit") + "/" + tCommon("Delete"),

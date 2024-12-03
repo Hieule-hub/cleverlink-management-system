@@ -76,7 +76,7 @@ export const CameraPage = () => {
 
     const handleSearch = useCallback(() => {
         setFilter((pre) => {
-            return { ...pre, filters: keyword };
+            return { ...pre, page: 1, filters: keyword };
         });
     }, [keyword]);
 
