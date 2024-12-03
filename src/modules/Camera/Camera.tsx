@@ -134,10 +134,10 @@ export const CameraPage = () => {
                 key: "action",
                 align: "right",
                 render: (_, record) => (
-                    <Box display='flex' justifyContent='end'>
+                    <Box display='flex' justifyContent='end' gap={2}>
                         <IconButton
                             size='small'
-                            color='primary'
+                            color='info'
                             onClick={() => {
                                 // openUserDialog(record);
                                 triggerToastDev();

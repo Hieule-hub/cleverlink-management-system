@@ -1,6 +1,7 @@
 "use client";
 
-import { ThemeOptions } from "@mui/material/styles";
+import { Theme, ThemeOptions, createTheme } from "@mui/material/styles";
+import { RoleCode } from "common";
 
 export const colorsFormControl = {
     //border color
@@ -17,15 +18,21 @@ export const colorsFormControl = {
     fontSize: "1rem"
 };
 
+export type Themes = {
+    [key in RoleCode]: Theme;
+};
+
 export const theme: ThemeOptions = {
     typography: {
         dashboardTitleCard: {
             fontSize: "1rem",
             fontWeight: "bold"
         },
-        aiTitleCard: {
-            fontSize: "1.25rem",
-            fontWeight: "bold"
+        userName: {
+            color: "var(--palette-primary-main)",
+            fontSize: "0.8rem",
+            fontWeight: 500,
+            marginLeft: "0.5rem"
         },
         body2: {
             color: "red"
@@ -119,4 +126,48 @@ export const theme: ThemeOptions = {
             }
         }
     }
+};
+
+const getTheme = (themeOptions: ThemeOptions) => {
+    return createTheme({
+        cssVariables: {
+            cssVarPrefix: ""
+        },
+        ...theme,
+        ...themeOptions
+    });
+};
+
+export const userThemes: Themes = {
+    CIP: getTheme({
+        palette: {
+            primary: {
+                main: "#0074FF",
+                dark: "#193F72"
+            }
+        }
+    }),
+    TU: getTheme({
+        palette: {
+            primary: {
+                main: "#FFC821",
+                dark: "#595549"
+            }
+        }
+    }),
+    BU: getTheme({
+        palette: {
+            primary: {
+                main: "#30B689",
+                dark: "#51635D"
+            }
+        }
+    }),
+    GU: getTheme({
+        palette: {
+            primary: {
+                main: "#FF6C00"
+            }
+        }
+    })
 };

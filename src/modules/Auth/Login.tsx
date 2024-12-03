@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { useRouter } from "next/navigation";
+
 import { Button, ContactInfoButton } from "@components/Button";
 import { ControllerInput } from "@components/Controller";
 import { Label } from "@components/Label";
@@ -80,7 +82,7 @@ export const LoginPage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false); // visible password
 
-    const { setUserInfo } = useAppStore((state) => state);
+    const { setUserInfo, fetUserInfo } = useAppStore((state) => state);
 
     const { handleSubmit, control } = useForm<UserLoginReq>({
         defaultValues: {
@@ -89,8 +91,8 @@ export const LoginPage = () => {
         }
     });
 
-    const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const handleLogin = () => {
+        // e.preventDefault();
         setIsLoading(true);
 
         setTimeout(() => {
@@ -102,19 +104,10 @@ export const LoginPage = () => {
                         // login success
                         const { data } = response;
 
-                        setUserInfo({
-                            _id: data._id,
-                            userId: data.userId,
-                            roleId: data.roleId,
-                            name: data.name,
-                            status: data.status,
-                            __v: data.__v,
-                            createdAt: data.createdAt,
-                            updatedAt: data.updatedAt
-                        });
-
                         localStorage.setItem("access-token", data.access);
                         Cookies.set("refresh-token", data.refresh, { expires: 7 });
+
+                        fetUserInfo();
                     }
                 } catch (error) {
                     console.log("🚀 ~ handleSubmit ~ error:", error);
@@ -132,7 +125,7 @@ export const LoginPage = () => {
 
     return (
         <StyledLoginPage>
-            <form className='left-part' onSubmit={handleLogin}>
+            <div className='left-part'>
                 <div className='login-form'>
                     <div className='login-logo' />
                     <span className='login-title'>{t("Login title")}</span>
@@ -203,7 +196,8 @@ export const LoginPage = () => {
                         fullWidth
                         height={"56px"}
                         color='primary'
-                        type='submit'
+                        // type='submit'
+                        onClick={handleLogin}
                         disabled={isLoading}
                         loading={isLoading}
                     >
@@ -212,7 +206,7 @@ export const LoginPage = () => {
 
                     <ContactInfoButton margin={"auto"}>{t("Contact Us")}</ContactInfoButton>
                 </div>
-            </form>
+            </div>
 
             <div className='right-part' />
         </StyledLoginPage>

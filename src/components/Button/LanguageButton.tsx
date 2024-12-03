@@ -57,7 +57,7 @@ export const LanguageButton = () => {
                     label: t("locale", { locale: cur }),
                     key: cur
                 }))}
-                onClick={handleSelectItem}
+                onSelectItem={handleSelectItem}
                 menuProps={{
                     anchorOrigin: {
                         vertical: "bottom",

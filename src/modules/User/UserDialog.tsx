@@ -11,7 +11,7 @@ import { useAppStore } from "@providers/AppStoreProvider";
 import companyService from "@services/company";
 import sceneService from "@services/scene";
 import userService from "@services/user";
-import { toast, triggerToast } from "@store/toastStore";
+import { toast } from "@store/toastStore";
 import { useUserStore } from "@store/userStore";
 import { RoleCode } from "common";
 import dayjs from "dayjs";
@@ -180,13 +180,11 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
         const roleId = getValues("roleId");
 
         //get role code
-        const roleCode: RoleCode = "TU";
-
         setIsFetchingUserId(true);
 
         try {
             const response = await userService.getUserId({
-                prefix: roleCode
+                prefix: roleId as RoleCode
             });
 
             if (!response.err) {

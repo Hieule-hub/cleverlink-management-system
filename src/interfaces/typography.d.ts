@@ -4,7 +4,7 @@ import "@mui/material/styles";
 declare module "@mui/material/styles" {
     interface TypographyVariants {
         dashboardTitleCard: React.CSSProperties;
-        aiTitleCard: React.CSSProperties;
+        userName: React.CSSProperties;
         body3: React.CSSProperties;
         body4: React.CSSProperties;
     }
@@ -12,7 +12,7 @@ declare module "@mui/material/styles" {
     // allow configuration using `createTheme`
     interface TypographyVariantsOptions {
         dashboardTitleCard?: React.CSSProperties;
-        aiTitleCard?: React.CSSProperties;
+        userName?: React.CSSProperties;
         body3?: React.CSSProperties;
         body4?: React.CSSProperties;
     }
@@ -22,7 +22,7 @@ declare module "@mui/material/styles" {
 declare module "@mui/material/Typography" {
     interface TypographyPropsVariantOverrides {
         dashboardTitleCard: true;
-        aiTitleCard: true;
+        userName: true;
         body3: true;
         body4: true;
     }

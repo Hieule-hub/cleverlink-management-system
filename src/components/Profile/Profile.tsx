@@ -4,14 +4,14 @@ import { redirect } from "next/navigation";
 
 import { Dropdown, IDropdownOption } from "@components/Dropdown";
 import { PowerSettingsNew, SettingsOutlined } from "@mui/icons-material";
-import { Avatar, IconButton } from "@mui/material";
+import { Avatar, Box, IconButton, Typography } from "@mui/material";
 import { useAppStore } from "@providers/AppStoreProvider";
 import userService from "@services/user";
 import { triggerToastDev } from "@utils/index";
 import Cookies from "js-cookie";
 
 export const Profile = () => {
-    const { setUserInfo } = useAppStore((state) => state);
+    const { setUserInfo, userInfo } = useAppStore((state) => state);
 
     const handleLogout = useCallback(async () => {
         await userService.userLogout();
@@ -51,13 +51,16 @@ export const Profile = () => {
     return (
         <React.Fragment>
             <Dropdown menu={items} onSelectItem={handleSelectItem}>
-                <IconButton sx={{ padding: 0 }}>
+                <Box padding={0} display='flex' marginY={"auto"} alignItems='center' sx={{ cursor: "pointer" }}>
                     <Avatar
                         alt='avatar'
                         src='https://avatarfiles.alphacoders.com/851/thumb-1920-85184.png'
                         sx={{ width: 32, height: 32 }}
                     />
-                </IconButton>
+                    <Typography variant='userName' noWrap>
+                        {userInfo?.name}
+                    </Typography>
+                </Box>
             </Dropdown>
         </React.Fragment>
     );

@@ -161,7 +161,7 @@ export const EventPage = () => {
                         </IconButton>
                         <IconButton
                             size='small'
-                            color='primary'
+                            color='info'
                             onClick={() => {
                                 // openUserDialog(record);
                                 triggerToastDev();
