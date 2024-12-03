@@ -1,74 +1,165 @@
 {
     "App": {
-        "logo-text": "AI CLEVER-LINK 통합관리 시스템"
+        "logo-text": "AI CLEVER-LINK 통합 관리 시스템"
     },
 
     "Common": {
-        "Delete": "Delete"
+        "Add": "추가",
+        "Delete": "삭제",
+        "Edit": "수정정",
+        "Search": "찾기기",
+        "Previous": "이전",
+        "Next": "다음",
+        "selected": "선택중",
+        "Filter": "필터",
+        "Close": "닫기",
+        "Save": "저장",
+        "Cancel": "취소",
+        "Yes": "예",
+        "No": "아니오",
+        "Reset": "리셋",
+        "Detail": "디테일일",
+        "Camera": "카메라",
+        "Snapshot": "스냅샷"
     },
 
-    "Error": {
-        "description": "<p>We've unfortunately encountered an error.</p><p>You can try to <retry>reload the page</retry> you were visiting.</p>",
-        "title": "Something went wrong!"
+    "DashboardPage": {
+        "title": "대시보드",
+        "Company ID": "기관관ID",
+        "Company name": "기관명명",
+        "Scene ID": "현장ID",
+        "Scene name": "현장명",
+        "Device ID": "장비ID"
     },
-    "IndexPage": {
-        "description": "This is a basic example that demonstrates the usage of <code>next-intl</code> with the Next.js App Router. Try changing the locale in the top right corner and see how the content changes.",
-        "title": "next-intl example"
+
+    "UserPage": {
+        "title": "사용자 관리",
+        "Placeholder search": "이름, ID, 분류, 근무현장",
+        "Add new record": "새 사용자 추가",
+        "Edit record": "사용자 수정",
+        "ID": "ID",
+        "Name": "이름",
+        "Scene name": "현장명",
+        "Role": "구분분"
     },
+
+    "ScenePage": {
+        "title": "현장 관리",
+        "Placeholder search": "현장코드, 기관명, 현장명, 담당자, 주소",
+        "Add new record": "새 현장 추가",
+        "Edit record": "현장 수정정",
+        "Manager": "관리자",
+        "Scene ID": "현장 ID",
+        "Scene name": "현장명명",
+        "Company name": "기관명명",
+        "Address": "주소"
+    },
+
+    "CompanyPage": {
+        "title": "기관 관리리",
+        "Placeholder search": "기관코드, 기관명, 담당자",
+        "Add new record": "새 기관 추가",
+        "Edit record": "기관 수정정",
+        "Manager": "관리자",
+        "Name": "기관명",
+        "Devices": "장치",
+        "Company ID": "기관ID"
+    },
+
+    "DevicePage": {
+        "title": "장치 관리",
+        "Placeholder search": "장비ID, 기관관명, 설치장소, 장비관리자",
+        "Add new record": "새 창지 추가",
+        "Edit record": "창지 수정",
+        "Device ID": "창지ID",
+        "Install date": "등록일자",
+        "Company name": "기관명",
+        "Scene name": "현장명",
+        "Manager": "관리자"
+    },
+
+    "CameraPage": {
+        "title": "카메라 관리리",
+        "Placeholder search": "모델 ID, 모델명, 종류, 제조사, 통신방식",
+        "Add new record": "새 카메라 추가",
+        "Edit record": "카메라 수정",
+        "Model ID": "메델 ID",
+        "Model name": "모델명",
+        "Type": "종류",
+        "Factory": "공장",
+        "Protocol": "규약",
+        "POE": "POE"
+    },
+
+    "EventPage": {
+        "title": "이벤트 관리",
+        "Placeholder search": "설치장소, 장비ID, 경고장치, 수신자, 담당자 관리",
+        "Add new record": "새 이벤트 추가",
+        "Edit record": "이벤트 수정",
+        "Event time": "발생 시간",
+        "Emplacement": "설치",
+        "Device ID": "창지지 ID",
+        "Warning device": "경고장치",
+        "Receiver": "수진자",
+        "Manager": "관리자"
+    },
+
+    "LoginPage": {
+        "title": "로그인",
+        "Clever link": "클레버링크크",
+        "Login title": "CLEVER-LINK 클라우드 서비스",
+        "Login": "로그인인",
+        "Password": "비밀번호",
+        "Thank you for your visit": "방문해 주셔서 감사합니다.",
+        "Email address": "이메일 주소",
+        "Enter username": "사용자 이름을 입력하세요",
+        "Contact Us": "문의하기"
+    },
+
+    "NotFoundPage": {
+        "description": "브라우저 주소 표시줄을 다시 확인하거나 탐색을 사용하여 알고 있는 페이지로 이동하세.",
+        "title": "페이지를 찾을 수 없습니다"
+    },
+
+    "ErrorPage": {
+        "description": "<p>안타깝게도 오류가 발생했습니다.</p><p>방문 중이던 페이지를 <retry>새로 고침</retry>해 보세요.</p>",
+        "title": "문제가 발생했습니다!"
+    },
+
     "LocaleLayout": {
-        "title": "next-intl example"
+        "title": "클레버링크 시스템"
     },
     "LocaleSwitcher": {
-        "label": "Change language",
-        "locale": "{locale, select, ko {🇰🇷 Korean} en {🇺🇸 English} other {Unknown}}"
+        "label": "언어 변경",
+        "locale": "{구역, 선택, ko {🇩🇪 한국어어} en {🇺🇸 영어 other {알 수 없음}}"
     },
     "Manifest": {
-        "name": "Clever Link System"
+        "name": "클레버링크 시스템"
     },
-    "Navigation": {
-        "home": "Home",
-        "pathnames": "Pathnames"
-    },
-    "NotFoundPage": {
-        "description": "Please double-check the browser address bar or use the navigation to go to a known page.",
-        "title": "Page not found"
-    },
+
     "MainLayout": {
         "links": {
             "docs": {
-                "description": "Learn more about next-intl in the official docs.",
+                "description": "공식 문서에서 next-intl에 대해 자세히 알아보세요.",
                 "href": "https://next-intl-docs.vercel.app/",
-                "title": "Docs"
+                "title": "문서"
             },
             "source": {
-                "description": "Browse the source code of this example on GitHub.",
+                "description": "이 예제의 소스 코드를 GitHub에서 확인하세요.",
                 "href": "https://github.com/amannn/next-intl/tree/main/examples/example-app-router",
-                "title": "Source code"
+                "title": "소스 코드"
             }
         }
     },
     "PathnamesPage": {
-        "description": "<p>The pathnames are internationalized too.</p><p>If you're using the default language English, you'll see <code>/en/pathnames</code> in the browser address bar on this page.</p><p>If you change the locale to German, the URL is localized accordingly (<code>/de/pfadnamen</code>).</p>",
+        "description": "<p>경로 이름도 국제화되었습니다.</p><p>기본 언어로 영어를 사용하는 경우, 이 페이지의 브라우저 주소 표시줄에  <code>/en/pathnames</code> 가 표시됩니다.</p><p>로케일을 독일어로 변경하면 URL이 해당 언어에 맞게 로컬라이즈됩니다 (<code>/de/pfadnamen</code>).</p>",
         "title": "Pathnames"
     },
 
-    "HomePage": {
-        "title": "Hello world!",
-        "about": "Go to the about page"
-    },
-
-    "LoginPage": {
-        "Clever link": "Clever link",
-        "Login title": "CLEVER-LINK 클라우드 서비스",
-        "Login": "Login",
-        "title": "Login",
-        "email": "Email",
-        "password": "Password",
-        "login": "Login",
-        "forgotPassword": "Forgot password?",
-        "Thank you for your visit": "Thank you for your visit",
-        "Email address": "Email address",
-        "Enter username": "Enter username",
-        "Contact Us": "Contact Us"
+    "Contact": {
+        "Address": "서울시 금천구 디지털로 78 가산퍼블릭 B동 606호",
+        "Phone": "02-3472-3577",
+        "Email": "cip@cip.co.kr",
+        "Website": "https://www.cipsystem.co.kr"
     }
 }
