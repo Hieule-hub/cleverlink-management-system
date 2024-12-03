@@ -18,13 +18,91 @@
         "Cancel": "Cancel",
         "Yes": "Yes",
         "No": "No",
-        "Reset": "Reset"
+        "Reset": "Reset",
+        "Detail": "Detail",
+        "Camera": "Camera",
+        "Snapshot": "Snapshot"
+    },
+
+    "DashboardPage": {
+        "title": "Dashboard",
+        "Company ID": "Company ID",
+        "Company name": "Company name",
+        "Scene ID": "Scene ID",
+        "Scene name": "Scene name",
+        "Device ID": "Device ID"
     },
 
     "UserPage": {
         "title": "User Management",
-        "Add new user": "Add new user",
-        "Edit user": "Edit user"
+        "Placeholder search": "Name, ID, classification, work site",
+        "Add new record": "Add new user",
+        "Edit record": "Edit user",
+        "ID": "ID",
+        "Name": "Name",
+        "Scene name": "Scene name",
+        "Role": "Role"
+    },
+
+    "ScenePage": {
+        "title": "Scene Management",
+        "Placeholder search": "Field code, organization name, field name, person in charge, address",
+        "Add new record": "Add new scene",
+        "Edit record": "Edit scene",
+        "Manager": "Manager",
+        "Scene ID": "Scene ID",
+        "Scene name": "Scene name",
+        "Company name": "Company name",
+        "Address": "Address"
+    },
+
+    "CompanyPage": {
+        "title": "Company Management",
+        "Placeholder search": "Institution code, institution name, contact person",
+        "Add new record": "Add new company",
+        "Edit record": "Edit company",
+        "Manager": "Manager",
+        "Name": "Company name",
+        "Devices": "Devices",
+        "Company ID": "Company ID"
+    },
+
+    "DevicePage": {
+        "title": "Device Management",
+        "Placeholder search": "Equipment ID, organization name, installation site, equipment manager",
+        "Add new record": "Add new device",
+        "Edit record": "Edit device",
+        "Device ID": "Device ID",
+        "Install date": "Install date",
+        "Company name": "Company name",
+        "Scene name": "Scene name",
+        "Manager": "Manager"
+    },
+
+    "CameraPage": {
+        "title": "Camera Management",
+        "Placeholder search": "Model ID, model name, type, manufacturer, communication method",
+        "Add new record": "Add new camera",
+        "Edit record": "Edit camera",
+        "Model ID": "Model ID",
+        "Model name": "Model name",
+        "Type": "Type",
+        "Factory": "Factory",
+        "Protocol": "Protocol",
+        "POE": "POE"
+    },
+
+    "EventPage": {
+        "title": "Event Management",
+        "Placeholder search": "Installation location, equipment ID, warning device, recipient, management person in charge",
+        "Add new record": "Add new event",
+        "Edit record": "Edit event",
+        "Event time": "Event time",
+        "Emplacement": "Emplacement",
+        "Device ID": "Device ID",
+        "Warning device": "Warning device",
+        "Receiver": "Receiver",
+        "Manager": "Manager"
     },
 
     "Error": {

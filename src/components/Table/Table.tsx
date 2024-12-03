@@ -180,7 +180,7 @@ export const Table = ({ columns, data, isLoading = false, rowSelection, border }
                                     </StyledTableCell>
                                 )}
                                 {columns.map((column) => {
-                                    const value = item[column.key];
+                                    const value = item[column.dataIndex];
 
                                     if (column.render) {
                                         return (

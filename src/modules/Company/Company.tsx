@@ -6,26 +6,23 @@ import MainLayout from "@components/Layout/MainLayout";
 import { Pagination } from "@components/Pagination";
 import { Paper } from "@components/Paper";
 import { type Column, Table } from "@components/Table";
-import { User } from "@interfaces/user";
 import { AddCircleOutlineOutlined, DeleteOutline, DescriptionOutlined, FilterList, Search } from "@mui/icons-material";
 import { Box, IconButton, TextField } from "@mui/material";
-import userService from "@services/user";
-import { useUserStore } from "@store/userStore";
+import companyService from "@services/company";
 import { useTranslations } from "next-intl";
 
-import { UserDialog } from "./UserDialog";
+import { triggerToastDev } from "@/utils";
 
-export const UserPage = () => {
-    const t = useTranslations("UserPage");
+export const CompanyPage = () => {
+    const t = useTranslations("CompanyPage");
     const tCommon = useTranslations("Common");
 
     const [isFetching, setIsFetching] = useState(false);
-    const [dataList, setDataList] = useState<User[]>([]);
+    const [dataList, setDataList] = useState([]);
 
     //Store controller
-    const { user, openUserDialog } = useUserStore();
 
-    //Delete user list
+    //Delete list
     const [deleteIds, setDeleteIds] = useState([]);
 
     // Filter
@@ -40,12 +37,10 @@ export const UserPage = () => {
     const fetchDataList = useCallback(async (params: typeof filter) => {
         setIsFetching(true);
         try {
-            const listRes = await userService.getUserList(params);
+            const listRes = await companyService.getCompanyList(params);
 
-            if (!listRes.err) {
-                setDataList(listRes.data.users);
-                setTotal(listRes.data.paging.totalItems);
-            }
+            setDataList(listRes.data.companies);
+            setTotal(listRes.data.paging.totalItems);
         } catch (error) {
             console.error(error);
         } finally {
@@ -58,20 +53,20 @@ export const UserPage = () => {
         fetchDataList(filter);
     }, [filter, fetchDataList]);
 
-    const handleDeleteUsers = async (ids: string[]) => {
-        if (!confirm("Are you sure you want to delete the selected users: " + ids.join(", "))) {
+    const handleDeleteItems = async (ids: string[]) => {
+        if (!confirm("Are you sure you want to delete the selected: " + ids.join(", "))) {
             return;
         }
 
         setIsFetching(true);
         try {
-            await userService.deleteUsers({
-                ids: ids
-            });
+            // await userService.deleteUsers({
+            //     ids: ids
+            // });
             fetchDataList(filter);
             setDeleteIds([]);
         } catch (error) {
-            console.log("🚀 ~ handleDeleteUsers ~ error:", error);
+            console.log("🚀 ~ handleDeleteItems ~ error:", error);
         } finally {
             setIsFetching(false);
         }
@@ -86,6 +81,13 @@ export const UserPage = () => {
     const columns = useMemo((): Column[] => {
         return [
             {
+                key: "companyId",
+                title: t("Company ID"),
+                dataIndex: "companyId",
+                width: 200,
+                render: (text) => text
+            },
+            {
                 key: "name",
                 title: t("Name"),
                 dataIndex: "name",
@@ -93,30 +95,22 @@ export const UserPage = () => {
                 render: (text) => text
             },
             {
-                key: "userId",
-                title: t("ID"),
-                dataIndex: "UserId",
-                width: 200,
-                render: (text) => text
-            },
-            {
-                key: "roleId",
-                title: t("Role"),
-                dataIndex: "roleId",
+                key: "user",
+                title: t("Manager"),
+                dataIndex: "user",
                 align: "center",
                 width: 200,
                 render: (value) => {
-                    return value?.code;
+                    return value?.name;
                 }
             },
             {
-                key: "scene",
-                title: t("Scene name"),
-                dataIndex: "scene",
+                key: "totalDevices",
+                title: t("Devices"),
+                dataIndex: "totalDevices",
+                align: "center",
                 width: 200,
-                render: (value) => {
-                    return value.name;
-                }
+                render: (text) => text
             },
             {
                 title: tCommon("Edit") + "/" + tCommon("Delete"),
@@ -128,7 +122,8 @@ export const UserPage = () => {
                             size='small'
                             color='primary'
                             onClick={() => {
-                                openUserDialog(record);
+                                // openUserDialog(record);
+                                triggerToastDev();
                             }}
                         >
                             <DescriptionOutlined fontSize='inherit' />
@@ -137,7 +132,7 @@ export const UserPage = () => {
                             size='small'
                             color='error'
                             onClick={() => {
-                                handleDeleteUsers([record._id]);
+                                handleDeleteItems([record._id]);
                             }}
                         >
                             <DeleteOutline fontSize='inherit' />
@@ -177,7 +172,10 @@ export const UserPage = () => {
                         height='48px'
                         color='primary'
                         startIcon={AddCircleOutlineOutlined}
-                        onClick={() => openUserDialog()}
+                        onClick={() => {
+                            // openUserDialog();
+                            triggerToastDev();
+                        }}
                     >
                         {t("Add new record")}
                     </Button>
@@ -203,7 +201,7 @@ export const UserPage = () => {
                     disabled={isFetching || deleteIds.length === 0}
                     height='40px'
                     startIcon={DeleteOutline}
-                    onClick={() => handleDeleteUsers(deleteIds)}
+                    onClick={() => handleDeleteItems(deleteIds)}
                 >
                     {tCommon("Delete")}
                 </Button>
@@ -227,7 +225,7 @@ export const UserPage = () => {
                 )}
             </Box>
 
-            <UserDialog onClose={() => console.log("dialog on close ---->")} />
+            {/* <UserDialog onClose={() => console.log("dialog on close ---->")} /> */}
         </MainLayout>
     );
 };

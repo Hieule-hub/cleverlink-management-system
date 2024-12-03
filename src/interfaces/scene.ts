@@ -5,6 +5,7 @@ import { User } from "./user";
 
 export interface Scene {
     _id: string;
+    sceneId: string;
     name: string;
     address: string;
     company: Company;

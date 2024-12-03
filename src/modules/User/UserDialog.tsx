@@ -141,10 +141,10 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                     //     token: data.token
                     // });
                     // if (!response.err) {
-                    //     // triggerToastDev("success", t("UserPage.CreateUserSuccess"));
+                    //     // triggerToastDev("success", t("UserPage.CreateRecordSuccess"));
                     //     handleClose();
                     // } else {
-                    //     // triggerToastDev("error", t("UserPage.CreateUserFailed"));
+                    //     // triggerToastDev("error", t("UserPage.CreateRecordFailed"));
                     // }
                 } else {
                     const response = await userService.createUser({
@@ -162,10 +162,10 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                         token: data.token
                     });
                     if (!response.err) {
-                        toast.success({ title: t("UserPage.CreateUserSuccess") });
+                        toast.success({ title: t("UserPage.CreateRecordSuccess") });
                         handleClose();
                     } else {
-                        // triggerToastDev("error", t("UserPage.CreateUserFailed"));
+                        // triggerToastDev("error", t("UserPage.CreateRecordFailed"));
                     }
                 }
             } catch (error) {
@@ -242,7 +242,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                 }
             }}
             open={open}
-            title={user ? t("UserPage.Edit user") : t("UserPage.Add new user")}
+            title={user ? t("UserPage.Edit record") : t("UserPage.Add new record")}
             onClose={handleClose}
             onCancel={handleClose}
             onOk={handleSave}
