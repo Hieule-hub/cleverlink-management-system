@@ -18,6 +18,7 @@
         "Yes": "Yes",
         "No": "No",
         "Reset": "Reset",
+        "Init": "Init",
         "Detail": "Detail",
         "Camera": "Camera",
         "Snapshot": "Snapshot"
@@ -37,10 +38,15 @@
         "Placeholder search": "Name, ID, classification, work site",
         "Add new record": "Add new user",
         "Edit record": "Edit user",
+        "Edit record success": "Edit user success",
+        "Edit record failed": "Edit user failed",
+        "Create record success": "Create user success",
+        "Create record failed": "Create user failed",
         "ID": "ID",
         "Name": "Name",
         "Scene name": "Scene name",
-        "Role": "Role"
+        "Role": "Role",
+        "Notice note": "※This is the contact information input field for receiving risk notifications."
     },
 
     "ScenePage": {

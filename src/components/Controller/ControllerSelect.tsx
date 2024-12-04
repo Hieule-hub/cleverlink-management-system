@@ -1,47 +1,45 @@
 import { Select, type SelectProps } from "@components/Select";
 import { type Control, Controller as ControllerRHF } from "react-hook-form";
 
-import { useAppStore } from "@/providers/AppStoreProvider";
-
 interface ControllerProps {
     keyName?: string;
     placeholder?: string;
     selectProps?: SelectProps;
+    disabled?: boolean;
     control: Control<any>;
+    onChangeField?: (value?: any) => void;
 }
 
-export const ControllerSelect = ({ keyName, control, placeholder, selectProps }: ControllerProps) => {
+export const ControllerSelect = ({
+    keyName,
+    control,
+    placeholder,
+    disabled,
+    onChangeField = () => "",
+    selectProps
+}: ControllerProps) => {
     return (
         <ControllerRHF
             control={control}
             name={keyName}
-            render={({ field }) => (
-                <Select {...field} id={keyName} placeholder={placeholder} fullWidth {...selectProps} />
-            )}
-        />
-    );
-};
+            render={({ field }) => {
+                const { onChange, ...otherFields } = field;
 
-export const ControllerOrganizationSelect = ({ keyName, control, placeholder, selectProps }: ControllerProps) => {
-    const { organizations } = useAppStore((state) => state);
-
-    return (
-        <ControllerRHF
-            control={control}
-            name={keyName}
-            render={({ field }) => (
-                <Select
-                    {...field}
-                    id={keyName}
-                    placeholder={placeholder}
-                    fullWidth
-                    options={organizations.map((org) => ({
-                        value: org.code,
-                        label: org.name
-                    }))}
-                    {...selectProps}
-                />
-            )}
+                return (
+                    <Select
+                        disabled={disabled}
+                        onChange={(event) => {
+                            onChange(event);
+                            onChangeField(event.target.value);
+                        }}
+                        {...otherFields}
+                        id={keyName}
+                        placeholder={placeholder}
+                        fullWidth
+                        {...selectProps}
+                    />
+                );
+            }}
         />
     );
 };

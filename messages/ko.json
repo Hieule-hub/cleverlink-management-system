@@ -18,6 +18,7 @@
         "Yes": "예",
         "No": "아니오",
         "Reset": "리셋",
+        "Init": "초기화",
         "Detail": "디테일일",
         "Camera": "카메라",
         "Snapshot": "스냅샷"
@@ -37,10 +38,15 @@
         "Placeholder search": "이름, ID, 분류, 근무현장",
         "Add new record": "새 사용자 추가",
         "Edit record": "사용자 수정",
+        "Edit record success": "Translating",
+        "Edit record failed": "Translating",
+        "Create record success": "Translating",
+        "Create record failed": "Translating",
         "ID": "ID",
         "Name": "이름",
         "Scene name": "현장명",
-        "Role": "구분분"
+        "Role": "구분분",
+        "Notice note": "※위험을 알림받기 위한 연락처 입력란 입니다."
     },
 
     "ScenePage": {

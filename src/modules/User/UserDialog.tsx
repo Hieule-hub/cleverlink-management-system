@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { use, useCallback, useEffect, useMemo, useState } from "react";
 
 import { Button } from "@components/Button";
 import { ControllerInput } from "@components/Controller";
@@ -6,7 +6,8 @@ import { ControllerAsyncSearchSelect, type Option } from "@components/Controller
 import { ControllerSelect } from "@components/Controller/ControllerSelect";
 import { Dialog } from "@components/Dialog";
 import { Label } from "@components/Label";
-import { Divider, Grid2 as Grid, Zoom } from "@mui/material";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Divider, Grid2 as Grid, Typography, Zoom } from "@mui/material";
 import { useAppStore } from "@providers/AppStoreProvider";
 import companyService from "@services/company";
 import sceneService from "@services/scene";
@@ -17,6 +18,7 @@ import { RoleCode } from "common";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
+import * as yup from "yup";
 
 interface UserDialogProps {
     onClose?: (status?: string) => void;
@@ -29,6 +31,8 @@ type FormUserValues = Partial<{
     userId: string;
     password: string;
     name: string;
+
+    role: string;
     roleId: string;
     company: Option;
     companyId: string;
@@ -71,7 +75,27 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isFetchingUserId, setIsFetchingUserId] = useState(false);
 
-    const { handleSubmit, control, getValues, setValue, reset } = useForm<FormUserValues>({
+    const editMode = useMemo(() => Boolean(user), [user]);
+
+    const resolver = yup.object({
+        userId: yup.string().required("User ID is required"),
+        password: yup.string().required("Password is required"),
+        name: yup.string().required("Name is required"),
+        sceneId: yup.string().required("Scene is required"),
+        companyId: yup.string().required("Company is required"),
+        roleId: yup.string().required("Role is required"),
+        email: yup.string().email("Email is not valid")
+    });
+
+    const {
+        handleSubmit,
+        control,
+        formState: { errors },
+        getValues,
+        setValue,
+        reset
+    } = useForm<FormUserValues>({
+        resolver: yupResolver(resolver),
         defaultValues: {
             userId: "",
             password: "",
@@ -82,25 +106,21 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
     useEffect(() => {
         //fill form with user data
         if (user) {
-            console.log("🚀 ~ useEffect ~ user:", user);
-
             const newValue: FormUserValues = {
                 ...initFormValues,
                 userId: user.userId,
-                // password: user.password,
+                password: "11111111",
                 name: user.name,
-                roleId: user.roleId.code,
-                company: { label: user.company.name, value: user.company._id },
-                companyId: user.company.companyId,
-                scene: { label: user.scene.name, value: user.scene._id },
-                sceneId: user.scene._id,
-
-                // task: user.task,
-                // phone: user.phone,
-                // email: user.email,
-                // kakao: user.kakao,
-                // telegram: user.telegram,
-                // token: user.token,
+                roleId: user.roleId?.code,
+                company: { label: user.company?.name, value: user.company?._id },
+                companyId: user.company?.companyId,
+                scene: { label: user.scene?.name, value: user.scene?._id },
+                sceneId: user.scene?._id,
+                task: user?.task || initFormValues.task,
+                phone: user?.phone || initFormValues.phone,
+                email: user?.email || initFormValues.email,
+                kakao: user?.kakao || initFormValues.kakao,
+                telegram: user?.telegram || initFormValues.telegram,
                 startDate: dayjs(user.createdAt).format("YYYY-MM-DD HH:mm:ss")
             };
 
@@ -108,7 +128,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
         } else {
             reset(initFormValues);
         }
-    }, [user]);
+    }, [user, reset]);
 
     const handleClose = () => {
         onClose();
@@ -120,32 +140,40 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
     };
 
     const handleSave = () => {
+        if (errors) {
+            for (const key in errors) {
+                if (errors.hasOwnProperty(key)) {
+                    const element = errors[key];
+
+                    if (element?.message) {
+                        toast.error({ title: element.message });
+                    }
+                }
+            }
+        }
+
         handleSubmit(async (data: FormUserValues) => {
             console.log("🚀 ~ handleSubmit ~ data:", data);
             setIsLoading(true);
 
             try {
                 if (user) {
-                    // const response = await userService.createUser({
-                    //     userId: data.userId,
-                    //     password: data.password,
-                    //     name: data.name,
-                    //     roleId: data.roleId,
-                    //     companyId: data.company?.value,
-                    //     sceneId: data.scene?.value,
-                    //     task: data.task,
-                    //     phone: data.phone,
-                    //     email: data.email,
-                    //     kakao: data.kakao,
-                    //     telegram: data.telegram,
-                    //     token: data.token
-                    // });
-                    // if (!response.err) {
-                    //     // triggerToastDev("success", t("UserPage.CreateRecordSuccess"));
-                    //     handleClose();
-                    // } else {
-                    //     // triggerToastDev("error", t("UserPage.CreateRecordFailed"));
-                    // }
+                    const response = await userService.editUser({
+                        userId: user._id,
+                        name: data.name,
+                        sceneId: data.sceneId,
+                        task: data.task,
+                        phone: data.phone,
+                        email: data.email,
+                        kakao: data.kakao,
+                        telegram: data.telegram
+                    });
+                    if (!response.err) {
+                        toast.success({ title: t("UserPage.Edit record success") });
+                        handleClose();
+                    } else {
+                        // toast.error({ title: t("UserPage.Edit record failed") });
+                    }
                 } else {
                     const response = await userService.createUser({
                         userId: data.userId,
@@ -153,7 +181,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                         name: data.name,
                         roleId: roles.find((role) => role.code === data.roleId)?._id || "",
                         companyId: (data.company?.value || "") as string,
-                        sceneId: (data.scene?.value || "") as string,
+                        sceneId: data.sceneId,
                         task: data.task,
                         phone: data.phone,
                         email: data.email,
@@ -162,10 +190,10 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                         token: data.token
                     });
                     if (!response.err) {
-                        toast.success({ title: t("UserPage.CreateRecordSuccess") });
+                        toast.success({ title: t("UserPage.Create record success") });
                         handleClose();
                     } else {
-                        // triggerToastDev("error", t("UserPage.CreateRecordFailed"));
+                        // toast.error({ title: t("UserPage.Create record failed") });
                     }
                 }
             } catch (error) {
@@ -219,7 +247,8 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
             if (!res.err) {
                 return res.data.companies.map((company) => ({
                     label: company.name,
-                    value: company._id
+                    value: company._id,
+                    id: company.companyId
                 }));
             } else {
                 return [];
@@ -247,28 +276,34 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
             loading={isLoading}
         >
             <Grid padding={2} width='100%' gap={2} container spacing={2} columns={24} alignItems='center'>
-                {/* Company name */}
+                {/* Company Field */}
                 <Grid size={labelSize}>
-                    <Label label='Company' htmlFor='company' />
+                    <Label required label='Company' htmlFor='company' />
                 </Grid>
                 <Grid size={inputSize}>
                     <ControllerAsyncSearchSelect
+                        disabled={editMode}
                         control={control}
                         keyName='company'
                         placeholder='Company'
                         request={fetchCompanies}
+                        onchangeField={(value) => {
+                            if (value) {
+                                setValue("companyId", value?.value as string);
+                            }
+                        }}
                     />
                 </Grid>
 
-                {/* User name */}
+                {/* User name Field */}
                 <Grid size={labelSize}>
-                    <Label label='User Name' htmlFor='name' />
+                    <Label required label='User Name' htmlFor='name' />
                 </Grid>
                 <Grid size={inputSize}>
                     <ControllerInput control={control} keyName='name' placeholder='Name' />
                 </Grid>
 
-                {/* Company ID */}
+                {/* Company ID Field */}
                 <Grid size={labelSize}>
                     <Label label='Company ID' htmlFor='companyId' />
                 </Grid>
@@ -276,14 +311,15 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                     <ControllerInput control={control} keyName='companyId' placeholder='Company ID' disabled />
                 </Grid>
 
-                {/* Department name */}
+                {/* Role Field */}
                 <Grid size={labelSize}>
-                    <Label label='Department name' htmlFor='departmentName' />
+                    <Label required label='Role' htmlFor='role' />
                 </Grid>
                 <Grid size={inputSize}>
                     <ControllerSelect
+                        disabled={editMode}
                         control={control}
-                        keyName='roleId'
+                        keyName='role'
                         placeholder='Department name'
                         selectProps={{
                             options: roles.map((org) => ({
@@ -291,10 +327,13 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                                 label: org.name
                             }))
                         }}
+                        onChangeField={(value) => {
+                            setValue("roleId", value);
+                        }}
                     />
                 </Grid>
 
-                {/* Scene */}
+                {/* Scene Field */}
                 <Grid size={labelSize}>
                     <Label label='Scene' htmlFor='scene' />
                 </Grid>
@@ -304,18 +343,24 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                         keyName='scene'
                         placeholder='Scene'
                         request={fetchScenes}
+                        onchangeField={(value) => {
+                            if (value) {
+                                setValue("sceneId", value?.value as string);
+                            }
+                        }}
                     />
+                    <ControllerInput hidden control={control} keyName='sceneId' placeholder='Scene ID' />
                 </Grid>
 
-                {/* Role */}
+                {/* Role ID Field */}
                 <Grid size={labelSize}>
-                    <Label label='Role' htmlFor='roleId' />
+                    <Label label='Role ID' htmlFor='roleId' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput control={control} keyName='roleId' placeholder='Role' disabled />
+                    <ControllerInput control={control} keyName='roleId' placeholder='Role ID' disabled />
                 </Grid>
 
-                {/* Task */}
+                {/* Task Field */}
                 <Grid size={labelSize}>
                     <Label label='Task' htmlFor='task' />
                 </Grid>
@@ -323,15 +368,15 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                     <ControllerInput control={control} keyName='task' placeholder='Task' />
                 </Grid>
 
-                {/* User ID */}
+                {/* User ID Field */}
                 <Grid size={labelSize}>
-                    <Label label='User ID' htmlFor='userId' />
+                    <Label required label='User ID' htmlFor='userId' />
                 </Grid>
                 <Grid size={inputSize}>
                     <ControllerInput control={control} keyName='userId' placeholder='User ID' disabled />
                 </Grid>
 
-                {/* Register Date */}
+                {/* Register Date Field */}
                 <Grid size={labelSize}>
                     <Label label='Register Date' htmlFor='startDate' />
                 </Grid>
@@ -339,12 +384,20 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                     <ControllerInput control={control} keyName='startDate' placeholder='Register Date' disabled />
                 </Grid>
 
-                {/* Password */}
+                {/* Password Field */}
                 <Grid size={labelSize}>
-                    <Label label='PW' htmlFor='password' />
+                    <Label required label='PW' htmlFor='password' />
                 </Grid>
                 <Grid size={5}>
-                    <ControllerInput control={control} keyName='password' placeholder='Password' disabled />
+                    <ControllerInput
+                        control={control}
+                        keyName='password'
+                        placeholder='Password'
+                        disabled
+                        inputProps={{
+                            type: "password"
+                        }}
+                    />
                 </Grid>
                 <Grid size={3}>
                     <Button
@@ -353,10 +406,11 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                             width: "100%"
                         }}
                         height='48px'
+                        disabled={editMode}
                         onClick={fetchingUserId}
                         loading={isFetchingUserId}
                     >
-                        {t("Common.Reset")}
+                        {t("Common.Init")}
                     </Button>
                 </Grid>
             </Grid>
@@ -364,7 +418,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
             <Divider />
 
             <Grid padding={2} width='100%' gap={2} container spacing={2} columns={24} alignItems='center'>
-                {/* Phone number */}
+                {/* Phone number Field */}
                 <Grid size={labelSize}>
                     <Label label='Phone number' htmlFor='phone' />
                 </Grid>
@@ -372,7 +426,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                     <ControllerInput control={control} keyName='phone' placeholder='Phone Number' />
                 </Grid>
 
-                {/* ID Kakao */}
+                {/* ID Kakao Field */}
                 <Grid size={labelSize}>
                     <Label label='KakaoTalk ID' htmlFor='kakao' />
                 </Grid>
@@ -380,7 +434,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                     <ControllerInput control={control} keyName='kakao' placeholder='KakaoTalk ID' />
                 </Grid>
 
-                {/* Email */}
+                {/* Email Field */}
                 <Grid size={labelSize}>
                     <Label label='Email' htmlFor='email' />
                 </Grid>
@@ -388,7 +442,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                     <ControllerInput control={control} keyName='email' placeholder='Email' />
                 </Grid>
 
-                {/* Telegram */}
+                {/* Telegram Field */}
                 <Grid size={labelSize}>
                     <Label label='Telegram ID' htmlFor='telegram' />
                 </Grid>
@@ -396,9 +450,16 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                     <ControllerInput control={control} keyName='telegram' placeholder='Telegram ID' />
                 </Grid>
 
-                {/* Token */}
-                <input type='hidden' />
+                {/* Token Field */}
                 <ControllerInput hidden control={control} keyName='token' placeholder='Token' />
+
+                {editMode && (
+                    <Grid size={24} textAlign={"end"}>
+                        <Typography variant='body1' color='primary'>
+                            {t("UserPage.Notice note")}
+                        </Typography>
+                    </Grid>
+                )}
             </Grid>
         </Dialog>
     );

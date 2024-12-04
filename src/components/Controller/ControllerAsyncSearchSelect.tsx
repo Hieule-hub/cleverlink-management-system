@@ -9,19 +9,24 @@ interface ControllerProps {
     keyName?: string;
     placeholder?: string;
     control: Control<any>;
+    disabled?: boolean;
     request?: (query?: string) => Promise<Option[]>;
+    onchangeField?: (value?: Option) => void;
 }
 
 export interface Option {
     label: string;
     value: string | number;
+    id?: string | number;
 }
 
 export const ControllerAsyncSearchSelect = ({
     keyName,
     control,
     placeholder,
-    request = () => Promise.resolve([])
+    disabled,
+    request = () => Promise.resolve([]),
+    onchangeField = () => ""
 }: ControllerProps) => {
     const [options, setOptions] = useState<Option[]>([]);
     const [loading, setLoading] = useState(false);
@@ -67,17 +72,18 @@ export const ControllerAsyncSearchSelect = ({
 
                 return (
                     <Autocomplete
+                        disabled={disabled}
                         onBlur={onBlur}
                         id={keyName}
                         onChange={(_, newValue) => {
                             onChange(newValue ? newValue : null);
+                            onchangeField(newValue);
                         }}
                         value={value ? (options.find((o) => o.value === field.value) ?? value) : null}
-                        clearIcon={null}
                         options={options}
                         loading={loading}
                         getOptionLabel={(option) => {
-                            return option.label;
+                            return option?.label || "";
                         }}
                         onInputChange={handleSearchInput}
                         renderOption={(props, option) => {

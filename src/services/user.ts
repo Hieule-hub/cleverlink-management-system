@@ -1,6 +1,7 @@
 import {
     CreateUserReq,
     DeleteUsersReq,
+    EditUserReq,
     GetUserIdReq,
     GetUserIdRes,
     GetUserListReq,
@@ -38,11 +39,18 @@ const getUserId = async (params: GetUserIdReq) => {
 
 const createUser = async (params: CreateUserReq) => {
     const { token, ...otherParams } = params;
+
     return apiClient.post<CreateUserReq, DataResponse<unknown>>("/user/create", otherParams, {
         headers: {
             encrypted: token
         }
     });
+};
+
+const editUser = async (params: EditUserReq) => {
+    const { userId, ...otherParams } = params;
+
+    return apiClient.put<CreateUserReq, DataResponse<unknown>>(`/user/edit/` + userId, otherParams);
 };
 
 const deleteUsers = async (params: DeleteUsersReq) => {
@@ -51,6 +59,6 @@ const deleteUsers = async (params: DeleteUsersReq) => {
     });
 };
 
-const userService = { userLogin, getUserInfo, getUserList, userLogout, deleteUsers, getUserId, createUser };
+const userService = { userLogin, getUserInfo, getUserList, userLogout, deleteUsers, getUserId, createUser, editUser };
 
 export default userService;

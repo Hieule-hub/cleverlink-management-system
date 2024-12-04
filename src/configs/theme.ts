@@ -67,6 +67,12 @@ export const theme: ThemeOptions = {
                     },
                     "& .MuiOutlinedInput-notchedOutline": {
                         borderColor: "transparent !important"
+                    },
+                    "&.Mui-disabled": {
+                        backgroundColor: "var(--bg-container-disabled)",
+                        "& .MuiSelect-select": {
+                            borderColor: "var(--palette-action-disabled)"
+                        }
                     }
                 }
             }
@@ -92,6 +98,9 @@ export const theme: ThemeOptions = {
                             borderColor: "var(--input-border-color)"
                         },
                         input: {
+                            WebkitBoxShadow: "0px 2px 4px white",
+                            WebkitTextFillColor: "var(--input-color)",
+                            caretColor: "var(--input-color)",
                             color: "var(--input-color)",
                             fontSize: "var(--input-font-size)",
                             padding: "var(--input-padding)"

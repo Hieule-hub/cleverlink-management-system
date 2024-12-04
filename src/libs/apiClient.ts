@@ -42,9 +42,9 @@ apiClient.interceptors.request.use(
 
         // Do something before the request is sent
         const token = localStorage.getItem("access-token"); // Retrieve auth token from localStorage
-        if (token) {
-            config.headers.token = token;
-        }
+
+        config.headers.token = token || "token";
+
         return config;
     },
     function (error) {
@@ -74,11 +74,13 @@ apiClient.interceptors.response.use(
     async function (error: AxiosError) {
         // Handle the response error
         if (isDebug) {
-            // console.log('Error:', error);
-            toast.error({
-                title: "API Error",
-                description: error.message
-            });
+            // console.log("Error:", error);
+            if (error.status !== 401) {
+                toast.error({
+                    title: "API Error",
+                    description: error.message
+                });
+            }
         }
 
         const originalRequest = error.config as CustomAxiosRequestConfig;
