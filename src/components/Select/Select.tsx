@@ -31,7 +31,7 @@ export const Select = ({
 
             const selectedOption = options.find((option) => option.value === selected);
 
-            return selectedOption ? selectedOption.label : null;
+            return selectedOption ? selectedOption.label : "Invalid";
         },
         [placeholder, options]
     );

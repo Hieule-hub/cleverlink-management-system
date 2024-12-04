@@ -11,7 +11,7 @@ import { Box, IconButton, TextField } from "@mui/material";
 import companyService from "@services/company";
 import { useTranslations } from "next-intl";
 
-import { triggerToastDev } from "@/utils";
+import { CompanyDialog, useCompanyDialog } from "./CompanyDialog";
 
 export const CompanyPage = () => {
     const t = useTranslations("CompanyPage");
@@ -21,6 +21,7 @@ export const CompanyPage = () => {
     const [dataList, setDataList] = useState([]);
 
     //Store controller
+    const { openDialog } = useCompanyDialog();
 
     //Delete list
     const [deleteIds, setDeleteIds] = useState([]);
@@ -60,9 +61,9 @@ export const CompanyPage = () => {
 
         setIsFetching(true);
         try {
-            // await userService.deleteUsers({
-            //     ids: ids
-            // });
+            await companyService.deleteCompanies({
+                ids: ids
+            });
             fetchDataList(filter);
             setDeleteIds([]);
         } catch (error) {
@@ -123,7 +124,7 @@ export const CompanyPage = () => {
                             color='info'
                             onClick={() => {
                                 // openUserDialog(record);
-                                triggerToastDev();
+                                openDialog(record);
                             }}
                         >
                             <DescriptionOutlined fontSize='inherit' />
@@ -173,8 +174,7 @@ export const CompanyPage = () => {
                         color='primary'
                         startIcon={AddCircleOutlineOutlined}
                         onClick={() => {
-                            // openUserDialog();
-                            triggerToastDev();
+                            openDialog();
                         }}
                     >
                         {t("Add new record")}
@@ -225,7 +225,7 @@ export const CompanyPage = () => {
                 )}
             </Box>
 
-            {/* <UserDialog onClose={() => console.log("dialog on close ---->")} /> */}
+            <CompanyDialog onClose={() => console.log("dialog on close ---->")} />
         </MainLayout>
     );
 };
