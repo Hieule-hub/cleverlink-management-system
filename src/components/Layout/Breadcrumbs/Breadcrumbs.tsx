@@ -40,12 +40,12 @@ export const Breadcrumbs = (props: BreadcrumbsProps) => {
 
     return (
         <MUIBreadcrumbs
-            separator={<ArrowForwardIosOutlined sx={{ fontSize: 16 }} />}
+            separator={<ArrowForwardIosOutlined sx={{ fontSize: 14 }} />}
             aria-label='breadcrumb'
             {...props}
         >
             <Link href='/' style={{ display: "flex", alignItems: "center" }}>
-                <HomeOutlined color='inherit' sx={{ fontSize: 24 }} />
+                <HomeOutlined color='primary' sx={{ fontSize: 22 }} />
             </Link>
             {pathnames.splice(0, 1).map((value, index) => {
                 const last = index === pathnames.length - 1;

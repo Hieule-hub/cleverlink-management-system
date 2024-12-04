@@ -121,6 +121,21 @@ export const theme: ThemeOptions = {
                         legend: {
                             display: "none"
                         }
+                    },
+                    "& .MuiInputBase-root": {
+                        height: "var(--input-height)",
+                        borderRadius: "var(--input-border-radius)",
+                        paddingLeft: 0,
+                        fieldset: {
+                            transition: "all 0.2s ease-in-out",
+                            borderColor: "var(--input-border-color)",
+                            top: 0
+                        },
+                        "& .MuiAutocomplete-input": {
+                            color: "var(--input-color)",
+                            fontSize: "var(--input-font-size)",
+                            padding: "var(--input-padding)"
+                        }
                     }
                 }
             }
