@@ -15,11 +15,13 @@ import {
     VideocamOutlined
 } from "@mui/icons-material";
 import { Box, IconButton, TextField } from "@mui/material";
+import deviceService from "@services/device";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
 
-import deviceService from "@/services/device";
 import { triggerToastDev } from "@/utils";
+
+import { DeviceDialog, useDeviceDialog } from "./DeviceDialog";
 
 export const DevicePage = () => {
     const t = useTranslations("DevicePage");
@@ -29,6 +31,7 @@ export const DevicePage = () => {
     const [dataList, setDataList] = useState([]);
 
     //Store controller
+    const { openDialog } = useDeviceDialog();
 
     //Delete list
     const [deleteIds, setDeleteIds] = useState([]);
@@ -70,9 +73,9 @@ export const DevicePage = () => {
 
         setIsFetching(true);
         try {
-            // await userService.deleteUsers({
-            //     ids: ids
-            // });
+            await deviceService.deleteDevices({
+                ids: ids
+            });
             fetchDataList(filter);
             setDeleteIds([]);
         } catch (error) {
@@ -141,7 +144,6 @@ export const DevicePage = () => {
                             size='small'
                             color='success'
                             onClick={() => {
-                                // openUserDialog(record);
                                 triggerToastDev();
                             }}
                         >
@@ -151,8 +153,7 @@ export const DevicePage = () => {
                             size='small'
                             color='info'
                             onClick={() => {
-                                // openUserDialog(record);
-                                triggerToastDev();
+                                openDialog(record);
                             }}
                         >
                             <DescriptionOutlined fontSize='inherit' />
@@ -202,8 +203,7 @@ export const DevicePage = () => {
                         color='primary'
                         startIcon={AddCircleOutlineOutlined}
                         onClick={() => {
-                            // openUserDialog();
-                            triggerToastDev();
+                            openDialog();
                         }}
                     >
                         {t("Add new record")}
@@ -254,7 +254,13 @@ export const DevicePage = () => {
                 )}
             </Box>
 
-            {/* <UserDialog onClose={() => console.log("dialog on close ---->")} /> */}
+            <DeviceDialog
+                onClose={(status) => {
+                    if (status === "success") {
+                        handleSearch();
+                    }
+                }}
+            />
         </MainLayout>
     );
 };
