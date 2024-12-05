@@ -6,8 +6,9 @@ import MainLayout from "@components/Layout/MainLayout";
 import { Pagination } from "@components/Pagination";
 import { Paper } from "@components/Paper";
 import { type Column, Table } from "@components/Table";
+import { UserInfoDialog, useUserInfoDialog } from "@modules/User";
 import { AddCircleOutlineOutlined, DeleteOutline, DescriptionOutlined, FilterList, Search } from "@mui/icons-material";
-import { Box, IconButton, TextField } from "@mui/material";
+import { Box, IconButton, Link, TextField } from "@mui/material";
 import companyService from "@services/company";
 import { useTranslations } from "next-intl";
 
@@ -22,6 +23,7 @@ export const CompanyPage = () => {
 
     //Store controller
     const { openDialog } = useCompanyDialog();
+    const { openDialog: showUserInfo } = useUserInfoDialog();
 
     //Delete list
     const [deleteIds, setDeleteIds] = useState([]);
@@ -102,7 +104,18 @@ export const CompanyPage = () => {
                 align: "center",
                 width: 200,
                 render: (value) => {
-                    return value?.name;
+                    return (
+                        <Link
+                            component='button'
+                            variant='body2'
+                            fontWeight={500}
+                            onClick={() => {
+                                showUserInfo(value);
+                            }}
+                        >
+                            {value?.name}
+                        </Link>
+                    );
                 }
             },
             {
@@ -232,6 +245,8 @@ export const CompanyPage = () => {
                     }
                 }}
             />
+
+            <UserInfoDialog />
         </MainLayout>
     );
 };
