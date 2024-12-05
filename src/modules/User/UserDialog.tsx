@@ -289,7 +289,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                         request={fetchCompanies}
                         onchangeField={(value) => {
                             if (value) {
-                                setValue("companyId", value?.value as string);
+                                setValue("companyId", value?.id as string);
                             }
                         }}
                     />

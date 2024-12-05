@@ -6,12 +6,12 @@ import MainLayout from "@components/Layout/MainLayout";
 import { Pagination } from "@components/Pagination";
 import { Paper } from "@components/Paper";
 import { type Column, Table } from "@components/Table";
-import { AddCircleOutlineOutlined, DeleteOutline, DescriptionOutlined, FilterList, Search } from "@mui/icons-material";
+import { AddCircleOutlineOutlined, DeleteOutline, DescriptionOutlined, Search } from "@mui/icons-material";
 import { Box, IconButton, TextField } from "@mui/material";
 import sceneService from "@services/scene";
 import { useTranslations } from "next-intl";
 
-import { triggerToastDev } from "@/utils";
+import { SceneDialog, useSceneDialog } from "./SceneDialog";
 
 export const ScenePage = () => {
     const t = useTranslations("ScenePage");
@@ -21,6 +21,7 @@ export const ScenePage = () => {
     const [dataList, setDataList] = useState([]);
 
     //Store controller
+    const { openDialog } = useSceneDialog();
 
     //Delete list
     const [deleteIds, setDeleteIds] = useState([]);
@@ -62,9 +63,9 @@ export const ScenePage = () => {
 
         setIsFetching(true);
         try {
-            // await userService.deleteUsers({
-            //     ids: ids
-            // });
+            await sceneService.deleteScenes({
+                ids: ids
+            });
             fetchDataList(filter);
             setDeleteIds([]);
         } catch (error) {
@@ -134,8 +135,7 @@ export const ScenePage = () => {
                             size='small'
                             color='info'
                             onClick={() => {
-                                // openUserDialog(record);
-                                triggerToastDev();
+                                openDialog(record);
                             }}
                         >
                             <DescriptionOutlined fontSize='inherit' />
@@ -185,8 +185,7 @@ export const ScenePage = () => {
                         color='primary'
                         startIcon={AddCircleOutlineOutlined}
                         onClick={() => {
-                            // openUserDialog();
-                            triggerToastDev();
+                            openDialog();
                         }}
                     >
                         {t("Add new record")}
@@ -237,7 +236,7 @@ export const ScenePage = () => {
                 )}
             </Box>
 
-            {/* <UserDialog onClose={() => console.log("dialog on close ---->")} /> */}
+            <SceneDialog onClose={() => console.log("dialog on close ---->")} />
         </MainLayout>
     );
 };
