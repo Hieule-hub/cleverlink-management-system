@@ -36,6 +36,7 @@
     "UserPage": {
         "title": "사용자 관리",
         "Placeholder search": "이름, ID, 분류, 근무현장",
+        "Record information": "Translating",
         "Add new record": "새 사용자 추가",
         "Edit record": "사용자 수정",
         "Edit record success": "Translating",
@@ -52,6 +53,7 @@
     "ScenePage": {
         "title": "현장 관리",
         "Placeholder search": "현장코드, 기관명, 현장명, 담당자, 주소",
+        "Record information": "Translating",
         "Add new record": "새 현장 추가",
         "Edit record": "현장 수정정",
         "Manager": "관리자",
@@ -64,6 +66,7 @@
     "CompanyPage": {
         "title": "기관 관리리",
         "Placeholder search": "기관코드, 기관명, 담당자",
+        "Record information": "Translating",
         "Add new record": "새 기관 추가",
         "Edit record": "기관 수정정",
         "Manager": "관리자",
@@ -75,6 +78,7 @@
     "DevicePage": {
         "title": "장치 관리",
         "Placeholder search": "장비ID, 기관관명, 설치장소, 장비관리자",
+        "Record information": "Translating",
         "Add new record": "새 창지 추가",
         "Edit record": "창지 수정",
         "Device ID": "창지ID",
@@ -87,6 +91,7 @@
     "CameraPage": {
         "title": "카메라 관리리",
         "Placeholder search": "모델 ID, 모델명, 종류, 제조사, 통신방식",
+        "Record information": "Translating",
         "Add new record": "새 카메라 추가",
         "Edit record": "카메라 수정",
         "Model ID": "메델 ID",
@@ -100,6 +105,7 @@
     "EventPage": {
         "title": "이벤트 관리",
         "Placeholder search": "설치장소, 장비ID, 경고장치, 수신자, 담당자 관리",
+        "Record information": "Translating",
         "Add new record": "새 이벤트 추가",
         "Edit record": "이벤트 수정",
         "Event time": "발생 시간",
@@ -137,7 +143,7 @@
     },
     "LocaleSwitcher": {
         "label": "언어 변경",
-        "locale": "{구역, 선택, ko {🇩🇪 한국어어} en {🇺🇸 영어 other {알 수 없음}}"
+        "locale": "{locale, select, ko {🇰🇷 한국어어} en {🇺🇸 영어} other {알 수 없음}}"
     },
     "Manifest": {
         "name": "클레버링크 시스템"
@@ -167,5 +173,15 @@
         "Phone": "02-3472-3577",
         "Email": "cip@cip.co.kr",
         "Website": "https://www.cipsystem.co.kr"
+    },
+
+    "Sidebar": {
+        "Dashboard": "대시보드",
+        "User": "사용자 관리",
+        "Scene": "현장 관리",
+        "Company": "기관 관리",
+        "Device": "장비 관리",
+        "Camera": "카메라 관리",
+        "Event": "이벤트 관리"
     }
 }

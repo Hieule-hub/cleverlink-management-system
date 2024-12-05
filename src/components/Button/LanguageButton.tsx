@@ -21,6 +21,7 @@ export const LanguageButton = () => {
     const t = useTranslations("LocaleSwitcher");
     const [isPending, startTransition] = useTransition();
     const locale = useLocale();
+    console.log("🚀 ~ LanguageButton ~ locale:", locale);
     const pathname = usePathname();
     const params = useParams();
 
@@ -57,6 +58,7 @@ export const LanguageButton = () => {
                     label: t("locale", { locale: cur }),
                     key: cur
                 }))}
+                selectedItem={locale}
                 onSelectItem={handleSelectItem}
                 menuProps={{
                     anchorOrigin: {

@@ -36,6 +36,7 @@
     "UserPage": {
         "title": "User Management",
         "Placeholder search": "Name, ID, classification, work site",
+        "Record information": "User details",
         "Add new record": "Add new user",
         "Edit record": "Edit user",
         "Edit record success": "Edit user success",
@@ -52,6 +53,7 @@
     "ScenePage": {
         "title": "Scene Management",
         "Placeholder search": "Field code, organization name, field name, person in charge, address",
+        "Record information": "Scene details",
         "Add new record": "Add new scene",
         "Edit record": "Edit scene",
         "Manager": "Manager",
@@ -64,6 +66,7 @@
     "CompanyPage": {
         "title": "Company Management",
         "Placeholder search": "Institution code, institution name, contact person",
+        "Record information": "Company details",
         "Add new record": "Add new company",
         "Edit record": "Edit company",
         "Manager": "Manager",
@@ -75,6 +78,7 @@
     "DevicePage": {
         "title": "Device Management",
         "Placeholder search": "Equipment ID, organization name, installation site, equipment manager",
+        "Record information": "Device details",
         "Add new record": "Add new device",
         "Edit record": "Edit device",
         "Device ID": "Device ID",
@@ -87,6 +91,7 @@
     "CameraPage": {
         "title": "Camera Management",
         "Placeholder search": "Model ID, model name, type, manufacturer, communication method",
+        "Record information": "Camera details",
         "Add new record": "Add new camera",
         "Edit record": "Edit camera",
         "Model ID": "Model ID",
@@ -100,6 +105,7 @@
     "EventPage": {
         "title": "Event Management",
         "Placeholder search": "Installation location, equipment ID, warning device, recipient, management person in charge",
+        "Record information": "Event details",
         "Add new record": "Add new event",
         "Edit record": "Edit event",
         "Event time": "Event time",
@@ -137,7 +143,7 @@
     },
     "LocaleSwitcher": {
         "label": "Change language",
-        "locale": "{locale, select, ko {🇩🇪 Korean} en {🇺🇸 English} other {Unknown}}"
+        "locale": "{locale, select, ko {🇰🇷 Korean} en {🇺🇸 English} other {Unknown}}"
     },
     "Manifest": {
         "name": "Clever Link System"
@@ -167,5 +173,15 @@
         "Phone": "02-3472-3577",
         "Email": "cip@cip.co.kr",
         "Website": "https://www.cipsystem.co.kr"
+    },
+
+    "Sidebar": {
+        "Dashboard": "Dashboard",
+        "User": "User",
+        "Scene": "Scene",
+        "Company": "Company",
+        "Device": "Device",
+        "Camera": "Camera",
+        "Event": "Event"
     }
 }

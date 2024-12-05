@@ -14,6 +14,7 @@ export type IDropdownOption = {
 };
 
 export type IDropdownProps = {
+    selectedItem?: string;
     menu: IDropdownOption[];
     menuProps?: Partial<MenuProps>;
     onSelectItem?: (i: IDropdownOption) => void;
@@ -46,9 +47,13 @@ const MenuItem = styled(MuiMenuItem)`
     :hover {
         background-color: #f5f5f5;
     }
+
+    &.selected {
+        color: var(--palette-primary-main);
+    }
 `;
 
-export const Dropdown = ({ menu, children, onSelectItem, menuProps, ...props }: IDropdownProps) => {
+export const Dropdown = ({ selectedItem, menu, children, onSelectItem, menuProps, ...props }: IDropdownProps) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
 
@@ -107,7 +112,11 @@ export const Dropdown = ({ menu, children, onSelectItem, menuProps, ...props }: 
             >
                 {menu.map((item) => {
                     return (
-                        <MenuItem key={item.key} onClick={() => handleSelectItem(item)}>
+                        <MenuItem
+                            className={selectedItem === item.key ? "selected" : ""}
+                            key={item.key}
+                            onClick={() => handleSelectItem(item)}
+                        >
                             {item.icon && <item.icon className='icon' />}
                             <div className='label'>{item.label}</div>
                         </MenuItem>

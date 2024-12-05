@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { RouteConfig, routeConfig } from "@configs/routeConfig";
 import { ChevronRightOutlined } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
+import { useTranslations } from "next-intl";
 import Menu, { Divider as RcDivider, Item as RcMenuItem, SubMenu as RcSubMenu } from "rc-menu";
 
 // import 'rc-menu/assets/index.css';
@@ -143,7 +144,11 @@ const ExpandIcon = styled("div")`
 `;
 
 // Helper to render Menu items and submenus recursively
-const renderMenuItems = (items: RouteConfig[], onClick: (item: RouteConfig) => void) => {
+const renderMenuItems = (
+    items: RouteConfig[],
+    onClick: (item: RouteConfig) => void,
+    trans: (key?: string) => string
+) => {
     return items.map((item) => {
         if (item.hidden) return null;
 
@@ -163,7 +168,7 @@ const renderMenuItems = (items: RouteConfig[], onClick: (item: RouteConfig) => v
                                     </MenuItemIcon>
                                 </div>
                             ) : null}
-                            {item.label && <MenuItemLabel>{item.label}</MenuItemLabel>}
+                            {item.label && <MenuItemLabel>{trans(item.label)}</MenuItemLabel>}
                         </MenuItemContent>
                     }
                     expandIcon={({ isOpen }) => (
@@ -172,7 +177,7 @@ const renderMenuItems = (items: RouteConfig[], onClick: (item: RouteConfig) => v
                         </ExpandIcon>
                     )}
                 >
-                    {renderMenuItems(item.children, onClick)}
+                    {renderMenuItems(item.children, onClick, trans)}
                 </SubMenu>
             );
         }
@@ -186,7 +191,7 @@ const renderMenuItems = (items: RouteConfig[], onClick: (item: RouteConfig) => v
                             </MenuItemIcon>
                         </div>
                     ) : null}
-                    {item.label && <MenuItemLabel>{item.label}</MenuItemLabel>}
+                    {item.label && <MenuItemLabel>{trans(item.label)}</MenuItemLabel>}
                 </MenuItemContent>
             </MenuItem>
         );
@@ -195,7 +200,7 @@ const renderMenuItems = (items: RouteConfig[], onClick: (item: RouteConfig) => v
 
 // eslint-disable-next-line react/display-name
 export const MenuSidebar = memo(() => {
-    // const { t } = useTranslation();
+    const t = useTranslations("Sidebar");
 
     const router = useRouter();
 
@@ -213,6 +218,10 @@ export const MenuSidebar = memo(() => {
         }
     };
 
+    const translate = (key: string) => {
+        return t(key);
+    };
+
     return (
         <Menu
             style={{
@@ -228,7 +237,7 @@ export const MenuSidebar = memo(() => {
             // 	setKeyPath(e.keyPath);
             // }}
         >
-            {renderMenuItems(routeConfig, handleClick)}
+            {renderMenuItems(routeConfig, handleClick, translate)}
         </Menu>
     );
 });
