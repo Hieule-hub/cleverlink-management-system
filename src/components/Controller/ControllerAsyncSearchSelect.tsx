@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import { CircularProgress, TextField } from "@mui/material";
-import Autocomplete from "@mui/material/Autocomplete";
+import Autocomplete, { AutocompleteRenderOptionState } from "@mui/material/Autocomplete";
 import { debounce } from "@mui/material/utils";
 import { type Control, Controller as ControllerRHF } from "react-hook-form";
 
@@ -12,6 +12,11 @@ interface ControllerProps {
     disabled?: boolean;
     request?: (query?: string) => Promise<Option[]>;
     onchangeField?: (value?: Option) => void;
+    renderOption?: (
+        props: React.HTMLAttributes<HTMLLIElement>,
+        option: Option,
+        state: AutocompleteRenderOptionState
+    ) => React.ReactNode;
 }
 
 export interface Option {
@@ -26,7 +31,14 @@ export const ControllerAsyncSearchSelect = ({
     placeholder,
     disabled,
     request = () => Promise.resolve([]),
-    onchangeField = () => ""
+    onchangeField = () => "",
+    renderOption = (props, option) => {
+        return (
+            <li {...props} key={option.value}>
+                {option.label}
+            </li>
+        );
+    }
 }: ControllerProps) => {
     const [options, setOptions] = useState<Option[]>([]);
     const [loading, setLoading] = useState(false);
@@ -86,13 +98,7 @@ export const ControllerAsyncSearchSelect = ({
                             return option?.label || "";
                         }}
                         onInputChange={handleSearchInput}
-                        renderOption={(props, option) => {
-                            return (
-                                <li {...props} key={option.value}>
-                                    {option.label}
-                                </li>
-                            );
-                        }}
+                        renderOption={renderOption}
                         renderInput={(params) => (
                             <TextField
                                 {...params}
