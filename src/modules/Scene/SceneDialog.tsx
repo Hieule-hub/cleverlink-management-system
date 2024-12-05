@@ -140,8 +140,8 @@ export const SceneDialog = ({ onClose = () => "" }: SceneDialogProps) => {
         }
     }, [item, reset]);
 
-    const handleClose = () => {
-        onClose();
+    const handleClose = (status?: string) => {
+        onClose(status);
         closeDialog();
     };
 
@@ -178,7 +178,7 @@ export const SceneDialog = ({ onClose = () => "" }: SceneDialogProps) => {
                     });
                     if (!response.err) {
                         toast.success({ title: t("ScenePage.Edit record success") });
-                        handleClose();
+                        handleClose("success");
                     } else {
                         // toast.error({ title: t("ScenePage.Edit record failed") });
                     }
@@ -202,7 +202,7 @@ export const SceneDialog = ({ onClose = () => "" }: SceneDialogProps) => {
                     });
                     if (!response.err) {
                         toast.success({ title: t("ScenePage.Create record success") });
-                        handleClose();
+                        handleClose("success");
                     } else {
                         // toast.error({ title: t("ScenePage.Create record failed") });
                     }

@@ -225,7 +225,13 @@ export const CompanyPage = () => {
                 )}
             </Box>
 
-            <CompanyDialog onClose={() => console.log("dialog on close ---->")} />
+            <CompanyDialog
+                onClose={(status) => {
+                    if (status === "success") {
+                        handleSearch();
+                    }
+                }}
+            />
         </MainLayout>
     );
 };

@@ -171,7 +171,11 @@ export const DashboardPage = () => {
                 )}
             </Box>
 
-            {/* <UserDialog onClose={() => console.log("dialog on close ---->")} /> */}
+            {/* <UserDialog  onClose={(status) => {
+                    if (status === "success") {
+                        handleSearch();
+                    }
+                }} /> */}
         </MainLayout>
     );
 };

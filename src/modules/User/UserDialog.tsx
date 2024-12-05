@@ -130,8 +130,8 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
         }
     }, [user, reset]);
 
-    const handleClose = () => {
-        onClose();
+    const handleClose = (status?: string) => {
+        onClose(status);
         closeUserDialog();
     };
 
@@ -170,7 +170,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                     });
                     if (!response.err) {
                         toast.success({ title: t("UserPage.Edit record success") });
-                        handleClose();
+                        handleClose("success");
                     } else {
                         // toast.error({ title: t("UserPage.Edit record failed") });
                     }
@@ -191,7 +191,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                     });
                     if (!response.err) {
                         toast.success({ title: t("UserPage.Create record success") });
-                        handleClose();
+                        handleClose("success");
                     } else {
                         // toast.error({ title: t("UserPage.Create record failed") });
                     }

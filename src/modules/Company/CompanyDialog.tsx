@@ -105,8 +105,8 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
         }
     }, [item, reset]);
 
-    const handleClose = () => {
-        onClose();
+    const handleClose = (status?: string) => {
+        onClose(status);
         closeDialog();
     };
 
@@ -143,7 +143,7 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
                     });
                     if (!response.err) {
                         toast.success({ title: t("CompanyPage.Edit record success") });
-                        handleClose();
+                        handleClose("success");
                     } else {
                         // toast.error({ title: t("CompanyPage.Edit record failed") });
                     }
@@ -162,7 +162,7 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
                     });
                     if (!response.err) {
                         toast.success({ title: t("CompanyPage.Create record success") });
-                        handleClose();
+                        handleClose("success");
                     } else {
                         // toast.error({ title: t("CompanyPage.Create record failed") });
                     }

@@ -236,7 +236,13 @@ export const ScenePage = () => {
                 )}
             </Box>
 
-            <SceneDialog onClose={() => console.log("dialog on close ---->")} />
+            <SceneDialog
+                onClose={(status) => {
+                    if (status === "success") {
+                        handleSearch();
+                    }
+                }}
+            />
         </MainLayout>
     );
 };
