@@ -6,8 +6,8 @@
     "Common": {
         "Add": "추가",
         "Delete": "삭제",
-        "Edit": "수정정",
-        "Search": "찾기기",
+        "Edit": "수정",
+        "Search": "찾기",
         "Previous": "이전",
         "Next": "다음",
         "selected": "선택중",
@@ -19,7 +19,7 @@
         "No": "아니오",
         "Reset": "리셋",
         "Init": "초기화",
-        "Detail": "디테일일",
+        "Detail": "상세",
         "Camera": "카메라",
         "Snapshot": "스냅샷"
     },
@@ -27,7 +27,7 @@
     "DashboardPage": {
         "title": "대시보드",
         "Company ID": "기관관ID",
-        "Company name": "기관명명",
+        "Company name": "기관명",
         "Scene ID": "현장ID",
         "Scene name": "현장명",
         "Device ID": "장비ID"
@@ -46,7 +46,7 @@
         "ID": "ID",
         "Name": "이름",
         "Scene name": "현장명",
-        "Role": "구분분",
+        "Role": "구분",
         "Notice note": "※위험을 알림받기 위한 연락처 입력란 입니다."
     },
 
@@ -55,20 +55,20 @@
         "Placeholder search": "현장코드, 기관명, 현장명, 담당자, 주소",
         "Record information": "Translating",
         "Add new record": "새 현장 추가",
-        "Edit record": "현장 수정정",
+        "Edit record": "현장 수정",
         "Manager": "관리자",
         "Scene ID": "현장 ID",
-        "Scene name": "현장명명",
-        "Company name": "기관명명",
+        "Scene name": "현장명",
+        "Company name": "기관명",
         "Address": "주소"
     },
 
     "CompanyPage": {
-        "title": "기관 관리리",
+        "title": "기관 관리",
         "Placeholder search": "기관코드, 기관명, 담당자",
         "Record information": "Translating",
         "Add new record": "새 기관 추가",
-        "Edit record": "기관 수정정",
+        "Edit record": "기관 수정",
         "Manager": "관리자",
         "Name": "기관명",
         "Devices": "장치",
@@ -77,7 +77,7 @@
 
     "DevicePage": {
         "title": "장치 관리",
-        "Placeholder search": "장비ID, 기관관명, 설치장소, 장비관리자",
+        "Placeholder search": "장비ID, 기관명, 설치장소, 장비 관리자",
         "Record information": "Translating",
         "Add new record": "새 창지 추가",
         "Edit record": "창지 수정",
@@ -89,7 +89,7 @@
     },
 
     "CameraPage": {
-        "title": "카메라 관리리",
+        "title": "카메라 관리",
         "Placeholder search": "모델 ID, 모델명, 종류, 제조사, 통신방식",
         "Record information": "Translating",
         "Add new record": "새 카메라 추가",
@@ -110,7 +110,7 @@
         "Edit record": "이벤트 수정",
         "Event time": "발생 시간",
         "Emplacement": "설치",
-        "Device ID": "창지지 ID",
+        "Device ID": "창지 ID",
         "Warning device": "경고장치",
         "Receiver": "수진자",
         "Manager": "관리자"
@@ -118,9 +118,9 @@
 
     "LoginPage": {
         "title": "로그인",
-        "Clever link": "클레버링크크",
+        "Clever link": "클레버링크",
         "Login title": "CLEVER-LINK 클라우드 서비스",
-        "Login": "로그인인",
+        "Login": "로그인",
         "Password": "비밀번호",
         "Thank you for your visit": "방문해 주셔서 감사합니다.",
         "Email address": "이메일 주소",
@@ -129,7 +129,7 @@
     },
 
     "NotFoundPage": {
-        "description": "브라우저 주소 표시줄을 다시 확인하거나 탐색을 사용하여 알고 있는 페이지로 이동하세.",
+        "description": "브라우저 주소 표시줄을 다시 확인하거나 탐색을 사용하여 알고 있는 페이지로 이동하세요.",
         "title": "페이지를 찾을 수 없습니다"
     },
 
@@ -143,7 +143,7 @@
     },
     "LocaleSwitcher": {
         "label": "언어 변경",
-        "locale": "{locale, select, ko {🇰🇷 한국어어} en {🇺🇸 영어} other {알 수 없음}}"
+        "locale": "{locale, select, ko {🇰🇷 한국어} en {🇺🇸 영어} other {알 수 없음}}"
     },
     "Manifest": {
         "name": "클레버링크 시스템"
