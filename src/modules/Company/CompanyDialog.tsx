@@ -65,13 +65,9 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
     const editMode = useMemo(() => Boolean(item), [item]);
 
     const resolver = yup.object({
-        // userId: yup.string().required("User ID is required"),
-        // password: yup.string().required("Password is required"),
-        // name: yup.string().required("Name is required"),
-        // sceneId: yup.string().required("Scene is required"),
-        // companyId: yup.string().required("Company is required"),
-        // roleId: yup.string().required("Role is required"),
-        // email: yup.string().email("Email is not valid")
+        userId: yup.string().required("User ID is required"),
+        organizationId: yup.string().required("Organization is required"),
+        name: yup.string().required("Company name is required")
     });
 
     const {
@@ -146,10 +142,10 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
                         organizationId: data.organizationId
                     });
                     if (!response.err) {
-                        toast.success({ title: t("UserPage.Edit record success") });
+                        toast.success({ title: t("CompanyPage.Edit record success") });
                         handleClose();
                     } else {
-                        // toast.error({ title: t("UserPage.Edit record failed") });
+                        // toast.error({ title: t("CompanyPage.Edit record failed") });
                     }
                 } else {
                     const response = await companyService.createCompany({
@@ -165,10 +161,10 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
                         token: data.token
                     });
                     if (!response.err) {
-                        toast.success({ title: t("UserPage.Create record success") });
+                        toast.success({ title: t("CompanyPage.Create record success") });
                         handleClose();
                     } else {
-                        // toast.error({ title: t("UserPage.Create record failed") });
+                        // toast.error({ title: t("CompanyPage.Create record failed") });
                     }
                 }
             } catch (error) {
