@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { ControllerInput } from "@components/Controller";
 import { ControllerAsyncSearchSelect, Option } from "@components/Controller/ControllerAsyncSearchSelect";
@@ -74,7 +74,7 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
 
     const [isLoading, setIsLoading] = useState(false);
 
-    // const editMode = useMemo(() => Boolean(item), [item]);
+    const editMode = useMemo(() => Boolean(item), [item]);
 
     const resolver = yup.object({
         company: yup.object({
@@ -289,7 +289,7 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
                 }
             }}
             open={open}
-            title={item ? t("DevicePage.Edit record") : t("DevicePage.Add new record")}
+            title={editMode ? t("DevicePage.Edit record") : t("DevicePage.Add new record")}
             onClose={handleClose}
             onCancel={handleClose}
             onOk={handleSave}

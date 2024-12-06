@@ -82,7 +82,7 @@ export const SceneDialog = ({ onClose = () => "" }: SceneDialogProps) => {
     const { item, open, closeDialog, setItem } = useSceneDialog();
 
     const [isLoading, setIsLoading] = useState(false);
-    const [isFetchingUserId, setIsFetchingUserId] = useState(false);
+    const [isFetchingId, setIsFetchingId] = useState(false);
 
     const editMode = useMemo(() => Boolean(item), [item]);
 
@@ -224,7 +224,7 @@ export const SceneDialog = ({ onClose = () => "" }: SceneDialogProps) => {
         }
 
         //get role code
-        setIsFetchingUserId(true);
+        setIsFetchingId(true);
 
         try {
             const response = await sceneService.getSceneIdAndUserId({
@@ -242,7 +242,7 @@ export const SceneDialog = ({ onClose = () => "" }: SceneDialogProps) => {
         } catch (error) {
             console.error(error);
         } finally {
-            setIsFetchingUserId(false);
+            setIsFetchingId(false);
         }
     };
 
@@ -368,7 +368,7 @@ export const SceneDialog = ({ onClose = () => "" }: SceneDialogProps) => {
                             height='48px'
                             disabled={editMode}
                             onClick={fetchId}
-                            loading={isFetchingUserId}
+                            loading={isFetchingId}
                         >
                             {t("Common.Init")}
                         </Button>

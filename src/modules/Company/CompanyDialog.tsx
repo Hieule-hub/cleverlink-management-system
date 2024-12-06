@@ -60,7 +60,7 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
     const { item, open, closeDialog, setItem } = useCompanyDialog();
 
     const [isLoading, setIsLoading] = useState(false);
-    const [isFetchingUserId, setIsFetchingUserId] = useState(false);
+    const [isFetchingId, setIsFetchingId] = useState(false);
 
     const editMode = useMemo(() => Boolean(item), [item]);
 
@@ -184,7 +184,7 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
         }
 
         //get role code
-        setIsFetchingUserId(true);
+        setIsFetchingId(true);
 
         try {
             const response = await companyService.getCompanyIdAndUserId({
@@ -203,7 +203,7 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
         } catch (error) {
             console.error(error);
         } finally {
-            setIsFetchingUserId(false);
+            setIsFetchingId(false);
         }
     };
 
@@ -302,7 +302,7 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
                         height='48px'
                         disabled={editMode}
                         onClick={fetchId}
-                        loading={isFetchingUserId}
+                        loading={isFetchingId}
                     >
                         {t("Common.Init")}
                     </Button>

@@ -73,7 +73,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
     const { user, open, closeUserDialog, setUser } = useUserStore();
 
     const [isLoading, setIsLoading] = useState(false);
-    const [isFetchingUserId, setIsFetchingUserId] = useState(false);
+    const [isFetchingId, setIsFetchingId] = useState(false);
 
     const editMode = useMemo(() => Boolean(user), [user]);
 
@@ -208,7 +208,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
         const roleId = getValues("roleId");
 
         //get role code
-        setIsFetchingUserId(true);
+        setIsFetchingId(true);
 
         try {
             const response = await userService.getUserId({
@@ -225,7 +225,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
         } catch (error) {
             console.error(error);
         } finally {
-            setIsFetchingUserId(false);
+            setIsFetchingId(false);
         }
     };
 
@@ -408,7 +408,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                         height='48px'
                         disabled={editMode}
                         onClick={fetchingUserId}
-                        loading={isFetchingUserId}
+                        loading={isFetchingId}
                     >
                         {t("Common.Init")}
                     </Button>
