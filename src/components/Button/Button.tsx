@@ -6,7 +6,7 @@ import { styled } from "@mui/material";
 import { SpinIcon } from "../Icon";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    color?: "default" | "primary" | "danger" | "success" | "brown";
+    color?: "default" | "primary" | "error" | "success" | "warning" | "info";
     loading?: boolean;
     height?: string;
     fullWidth?: boolean;
@@ -16,13 +16,12 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 const StyledButton = styled("button")`
     border: none;
+    cursor: pointer;
     border-radius: 0.5rem;
     padding: 0.5rem 1rem;
-    color: white;
     transition: all 0.3s ease;
     padding: 4px 15px;
     font-size: 14px;
-    height: ${(props: ButtonProps) => (props.height === undefined ? "var(--button-height)" : props.height)};
     box-sizing: border-box;
     font-weight: 500;
     display: inline-flex;
@@ -38,45 +37,83 @@ const StyledButton = styled("button")`
     overflow: hidden;
     text-overflow: ellipsis;
 
-    &:hover {
-        opacity: 0.9;
+    // Disable
+    &:disabled {
+        cursor: not-allowed;
+        pointer-events: none;
+        background-color: var(--palette-action-background);
+        opacity: var(--palette-action-opacity);
     }
 
-    &.default {
-        background-color: white;
-        color: #344054;
+    &.default:disabled {
+        /* background-color: white; */
+        /* color: #344054; */
         border: 1px solid var(--input-border-color);
-
-        :hover {
-            border-color: var(--palette-primary-main);
-            color: var(--palette-primary-main);
-        }
     }
 
-    &.primary {
-        border: none;
-        background-color: var(--palette-primary-main);
-
-        :hover {
-            background-color: var(--palette-primary-light);
-        }
+    &:hover {
+        opacity: var(--palette-action-hover-opacity);
     }
 
-    &.danger {
-        border: none;
-        background-color: var(--palette-danger-main);
-
-        :hover {
-            background-color: var(--palette-danger-light);
+    &:not(:disabled) {
+        &.default {
+            background-color: white;
+            color: #344054;
+            border: 1px solid var(--input-border-color);
+            :hover {
+                border-color: var(--palette-primary-main);
+                color: var(--palette-primary-main);
+            }
         }
-    }
 
-    &.success {
-        border: none;
-        background-color: var(--palette-success-main);
+        &.primary {
+            border: none;
+            background-color: var(--palette-primary-main);
+            color: white;
 
-        :hover {
-            background-color: var(--palette-success-light);
+            :hover {
+                background-color: var(--palette-primary-light);
+            }
+        }
+
+        &.error {
+            border: none;
+            color: white;
+            background-color: var(--palette-error-main);
+
+            :hover {
+                background-color: var(--palette-error-light);
+            }
+        }
+
+        &.success {
+            border: none;
+            color: white;
+            background-color: var(--palette-success-main);
+
+            :hover {
+                background-color: var(--palette-success-light);
+            }
+        }
+
+        &.warning {
+            border: none;
+            color: white;
+            background-color: var(--palette-warning-main);
+
+            :hover {
+                background-color: var(--palette-warning-light);
+            }
+        }
+
+        &.info {
+            border: none;
+            color: white;
+            background-color: var(--palette-info-main);
+
+            :hover {
+                background-color: var(--palette-info-light);
+            }
         }
     }
 
@@ -95,10 +132,8 @@ const StyledButton = styled("button")`
         line-height: 1;
     }
 
-    opacity: ${(props: ButtonProps) => (props.disabled ? 0.6 : 1)} !important;
-    pointer-events: ${(props: ButtonProps) => (props.disabled ? "" : "auto")} !important;
-    cursor: ${(props: ButtonProps) => (props.disabled ? "not-allowed" : "pointer")} !important;
     width: ${(props: ButtonProps) => (props.fullWidth ? "100%" : "auto")};
+    height: ${(props: ButtonProps) => (props.height === undefined ? "var(--button-height)" : props.height)};
 `;
 
 export const Button = ({ color = "default", loading = false, children, className = "", ...props }: ButtonProps) => {
