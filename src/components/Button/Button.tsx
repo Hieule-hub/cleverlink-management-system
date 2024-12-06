@@ -41,13 +41,18 @@ const StyledButton = styled("button")`
     &:disabled {
         cursor: not-allowed;
         pointer-events: none;
-        background-color: var(--palette-action-background);
+        background-color: var(--bg-container-disabled);
         opacity: var(--palette-action-opacity);
     }
 
-    &.default:disabled {
-        /* background-color: white; */
-        /* color: #344054; */
+    &.default:disabled,
+    &.primary:disabled,
+    &.error:disabled,
+    &.success:disabled,
+    &.warning:disabled,
+    &.info:disabled {
+        background-color: white;
+        background-color: var(--bg-container-disabled);
         border: 1px solid var(--input-border-color);
     }
 

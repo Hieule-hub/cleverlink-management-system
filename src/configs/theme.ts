@@ -91,7 +91,7 @@ export const theme: ThemeOptions = {
             styleOverrides: {
                 root: {
                     "& .MuiOutlinedInput-root": {
-                        height: "var(--input-height)",
+                        // height: "var(--input-height)",
                         borderRadius: "var(--input-border-radius)",
                         fieldset: {
                             transition: "all 0.2s ease-in-out",
