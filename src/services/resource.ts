@@ -1,6 +1,6 @@
 import { Device } from "@interfaces/device";
 import apiClient from "@libs/apiClient";
-import { Area, DataResponse, GetParams, Organization, Pagination, Role } from "common";
+import { Area, Category, DataResponse, GetParams, Organization, Pagination, Protocol, Role } from "common";
 
 const getResources = async () => {
     const roles = apiClient.get<unknown, DataResponse<Role[]>>("/resource/roles").then((res) => res.data);
@@ -8,8 +8,10 @@ const getResources = async () => {
         .get<unknown, DataResponse<Organization[]>>("/resource/organizations")
         .then((res) => res.data);
     const areas = apiClient.get<unknown, DataResponse<Area[]>>("/resource/areas").then((res) => res.data);
+    const protocols = apiClient.get<unknown, DataResponse<Protocol[]>>("/resource/protocols").then((res) => res.data);
+    const categories = apiClient.get<unknown, DataResponse<Category[]>>("/resource/categories").then((res) => res.data);
 
-    return Promise.all([roles, organizations, areas]);
+    return Promise.all([roles, organizations, areas, protocols, categories]);
 };
 
 type GetDashboardDataRes = DataResponse<{

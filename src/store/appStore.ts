@@ -1,17 +1,18 @@
 import { UserInfo } from "@interfaces/user";
 import resourceService from "@services/resource";
 import userService from "@services/user";
-import { Area, Organization, Role, RoleCode } from "common";
+import { Area, Category, Organization, Protocol, Role, RoleCode } from "common";
 import { createStore } from "zustand/vanilla";
 
 export type AppState = {
     isFetching: boolean;
     role: RoleCode;
-    // theme: Theme;
     userInfo?: UserInfo;
     roles: Role[];
     organizations: Organization[];
     areas: Area[];
+    protocols: Protocol[];
+    categories: Category[];
 };
 
 export type AppActions = {
@@ -28,7 +29,9 @@ export const initAppStore = (): AppState => {
         role: "CIP",
         roles: [],
         organizations: [],
-        areas: []
+        areas: [],
+        protocols: [],
+        categories: []
     };
 };
 
@@ -37,7 +40,9 @@ export const defaultInitAppState: AppState = {
     role: "CIP",
     roles: [],
     organizations: [],
-    areas: []
+    areas: [],
+    protocols: [],
+    categories: []
 };
 
 export const createAppStore = (initState: AppState = defaultInitAppState) => {
@@ -71,8 +76,15 @@ export const createAppStore = (initState: AppState = defaultInitAppState) => {
         },
         fetResources: async () => {
             try {
-                const [roles, organizations, areas] = await resourceService.getResources();
-                set((state) => ({ ...state, roles: roles, organizations: organizations, areas: areas }));
+                const [roles, organizations, areas, protocols, categories] = await resourceService.getResources();
+                set((state) => ({
+                    ...state,
+                    roles: roles,
+                    organizations: organizations,
+                    areas: areas,
+                    protocols: protocols,
+                    categories: categories
+                }));
             } catch (error) {
                 console.log("🚀 ~ fetResources: ~ error:", error);
             }

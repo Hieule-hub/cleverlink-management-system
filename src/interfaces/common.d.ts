@@ -40,4 +40,10 @@ declare module "common" {
     };
 
     type Area = Organization;
+
+    type Protocol = Organization;
+
+    type Category = Organization & {
+        key: string;
+    };
 }

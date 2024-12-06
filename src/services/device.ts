@@ -1,15 +1,18 @@
-import apiClient from "@libs/apiClient";
-import { DataResponse, GetParams } from "common";
-
 import {
+    CreateCameraReq,
     CreateDeviceReq,
     DeleteDevicesReq,
+    EditCameraReq,
     EditDeviceReq,
     GetActiveListReq,
     GetActiveListRes,
+    GetCameraIdReq,
+    GetCameraIdRes,
     GetCameraListRes,
     GetDeviceListRes
-} from "@/interfaces/device";
+} from "@interfaces/device";
+import apiClient from "@libs/apiClient";
+import { DataResponse, GetParams } from "common";
 
 const getDeviceList = async (params: Partial<GetParams>) => {
     return apiClient.get<unknown, GetDeviceListRes>("/device/findAll", {
@@ -33,18 +36,58 @@ const deleteDevices = async (params: DeleteDevicesReq) => {
     });
 };
 
-const getCameraList = async (params: Partial<GetParams>) => {
-    return apiClient.get<unknown, GetCameraListRes>("/camera/findAll", {
-        params
-    });
-};
-
 const getActiveList = async (params: GetActiveListReq) => {
     return apiClient.get<GetActiveListReq, GetActiveListRes>("/activate/findAll", {
         params
     });
 };
 
-const deviceService = { getDeviceList, getCameraList, getActiveList, createDevice, editDevice, deleteDevices };
+// Camera
+const getCameraList = async (params: Partial<GetParams>) => {
+    return apiClient.get<unknown, GetCameraListRes>("/camera/findAll", {
+        params
+    });
+};
+
+const getCameraId = async (params: GetCameraIdReq) => {
+    return apiClient.get<GetCameraIdReq, GetCameraIdRes>(`/camera/getCameraId`, {
+        params: params
+    });
+};
+
+const createCamera = async (params: CreateCameraReq) => {
+    const { token, ...otherParams } = params;
+
+    return apiClient.post<CreateDeviceReq, DataResponse<unknown>>("/camera/create", otherParams, {
+        headers: {
+            encrypted: token
+        }
+    });
+};
+
+const editCamera = async (params: EditCameraReq) => {
+    const { _id, ...otherParams } = params;
+
+    return apiClient.put<CreateDeviceReq, DataResponse<unknown>>(`/camera/edit/` + _id, otherParams);
+};
+
+const deleteCameras = async (params: DeleteDevicesReq) => {
+    return apiClient.delete<unknown, DataResponse<unknown>>(`/camera/deletes`, {
+        data: params
+    });
+};
+
+const deviceService = {
+    getDeviceList,
+    getCameraList,
+    getActiveList,
+    createDevice,
+    editDevice,
+    deleteDevices,
+    getCameraId,
+    createCamera,
+    editCamera,
+    deleteCameras
+};
 
 export default deviceService;

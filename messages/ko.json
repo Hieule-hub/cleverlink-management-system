@@ -183,5 +183,37 @@
         "Device": "장비 관리",
         "Camera": "카메라 관리",
         "Event": "이벤트 관리"
+    },
+
+    "Resolution": {
+        "Low": "Low",
+        "Standard": "Standard",
+        "High": "High",
+        "Ultra": "Ultra",
+        "Professional": "Professional",
+        "320x240": "320x240 (QVGA)",
+        "640x480": "640x480 (VGA)",
+        "800x600": "800x600 (SVGA)",
+        "1024x768": "1024x768 (XGA)",
+        "1280x720": "1280x720 (HD, 720p)",
+        "1280x1024": "1280x1024 (SXGA)",
+        "1600x1200": "1600x1200 (UXGA)",
+        "1920x1080": "1920x1080 (Full HD, 1080p)",
+        "2560x1440": "2560x1440 (QHD, 2K)",
+        "3840x2160": "3840x2160 (4K UHD)",
+        "5120x2880": "5120x2880 (5K)",
+        "7680x4320": "7680x4320 (8K UHD)"
+    },
+
+    "Voltage": {
+        "Low": "Low",
+        "Standard": "Standard",
+        "High": "High",
+        "5V": "5V DC",
+        "9V": "9V DC",
+        "12V": "12V DC",
+        "24V": "24V DC",
+        "48V": "48V DC (PoE)",
+        "220V": "220V AC"
     }
 }

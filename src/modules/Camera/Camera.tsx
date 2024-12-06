@@ -8,10 +8,10 @@ import { Paper } from "@components/Paper";
 import { type Column, Table } from "@components/Table";
 import { AddCircleOutlineOutlined, DeleteOutline, DescriptionOutlined, FilterList, Search } from "@mui/icons-material";
 import { Box, IconButton, TextField } from "@mui/material";
+import deviceService from "@services/device";
 import { useTranslations } from "next-intl";
 
-import deviceService from "@/services/device";
-import { triggerToastDev } from "@/utils";
+import { CameraDialog, useCameraDialog } from "./CameraDialog";
 
 export const CameraPage = () => {
     const t = useTranslations("CameraPage");
@@ -21,6 +21,7 @@ export const CameraPage = () => {
     const [dataList, setDataList] = useState([]);
 
     //Store controller
+    const { openDialog } = useCameraDialog();
 
     //Delete list
     const [deleteIds, setDeleteIds] = useState([]);
@@ -62,9 +63,9 @@ export const CameraPage = () => {
 
         setIsFetching(true);
         try {
-            // await userService.deleteUsers({
-            //     ids: ids
-            // });
+            await deviceService.deleteCameras({
+                ids: ids
+            });
             fetchDataList(filter);
             setDeleteIds([]);
         } catch (error) {
@@ -140,7 +141,7 @@ export const CameraPage = () => {
                             color='info'
                             onClick={() => {
                                 // openUserDialog(record);
-                                triggerToastDev();
+                                openDialog(record);
                             }}
                         >
                             <DescriptionOutlined fontSize='inherit' />
@@ -190,8 +191,7 @@ export const CameraPage = () => {
                         color='primary'
                         startIcon={AddCircleOutlineOutlined}
                         onClick={() => {
-                            // openUserDialog();
-                            triggerToastDev();
+                            openDialog();
                         }}
                     >
                         {t("Add new record")}
@@ -242,11 +242,13 @@ export const CameraPage = () => {
                 )}
             </Box>
 
-            {/* <UserDialog  onClose={(status) => {
+            <CameraDialog
+                onClose={(status) => {
                     if (status === "success") {
                         handleSearch();
                     }
-                }} /> */}
+                }}
+            />
         </MainLayout>
     );
 };

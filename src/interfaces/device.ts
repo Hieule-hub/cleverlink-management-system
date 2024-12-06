@@ -32,7 +32,11 @@ export interface Camera {
     factory: string;
     poe: number;
     category: Category;
+    resolution: string;
+    input: string;
+    description: string;
     protocol: Protocol;
+    path: string;
 }
 
 export interface Active {
@@ -79,11 +83,6 @@ export type GetDeviceListRes = DataResponse<{
     devices: Device[];
 }>;
 
-export type GetCameraListRes = DataResponse<{
-    paging: Pagination;
-    cameras: Camera[];
-}>;
-
 export type CreateDeviceReq = {
     companyId: string;
     sceneId: string;
@@ -115,3 +114,50 @@ export type GetActiveListRes = DataResponse<{
     paging: Pagination;
     activates: Active[];
 }>;
+
+// Request type Camera
+
+export type GetCameraListRes = DataResponse<{
+    paging: Pagination;
+    cameras: Camera[];
+}>;
+
+export type GetCameraIdReq = {
+    prefix: string;
+};
+
+export type GetCameraIdRes = DataResponse<{
+    cameraId: string;
+    token: string;
+}>;
+
+export type CreateCameraReq = {
+    cameraId: string;
+    categoryId: string;
+    name: string;
+    protocolId: string;
+    factory: string;
+    poe: number;
+    resolution: string;
+    input: string;
+    description: string;
+    path: string;
+    token: string;
+};
+
+export type EditCameraReq = {
+    _id: string;
+    categoryId: string;
+    name: string;
+    protocolId: string;
+    factory: string;
+    poe: number;
+    resolution: string;
+    input: string;
+    description: string;
+    path: string;
+};
+
+export type DeleteCamerasReq = {
+    ids: string[];
+};
