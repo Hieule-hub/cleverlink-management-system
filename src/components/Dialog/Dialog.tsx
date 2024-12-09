@@ -23,15 +23,19 @@ const DialogStyled = styled(DialogMui)`
     }
 
     .body {
+        width: 100%;
+        overflow-y: auto;
+        max-height: calc(100vh - 200px);
     }
 
     .footer {
         height: 60px;
         display: flex;
         justify-content: flex-end;
-        padding: 0 16px;
+        padding: 16px;
         align-items: center;
         border-top: 1px solid ${({ theme }) => theme.palette.divider};
+        background-color: white;
     }
 `;
 
