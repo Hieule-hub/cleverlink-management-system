@@ -5,7 +5,7 @@ import { Dialog } from "@components/Dialog";
 import { Label } from "@components/Label";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Camera } from "@interfaces/device";
-import { Divider, Grid2 as Grid, Stack, Zoom } from "@mui/material";
+import { Chip, Divider, Grid2 as Grid, Stack, Zoom } from "@mui/material";
 import deviceService from "@services/device";
 import { dialogStore } from "@store/dialogStore";
 import { toast } from "@store/toastStore";
@@ -444,9 +444,18 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
                     {watch("path").map(
                         (item) =>
                             item && (
-                                <a key={item} href={item} target='_blank' rel='noreferrer'>
-                                    {item}
-                                </a>
+                                <Chip
+                                    color='primary'
+                                    size='small'
+                                    key={item}
+                                    label={item}
+                                    onDelete={() => {
+                                        setValue(
+                                            "path",
+                                            watch("path").filter((o) => o !== item)
+                                        );
+                                    }}
+                                />
                             )
                     )}
                 </Grid>
