@@ -21,7 +21,8 @@
         "Init": "초기화",
         "Detail": "상세",
         "Camera": "카메라",
-        "Snapshot": "스냅샷"
+        "Snapshot": "스냅샷",
+        "Download": "다운로드"
     },
 
     "DashboardPage": {
@@ -56,6 +57,10 @@
         "Record information": "Translating",
         "Add new record": "새 현장 추가",
         "Edit record": "현장 수정",
+        "Edit record success": "Translating",
+        "Edit record failed": "Translating",
+        "Create record success": "Translating",
+        "Create record failed": "Translating",
         "Manager": "관리자",
         "Scene ID": "현장 ID",
         "Scene name": "현장명",
@@ -69,6 +74,10 @@
         "Record information": "Translating",
         "Add new record": "새 기관 추가",
         "Edit record": "기관 수정",
+        "Edit record success": "Translating",
+        "Edit record failed": "Translating",
+        "Create record success": "Translating",
+        "Create record failed": "Translating",
         "Manager": "관리자",
         "Name": "기관명",
         "Devices": "장치",
@@ -81,6 +90,10 @@
         "Record information": "Translating",
         "Add new record": "새 창지 추가",
         "Edit record": "창지 수정",
+        "Edit record success": "Translating",
+        "Edit record failed": "Translating",
+        "Create record success": "Translating",
+        "Create record failed": "Translating",
         "Device ID": "창지ID",
         "Install date": "등록일자",
         "Company name": "기관명",
@@ -95,6 +108,10 @@
         "Record information": "Translating",
         "Add new record": "새 카메라 추가",
         "Edit record": "카메라 수정",
+        "Edit record success": "Translating",
+        "Edit record failed": "Translating",
+        "Create record success": "Translating",
+        "Create record failed": "Translating",
         "Model ID": "메델 ID",
         "Model name": "모델명",
         "Type": "종류",
@@ -109,12 +126,18 @@
         "Record information": "Translating",
         "Add new record": "새 이벤트 추가",
         "Edit record": "이벤트 수정",
+        "Edit record success": "Translating",
+        "Edit record failed": "Translating",
+        "Create record success": "Translating",
+        "Create record failed": "Translating",
         "Event time": "발생 시간",
         "Emplacement": "설치",
         "Device ID": "창지 ID",
         "Warning device": "경고장치",
         "Receiver": "수진자",
-        "Manager": "관리자"
+        "Manager": "관리자",
+        "View snapshot": "스냅샷 보기",
+        "Snapshot note": "※현재 보고있는 스냅샷을 다운로드 합니다."
     },
 
     "LoginPage": {

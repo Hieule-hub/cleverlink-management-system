@@ -6,20 +6,15 @@ import MainLayout from "@components/Layout/MainLayout";
 import { Pagination } from "@components/Pagination";
 import { Paper } from "@components/Paper";
 import { type Column, Table } from "@components/Table";
-import {
-    AddCircleOutlineOutlined,
-    DeleteOutline,
-    DescriptionOutlined,
-    FilterList,
-    PhotoCameraBackOutlined,
-    Search
-} from "@mui/icons-material";
-import { Box, IconButton, TextField, Tooltip, Typography } from "@mui/material";
+import { UserInfoDialog, useUserInfoDialog } from "@modules/User";
+import { DeleteOutline, DescriptionOutlined, FilterList, PhotoCameraBackOutlined, Search } from "@mui/icons-material";
+import { Box, IconButton, Link, TextField, Tooltip, Typography } from "@mui/material";
 import eventService from "@services/event";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
 
-import { triggerToastDev } from "@/utils";
+import { EventDialog, useEventDialog } from "./EventDialog";
+import { SnapshotDialog, useSnapshotDialogDialog } from "./SnapshotDialog";
 
 export const EventPage = () => {
     const t = useTranslations("EventPage");
@@ -29,6 +24,9 @@ export const EventPage = () => {
     const [dataList, setDataList] = useState([]);
 
     //Store controller
+    const { openDialog } = useEventDialog();
+    const { openDialog: showUserInfo } = useUserInfoDialog();
+    const { openDialog: showSnapshot } = useSnapshotDialogDialog();
 
     //Delete list
     const [deleteIds, setDeleteIds] = useState([]);
@@ -45,7 +43,7 @@ export const EventPage = () => {
     const fetchDataList = useCallback(async (params: typeof filter) => {
         setIsFetching(true);
         try {
-            const listRes = await eventService.getDeviceList(params);
+            const listRes = await eventService.getEventList(params);
 
             if (!listRes.err) {
                 setDataList(listRes.data.events);
@@ -70,9 +68,9 @@ export const EventPage = () => {
 
         setIsFetching(true);
         try {
-            // await userService.deleteUsers({
-            //     ids: ids
-            // });
+            await eventService.deleteEvents({
+                ids: ids
+            });
             fetchDataList(filter);
             setDeleteIds([]);
         } catch (error) {
@@ -142,7 +140,20 @@ export const EventPage = () => {
                 dataIndex: "user",
                 align: "center",
                 width: 200,
-                render: (value) => value?.name
+                render: (value) => {
+                    return (
+                        <Link
+                            component='button'
+                            variant='body2'
+                            fontWeight={500}
+                            onClick={() => {
+                                showUserInfo(value);
+                            }}
+                        >
+                            {value?.name}
+                        </Link>
+                    );
+                }
             },
             {
                 title: tCommon("Snapshot") + "/" + tCommon("Edit") + "/" + tCommon("Delete"),
@@ -154,7 +165,7 @@ export const EventPage = () => {
                             size='small'
                             color='warning'
                             onClick={() => {
-                                triggerToastDev();
+                                showSnapshot(record);
                             }}
                         >
                             <PhotoCameraBackOutlined fontSize='inherit' />
@@ -163,8 +174,7 @@ export const EventPage = () => {
                             size='small'
                             color='info'
                             onClick={() => {
-                                // openUserDialog(record);
-                                triggerToastDev();
+                                openDialog(record);
                             }}
                         >
                             <DescriptionOutlined fontSize='inherit' />
@@ -205,21 +215,6 @@ export const EventPage = () => {
                     {/* <Button height='48px' startIcon={FilterList} onClick={triggerToastDev}>
                         {tCommon("Filter")}
                     </Button> */}
-
-                    <Button
-                        style={{
-                            marginLeft: "auto"
-                        }}
-                        height='48px'
-                        color='primary'
-                        startIcon={AddCircleOutlineOutlined}
-                        onClick={() => {
-                            // openUserDialog();
-                            triggerToastDev();
-                        }}
-                    >
-                        {t("Add new record")}
-                    </Button>
                 </Box>
 
                 <Table
@@ -265,12 +260,17 @@ export const EventPage = () => {
                     />
                 )}
             </Box>
+            <UserInfoDialog />
 
-            {/* <UserDialog  onClose={(status) => {
+            <EventDialog
+                onClose={(status) => {
                     if (status === "success") {
                         handleSearch();
                     }
-                }} /> */}
+                }}
+            />
+
+            <SnapshotDialog />
         </MainLayout>
     );
 };

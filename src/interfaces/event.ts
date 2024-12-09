@@ -6,6 +6,10 @@ export interface Event {
     receiver: string[];
     images: string[];
     time: string;
+    aiCode: string;
+    channel: number;
+    solve: string;
+    notifyCode: string;
     activate: {
         boxId: string;
     };
@@ -24,3 +28,12 @@ export type GetEventListRes = DataResponse<{
     paging: Pagination;
     events: Event[];
 }>;
+
+export type DeleteEventsReq = {
+    ids: string[];
+};
+
+export type EditEventReq = {
+    _id: string;
+    solve: string;
+};
