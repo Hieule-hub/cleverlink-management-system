@@ -102,15 +102,19 @@ apiClient.interceptors.response.use(
                         token: refreshToken
                     });
 
-                    const newAccessToken = response.data.accessToken;
-                    const newRefreshToken = response.data.refreshToken;
+                    if (!response.data.err) {
+                        const newAccessToken = response.data.accessToken;
+                        const newRefreshToken = response.data.refreshToken;
 
-                    // Update the token in local storage
-                    localStorage.setItem("access-token", newAccessToken);
-                    Cookies.set("refresh-token", newRefreshToken);
+                        // Update the token in local storage
+                        localStorage.setItem("access-token", newAccessToken);
+                        Cookies.set("refresh-token", newRefreshToken);
 
-                    // Process the failed requests
-                    processQueue(null, newAccessToken);
+                        // Process the failed requests
+                        processQueue(null, newAccessToken);
+                    } else {
+                        throw new Error(response.data.msg);
+                    }
                 } catch (refreshError) {
                     processQueue(refreshError, null);
                     return Promise.reject(refreshError);
