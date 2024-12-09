@@ -111,9 +111,10 @@ export const EventPage = () => {
                 render: (value) => value?.boxId
             },
             {
-                key: "warningDevice",
+                key: "notifyCode",
                 title: t("Warning device"),
-                dataIndex: "warningDevice",
+                dataIndex: "notifyCode",
+                align: "center",
                 width: 200,
                 render: (value) => value
             },
