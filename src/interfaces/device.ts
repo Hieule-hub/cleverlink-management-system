@@ -11,6 +11,7 @@ export interface Device {
         mac: string;
         serial: string;
         ip: string;
+        channels: Channel[];
     };
     company: {
         _id: string;
@@ -53,12 +54,12 @@ export interface Active {
 }
 
 export interface Channel {
-    modelId: string;
-    modelName: string;
-    ip: string;
-    place: string;
-    factory: string;
-    _id: string;
+    modelId?: string;
+    modelName?: string;
+    ip?: string;
+    place?: string;
+    factory?: string;
+    _id?: string;
 }
 
 export interface Category {

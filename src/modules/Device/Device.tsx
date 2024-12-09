@@ -22,6 +22,7 @@ import { useTranslations } from "next-intl";
 
 import { triggerToastDev } from "@/utils";
 
+import { CameraLinkInfo, useCameraLinkDialog } from "./CameraLinkInfo";
 import { DeviceDialog, useDeviceDialog } from "./DeviceDialog";
 
 export const DevicePage = () => {
@@ -33,6 +34,7 @@ export const DevicePage = () => {
 
     //Store controller
     const { openDialog } = useDeviceDialog();
+    const { openDialog: showCameraLinkInfo } = useCameraLinkDialog();
     const { openDialog: showUserInfo } = useUserInfoDialog();
 
     //Delete list
@@ -159,7 +161,7 @@ export const DevicePage = () => {
                             size='small'
                             color='success'
                             onClick={() => {
-                                triggerToastDev();
+                                showCameraLinkInfo(record);
                             }}
                         >
                             <VideocamOutlined fontSize='inherit' />
@@ -277,6 +279,7 @@ export const DevicePage = () => {
                 }}
             />
             <UserInfoDialog />
+            <CameraLinkInfo />
         </MainLayout>
     );
 };

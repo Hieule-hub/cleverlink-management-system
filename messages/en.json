@@ -85,7 +85,8 @@
         "Install date": "Install date",
         "Company name": "Company name",
         "Scene name": "Scene name",
-        "Manager": "Manager"
+        "Manager": "Manager",
+        "Connected camera information": "Connected camera information"
     },
 
     "CameraPage": {

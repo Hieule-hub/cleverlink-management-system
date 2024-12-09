@@ -85,7 +85,8 @@
         "Install date": "등록일자",
         "Company name": "기관명",
         "Scene name": "현장명",
-        "Manager": "관리자"
+        "Manager": "관리자",
+        "Connected camera information": "연결 카메라 정보"
     },
 
     "CameraPage": {
