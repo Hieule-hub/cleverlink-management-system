@@ -202,7 +202,9 @@ export const Table = ({ columns, data, isLoading = false, rowSelection, border }
                     })}
                     {data.length === 0 && (
                         <StyledTableRow>
-                            <StyledTableCell colSpan={columns.length} align='center' />
+                            <StyledTableCell colSpan={columns.length} align='center'>
+                                -
+                            </StyledTableCell>
                         </StyledTableRow>
                     )}
                 </TableBody>
