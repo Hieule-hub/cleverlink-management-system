@@ -7,7 +7,7 @@ import { BreadcrumbsProps, Breadcrumbs as MUIBreadcrumbs, Typography } from "@mu
 import { useTranslations } from "next-intl";
 
 export const Breadcrumbs = (props: BreadcrumbsProps) => {
-    const t = useTranslations();
+    const t = useTranslations("Sidebar");
     const pathnames = location.pathname.split("/").filter((x) => x);
 
     const breadcrumbNameMap = routeConfig.reduce<any>((acc, cur) => {
@@ -42,6 +42,11 @@ export const Breadcrumbs = (props: BreadcrumbsProps) => {
         <MUIBreadcrumbs
             separator={<ArrowForwardIosOutlined sx={{ fontSize: 14 }} />}
             aria-label='breadcrumb'
+            sx={{
+                display: "flex",
+                alignItems: "center",
+                height: "40px"
+            }}
             {...props}
         >
             <Link href='/' style={{ display: "flex", alignItems: "center" }}>
@@ -51,9 +56,7 @@ export const Breadcrumbs = (props: BreadcrumbsProps) => {
                 const last = index === pathnames.length - 1;
                 const to = `/${pathnames.slice(0, index + 1).join("/")}`;
 
-                // Decode URL component and rename "rule-details" to "앱"
-                const displayValue =
-                    value === "rule-details" ? "앱" : decodeURIComponent(breadcrumbNameMap[to] || value);
+                const displayValue = breadcrumbNameMap[to] || value;
 
                 if (last) {
                     return (

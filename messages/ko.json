@@ -22,7 +22,10 @@
         "Detail": "상세",
         "Camera": "카메라",
         "Snapshot": "스냅샷",
-        "Download": "다운로드"
+        "Download": "다운로드",
+        "Small": "작게",
+        "Large": "크게",
+        "List view": "목록보기"
     },
 
     "DashboardPage": {
@@ -140,6 +143,11 @@
         "Snapshot note": "※현재 보고있는 스냅샷을 다운로드 합니다."
     },
 
+    "VideoCapturePage": {
+        "title": "캡쳐 영상",
+        "Note view size": "※각 스냅샷을 더블 클릭하면 동영상 형태로 보실 수 있습니다."
+    },
+
     "LoginPage": {
         "title": "로그인",
         "Clever link": "클레버링크",
@@ -206,7 +214,8 @@
         "Company": "기관 관리",
         "Device": "장비 관리",
         "Camera": "카메라 관리",
-        "Event": "이벤트 관리"
+        "Event": "이벤트 관리",
+        "Video Capture": "캡쳐영상"
     },
 
     "Resolution": {

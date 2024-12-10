@@ -22,7 +22,10 @@
         "Detail": "Detail",
         "Camera": "Camera",
         "Snapshot": "Snapshot",
-        "Download": "Download"
+        "Download": "Download",
+        "Small": "Small",
+        "Large": "Large",
+        "List view": "List view"
     },
 
     "DashboardPage": {
@@ -140,6 +143,11 @@
         "Snapshot note": "※Download the snapshot you are currently viewing."
     },
 
+    "VideoCapturePage": {
+        "title": "Video capture",
+        "Note view size": "※Double-click each snapshot to view it in video format."
+    },
+
     "LoginPage": {
         "title": "Login",
         "Clever link": "Clever link",
@@ -206,7 +214,8 @@
         "Company": "Company",
         "Device": "Device",
         "Camera": "Camera",
-        "Event": "Event"
+        "Event": "Event",
+        "Video capture": "Video capture"
     },
 
     "Resolution": {

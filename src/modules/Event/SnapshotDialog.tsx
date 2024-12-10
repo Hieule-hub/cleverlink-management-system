@@ -19,11 +19,12 @@ interface SnapshotDialogProps {
 export const SnapshotDialog = ({ onClose = () => "" }: SnapshotDialogProps) => {
     const t = useTranslations();
     const { item, open, closeDialog } = useSnapshotDialogDialog();
-    const [imageSelected, setImageSelected] = useState("");
+    const [imageSelected, setImageSelected] = useState(item?.images[0] || "");
 
     const handleClose = (status?: string) => {
         onClose(status);
         closeDialog();
+        setImageSelected("");
     };
 
     const handleDownloadImage = async () => {
@@ -32,6 +33,16 @@ export const SnapshotDialog = ({ onClose = () => "" }: SnapshotDialogProps) => {
         }
 
         downloadImage(imageSelected, "image-snapshot");
+    };
+
+    const handleNextImage = () => {
+        const index = item?.images.indexOf(imageSelected) + 1;
+        setImageSelected(item?.images[index]);
+    };
+
+    const handlePreviousImage = () => {
+        const index = item?.images.indexOf(imageSelected) - 1;
+        setImageSelected(item?.images[index]);
     };
 
     return (
@@ -85,17 +96,20 @@ export const SnapshotDialog = ({ onClose = () => "" }: SnapshotDialogProps) => {
                 sx={{
                     bgcolor: "primary.main",
                     height: "400px",
-                    margin: "16px"
+                    margin: "16px",
+                    backgroundImage: `url(${imageSelected})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center"
                 }}
             />
             <Box display='flex' justifyContent='center' gap={1} marginBottom={2} color={"black"} width={"100%"}>
-                <IconButton color='inherit'>
+                <IconButton color='inherit' onClick={handlePreviousImage}>
                     <SkipPrevious color='inherit' />
                 </IconButton>
                 <IconButton color='inherit'>
                     <PlayCircle color='inherit' />
                 </IconButton>
-                <IconButton color='inherit'>
+                <IconButton color='inherit' onClick={handleNextImage}>
                     <SkipNext color='inherit' />
                 </IconButton>
             </Box>
@@ -114,6 +128,8 @@ export const SnapshotDialog = ({ onClose = () => "" }: SnapshotDialogProps) => {
                                     height: "104px",
                                     overflow: "hidden",
                                     backgroundImage: `url(${image})`,
+                                    backgroundSize: "cover",
+                                    backgroundPosition: "center",
                                     border: "3px solid",
                                     borderColor: imageSelected === image ? "red" : "transparent"
                                 }}

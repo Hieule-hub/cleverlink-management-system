@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { Button } from "@components/Button";
+import { Button, ButtonGroup } from "@components/Button";
 import { Breadcrumbs } from "@components/Layout/Breadcrumbs";
 import MainLayout from "@components/Layout/MainLayout";
 import { Pagination } from "@components/Pagination";
@@ -18,12 +18,15 @@ import { EventNavigation } from "./EventNavigation";
 import { GridEvent } from "./GridEvent";
 import { SnapshotDialog, useSnapshotDialogDialog } from "./SnapshotDialog";
 
-export const EventPage = () => {
-    const t = useTranslations("EventPage");
+export const VideoCapturePage = () => {
+    const t = useTranslations("VideoCapturePage");
+    const tEvent = useTranslations("EventPage");
+
     const tCommon = useTranslations("Common");
 
     const [isFetching, setIsFetching] = useState(false);
     const [dataList, setDataList] = useState([]);
+    const [viewSize, setViewSize] = useState("small");
 
     //Store controller
     const { openDialog } = useEventDialog();
@@ -35,7 +38,6 @@ export const EventPage = () => {
 
     // Filter
     const [total, setTotal] = useState(0);
-    const [keyword, setKeyword] = useState("");
     const [filter, setFilter] = useState({
         page: 1,
         limit: 10,
@@ -84,62 +86,68 @@ export const EventPage = () => {
 
     const handleSearch = useCallback(() => {
         setFilter((pre) => {
-            return { ...pre, page: 1, filters: keyword };
+            return { ...pre, page: 1, filters: "" };
         });
-    }, [keyword]);
+    }, []);
 
     const columns = useMemo((): Column[] => {
         return [
             {
                 key: "time",
-                title: t("Event time"),
+                title: tEvent("Event time"),
                 dataIndex: "time",
                 width: 200,
                 render: (value) => dayjs(value).format("YYYY.MM.DD HH:mm:ss")
             },
             {
                 key: "emplacement",
-                title: t("Emplacement"),
+                title: tEvent("Emplacement"),
                 dataIndex: "device",
                 width: 200,
                 render: (value) => value?.place
             },
+            {
+                key: "aiCode",
+                title: tEvent("AI code"),
+                dataIndex: "aiCode",
+                width: 200,
+                render: (value) => value?.place
+            },
 
-            {
-                key: "deviceId",
-                title: t("Device ID"),
-                dataIndex: "activate",
-                width: 200,
-                render: (value) => value?.boxId
-            },
-            {
-                key: "notifyCode",
-                title: t("Warning device"),
-                dataIndex: "notifyCode",
-                align: "center",
-                width: 200,
-                render: (value) => value
-            },
-            {
-                key: "receiver",
-                title: t("Receiver"),
-                dataIndex: "receiver",
-                align: "center",
-                width: 200,
-                render: (value) => {
-                    const title = (value || []).join(", ");
-                    return (
-                        <Tooltip title={title}>
-                            <Typography width={"200px"} noWrap>
-                                {title}
-                            </Typography>
-                        </Tooltip>
-                    );
-                }
-            },
+            // {
+            //     key: "deviceId",
+            //     title: tEvent("Device ID"),
+            //     dataIndex: "activate",
+            //     width: 200,
+            //     render: (value) => value?.boxId
+            // },
+            // {
+            //     key: "warningDevice",
+            //     title: tEvent("Warning device"),
+            //     dataIndex: "warningDevice",
+            //     width: 200,
+            //     render: (value) => value
+            // },
+            // {
+            //     key: "receiver",
+            //     title: tEvent("Receiver"),
+            //     dataIndex: "receiver",
+            //     align: "center",
+            //     width: 200,
+            //     render: (value) => {
+            //         const title = (value || []).join(", ");
+            //         return (
+            //             <Tooltip title={title}>
+            //                 <Typography width={"200px"} noWrap>
+            //                     {title}
+            //                 </Typography>
+            //             </Tooltip>
+            //         );
+            //     }
+            // },
             {
                 key: "user",
-                title: t("Manager"),
+                title: tEvent("Manager"),
                 dataIndex: "user",
                 align: "center",
                 width: 200,
@@ -159,20 +167,11 @@ export const EventPage = () => {
                 }
             },
             {
-                title: tCommon("Snapshot") + "/" + tCommon("Edit") + "/" + tCommon("Delete"),
+                title: tCommon("Detail"),
                 key: "action",
                 align: "right",
                 render: (_, record) => (
                     <Box display='flex' justifyContent='end' gap={2}>
-                        <IconButton
-                            size='small'
-                            color='warning'
-                            onClick={() => {
-                                showSnapshot(record);
-                            }}
-                        >
-                            <PhotoCameraBackOutlined fontSize='inherit' />
-                        </IconButton>
                         <IconButton
                             size='small'
                             color='info'
@@ -182,19 +181,14 @@ export const EventPage = () => {
                         >
                             <DescriptionOutlined fontSize='inherit' />
                         </IconButton>
-                        <IconButton
-                            size='small'
-                            color='error'
-                            onClick={() => {
-                                handleDeleteItems([record._id]);
-                            }}
-                        >
-                            <DeleteOutline fontSize='inherit' />
-                        </IconButton>
                     </Box>
                 )
             }
         ];
+    }, []);
+
+    const filterDataList = useCallback((list: any[], listSelected: string[]) => {
+        return list.filter((item) => listSelected.includes(item._id));
     }, []);
 
     return (
@@ -204,29 +198,43 @@ export const EventPage = () => {
             </Box>
             <Paper title={t("title")}>
                 <Box display='flex' alignItems='center' gap='12px' marginBottom={"12px"}>
-                    <div>{tCommon("Search")}</div>
-                    <TextField
-                        sx={{
-                            minWidth: 320
+                    <ButtonGroup
+                        value={viewSize}
+                        onSelected={(value) => {
+                            setViewSize(value);
                         }}
-                        size='small'
-                        value={keyword}
-                        onChange={(e) => setKeyword(e.target.value)}
-                        placeholder={t("Placeholder search")}
+                        options={[
+                            {
+                                label: tCommon("Small"),
+                                value: "small"
+                            },
+                            {
+                                label: tCommon("Large"),
+                                value: "large"
+                            }
+                        ]}
                     />
-                    <Button height='48px' startIcon={Search} onClick={handleSearch}>
-                        {tCommon("Search")}
+                    <Typography
+                        sx={{
+                            flexGrow: 1
+                        }}
+                        variant='body1'
+                        color='primary'
+                    >
+                        {t("Note view size")}
+                    </Typography>
+                    <Button
+                        disabled={isFetching || deleteIds.length === 0}
+                        startIcon={DeleteOutline}
+                        onClick={() => handleDeleteItems(deleteIds)}
+                    >
+                        {tCommon("Delete")}
                     </Button>
-                    {/* <Button height='48px' startIcon={FilterList} onClick={triggerToastDev}>
-                        {tCommon("Filter")}
-                    </Button> */}
                 </Box>
 
-                <Table
-                    border
-                    isLoading={isFetching}
-                    columns={columns}
+                <GridEvent
                     data={dataList}
+                    itemSize={viewSize}
                     rowSelection={{
                         keyName: "_id",
                         selectedRowKeys: [],
@@ -234,6 +242,29 @@ export const EventPage = () => {
                             setDeleteIds(selectedRowKeys);
                         }
                     }}
+                    onRow={(record, rowIndex) => ({
+                        onClick: () => {
+                            console.log("🚀 ~ onClick - record:", record);
+                        },
+                        onDoubleClick: () => {
+                            console.log("🚀 ~ onDoubleClick - record:", record);
+                            showSnapshot(record as any);
+                        }
+                    })}
+                />
+
+                <Table
+                    border
+                    isLoading={isFetching}
+                    columns={columns}
+                    data={filterDataList(dataList, deleteIds)}
+                    // rowSelection={{
+                    //     keyName: "_id",
+                    //     selectedRowKeys: [],
+                    //     onChange: (selectedRowKeys) => {
+                    //         setDeleteIds(selectedRowKeys);
+                    //     }
+                    // }}
                 />
             </Paper>
 
