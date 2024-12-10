@@ -3,21 +3,6 @@
 import { Theme, ThemeOptions, createTheme } from "@mui/material/styles";
 import { RoleCode } from "common";
 
-export const colorsFormControl = {
-    //border color
-    borderColor: "#d0d5dd",
-    borderHoverColor: "#667085",
-    borderFocusColor: "#0074ff",
-    borderRadius: "0.5rem",
-    //background color
-    backgroundColor: "#fff",
-
-    //text color
-    color: "#667085",
-    //font size
-    fontSize: "1rem"
-};
-
 export type Themes = {
     [key in RoleCode]: Theme;
 };
@@ -47,6 +32,9 @@ export const theme: ThemeOptions = {
         },
         fontFamily: ["var(--font-poppins)", "Roboto", '"Helvetica Neue"', "Arial", "sans-serif"].join(",")
     },
+    shape: {
+        borderRadius: 8
+    },
     components: {
         MuiSelect: {
             styleOverrides: {
@@ -60,7 +48,6 @@ export const theme: ThemeOptions = {
                         transition: "all 0.3s ease",
                         border: "1px solid var(--input-border-color)",
                         color: "var(--input-color)",
-                        borderRadius: "var(--input-border-radius) !important",
                         boxSizing: "border-box",
                         height: "var(--input-height) !important",
                         padding: "11px 12px"
@@ -81,7 +68,6 @@ export const theme: ThemeOptions = {
             styleOverrides: {
                 root: {
                     "& .MuiDialog-paper": {
-                        borderRadius: "var(--input-border-radius)",
                         boxShadow: "var(--dialog-box-shadow)"
                     }
                 }
@@ -92,7 +78,6 @@ export const theme: ThemeOptions = {
                 root: {
                     "& .MuiOutlinedInput-root": {
                         // height: "var(--input-height)",
-                        borderRadius: "var(--input-border-radius)",
                         fieldset: {
                             transition: "all 0.2s ease-in-out",
                             borderColor: "var(--input-border-color)"
@@ -106,8 +91,10 @@ export const theme: ThemeOptions = {
                             padding: "var(--input-padding)"
                         },
 
-                        "&:hover fieldset": {
-                            borderColor: (props) => (props.disabled ? "transparent" : "var(--input-border-hover-color)")
+                        "&:not(&.Mui-disabled)": {
+                            "&:hover fieldset": {
+                                borderColor: "var(--input-border-hover-color)"
+                            }
                         },
                         "&.Mui-focused fieldset": {
                             borderColor: "var(--input-border-active-color)",
@@ -133,7 +120,6 @@ export const theme: ThemeOptions = {
                     },
                     "& .MuiInputBase-root": {
                         height: "var(--input-height)",
-                        borderRadius: "var(--input-border-radius)",
                         paddingLeft: 0,
                         fieldset: {
                             transition: "all 0.2s ease-in-out",
@@ -145,6 +131,16 @@ export const theme: ThemeOptions = {
                             fontSize: "var(--input-font-size)",
                             padding: "var(--input-padding)"
                         }
+                    }
+                }
+            }
+        },
+        MuiCheckbox: {
+            styleOverrides: {
+                root: {
+                    color: "var(--input-color)",
+                    "&.Mui-checked": {
+                        color: "var(--input-checked-bg-color)"
                     }
                 }
             }

@@ -3,16 +3,18 @@
     --bg-container-disabled: rgba(0, 0, 0, 0.04);
 
     --button-font-weight: 600;
-    --button-border-radius: 0.5rem;
     --button-height: 40px;
 
     --input-border-color: #d0d5dd;
+    --input-border-hover-color: #667085;
     --input-border-active-color: #667085;
-    --input-border-radius: 0.5rem;
     --input-font-size: 1rem;
     --input-height: 48px;
     --input-color: #667085;
     --input-padding: 14px 14px;
+
+    /* Checkbox and Radio color */
+    --input-checked-bg-color: #363b64;
 
     --modal-z-index: 1300;
     --drawer-z-index: 1200;

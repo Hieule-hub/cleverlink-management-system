@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 
-import { colorsFormControl } from "@configs/theme";
 import { KeyboardArrowDownOutlined, KeyboardArrowUpOutlined } from "@mui/icons-material";
 import { InputBase, InputProps, styled } from "@mui/material";
 
 const StyledNumberInput = styled(InputBase)<InputProps>`
     &:hover {
         .MuiInputBase-input {
-            border: 1px solid ${colorsFormControl.borderHoverColor};
+            border: 1px solid var(--input-border-hover-color);
         }
     }
 
@@ -16,18 +15,12 @@ const StyledNumberInput = styled(InputBase)<InputProps>`
         border: none !important;
     }
     &.Mui-focused {
-        /* .MuiInputBase-input {
-			border: 1px solid ${colorsFormControl.borderFocusColor};
-		} */
     }
     .MuiInputBase-input {
         transition: all 0.3s ease;
         padding: 8px 12px;
         padding-right: 65px;
         border: 1px solid #e0e0e0;
-        color: ${colorsFormControl.color};
-        border-radius: ${colorsFormControl.borderRadius};
-        font-size: ${colorsFormControl.fontSize};
         box-sizing: border-box;
         height: 48px;
     }
@@ -78,13 +71,13 @@ const GroupActions = styled("div")`
     height: 100%;
     right: 0;
     overflow: hidden;
-    border-top-right-radius: ${colorsFormControl.borderRadius};
-    border-bottom-right-radius: ${colorsFormControl.borderRadius};
+    border-top-right-radius: var(--shape-borderRadius);
+    border-bottom-right-radius: var(--shape-borderRadius);
     box-sizing: border-box;
     border: 1px solid transparent;
-    border-left: 1px solid ${colorsFormControl.borderColor};
+    border-left: 1px solid var(--input-border-color);
     button:first-of-type {
-        border-bottom: 1px solid ${colorsFormControl.borderColor};
+        border-bottom: 1px solid var(--input-border-color);
     }
 `;
 

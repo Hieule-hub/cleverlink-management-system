@@ -18,9 +18,9 @@ const StyledInput = styled("input")`
 
 const StyleLayoutInput = styled("span")`
     padding: 7px 11px;
-    border: 1px solid #d0d5dd;
+    border: 1px solid var(--input-border-color);
     color: #667085;
-    border-radius: 0.5rem;
+    border-radius: var(--shape-borderRadius);
     font-size: 1rem;
     transition: all 0.2s ease;
     display: inline-flex;

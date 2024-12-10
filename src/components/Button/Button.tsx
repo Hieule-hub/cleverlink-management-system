@@ -17,7 +17,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 const StyledButton = styled("button")`
     border: none;
     cursor: pointer;
-    border-radius: 0.5rem;
+    border-radius: var(--shape-borderRadius);
     padding: 0.5rem 1rem;
     transition: all 0.3s ease;
     padding: 4px 15px;
