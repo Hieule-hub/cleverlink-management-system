@@ -12,15 +12,16 @@ export interface Column<T = any> {
     align?: "right" | "left" | "center";
     format?: (value: number) => string;
     render?: (value: T, row?: any, index?: number) => React.ReactNode;
+    colSpan?: number;
 }
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
+export const StyledTableRow = styled(TableRow)(({ theme }) => ({
     "&:last-child td": {
         borderBottom: "none"
     }
 }));
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
+export const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         // fontSize: "16px",
         fontWeight: 500,
@@ -185,7 +186,11 @@ export const Table = ({ columns, data, isLoading = false, rowSelection, border }
 
                                     if (column.render) {
                                         return (
-                                            <StyledTableCell key={column.key} align={column.align}>
+                                            <StyledTableCell
+                                                key={column.key}
+                                                align={column.align}
+                                                colSpan={column.colSpan || 1}
+                                            >
                                                 {column.render(value, item, index)}
                                             </StyledTableCell>
                                         );

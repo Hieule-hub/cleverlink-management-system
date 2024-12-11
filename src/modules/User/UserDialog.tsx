@@ -93,7 +93,8 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
         formState: { errors },
         getValues,
         setValue,
-        reset
+        reset,
+        watch
     } = useForm<FormUserValues>({
         resolver: yupResolver(resolver),
         defaultValues: {
@@ -229,18 +230,25 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
         }
     };
 
-    const fetchScenes = useCallback((query: string) => {
-        return sceneService.getSceneList({ filters: query, limit: 10, page: 1 }).then((res) => {
-            if (!res.err) {
-                return res.data.scenes.map((scene) => ({
-                    label: scene.name,
-                    value: scene._id
-                }));
-            } else {
-                return [];
-            }
-        });
-    }, []);
+    const fetchScenes = useCallback(
+        (query: string) => {
+            const companyId = watch("company.value");
+
+            return sceneService
+                .getSceneList({ filters: query, limit: 10, page: 1, companyId: companyId as string })
+                .then((res) => {
+                    if (!res.err) {
+                        return res.data.scenes.map((scene) => ({
+                            label: scene.name,
+                            value: scene._id
+                        }));
+                    } else {
+                        return [];
+                    }
+                });
+        },
+        [watch("company.value")]
+    );
 
     const fetchCompanies = useCallback((query: string) => {
         return companyService.getCompanyList({ filters: query, limit: 10, page: 1 }).then((res) => {

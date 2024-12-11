@@ -23,7 +23,13 @@ const getSceneIdAndUserId = async (params: GetSceneIdAndUserIdReq) => {
     });
 };
 
-const getSceneList = async (params: Partial<GetParams>) => {
+const getSceneList = async (params: Partial<GetParams & { companyId: string }>) => {
+    if (params.companyId) {
+        return apiClient.get<unknown, GetSceneListRes>("/scene/findByCompanyId", {
+            params
+        });
+    }
+
     return apiClient.get<unknown, GetSceneListRes>("/scene/findAll", {
         params
     });

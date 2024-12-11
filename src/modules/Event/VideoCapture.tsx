@@ -3,12 +3,11 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button, ButtonGroup } from "@components/Button";
 import { Breadcrumbs } from "@components/Layout/Breadcrumbs";
 import MainLayout from "@components/Layout/MainLayout";
-import { Pagination } from "@components/Pagination";
 import { Paper } from "@components/Paper";
-import { type Column, Table } from "@components/Table";
+import { type Column, StyledTableCell, StyledTableRow } from "@components/Table";
 import { UserInfoDialog, useUserInfoDialog } from "@modules/User";
-import { DeleteOutline, DescriptionOutlined, FilterList, PhotoCameraBackOutlined, Search } from "@mui/icons-material";
-import { Box, IconButton, Link, TextField, Tooltip, Typography } from "@mui/material";
+import { DeleteOutline, DescriptionOutlined, FilterList } from "@mui/icons-material";
+import { Box, IconButton, Link, Table, TableBody, TableContainer, TableHead, Typography } from "@mui/material";
 import eventService from "@services/event";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
@@ -17,6 +16,8 @@ import { EventDialog, useEventDialog } from "./EventDialog";
 import { EventNavigation } from "./EventNavigation";
 import { GridEvent } from "./GridEvent";
 import { SnapshotDialog, useSnapshotDialogDialog } from "./SnapshotDialog";
+
+const PAGE_SIZE = 48;
 
 export const VideoCapturePage = () => {
     const t = useTranslations("VideoCapturePage");
@@ -37,33 +38,46 @@ export const VideoCapturePage = () => {
     const [deleteIds, setDeleteIds] = useState([]);
 
     // Filter
-    const [total, setTotal] = useState(0);
+    // const [total, setTotal] = useState(0);
+    const [totalPage, setTotalPage] = useState(1);
     const [filter, setFilter] = useState({
         page: 1,
-        limit: 10,
-        filters: ""
+        limit: PAGE_SIZE,
+        filters: "",
+        expand: false
     });
 
-    const fetchDataList = useCallback(async (params: typeof filter) => {
-        setIsFetching(true);
-        try {
-            const listRes = await eventService.getEventList(params);
+    const fetchDataList = useCallback(async () => {
+        console.log("🚀 ~ fetchDataList ", filter);
 
-            if (!listRes.err) {
-                setDataList(listRes.data.events);
-                setTotal(listRes.data.paging.totalItems);
+        setIsFetching(true);
+        setTimeout(async () => {
+            try {
+                const listRes = await eventService.getEventList(filter);
+
+                if (!listRes.err) {
+                    if (filter.expand) {
+                        setDataList((pre) => {
+                            return [...pre, ...listRes.data.events];
+                        });
+                    } else {
+                        setDataList(listRes.data.events);
+                    }
+                    // setTotal(listRes.data.paging.totalItems);
+                    setTotalPage(listRes.data.paging.totalPages);
+                }
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setIsFetching(false);
             }
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setIsFetching(false);
-        }
-    }, []);
+        }, 1000);
+    }, [filter]);
 
     useEffect(() => {
         // Fetch data
-        fetchDataList(filter);
-    }, [filter, fetchDataList]);
+        fetchDataList();
+    }, [fetchDataList]);
 
     const handleDeleteItems = async (ids: string[]) => {
         if (!confirm("Are you sure you want to delete the selected: " + ids.join(", "))) {
@@ -75,7 +89,7 @@ export const VideoCapturePage = () => {
             await eventService.deleteEvents({
                 ids: ids
             });
-            fetchDataList(filter);
+            handleSearch();
             setDeleteIds([]);
         } catch (error) {
             console.log("🚀 ~ handleDeleteItems ~ error:", error);
@@ -86,7 +100,7 @@ export const VideoCapturePage = () => {
 
     const handleSearch = useCallback(() => {
         setFilter((pre) => {
-            return { ...pre, page: 1, filters: "" };
+            return { ...pre, page: 1, filters: "", expand: false };
         });
     }, []);
 
@@ -187,9 +201,18 @@ export const VideoCapturePage = () => {
         ];
     }, []);
 
-    const filterDataList = useCallback((list: any[], listSelected: string[]) => {
-        return list.filter((item) => listSelected.includes(item._id));
-    }, []);
+    const showDataList = useMemo(() => {
+        return dataList.filter((item) => deleteIds.includes(item._id));
+    }, [dataList, deleteIds]);
+
+    const handleLoadMore = useCallback(() => {
+        setFilter((pre) => {
+            if (!isFetching && totalPage > filter.page) {
+                return { ...pre, page: pre.page + 1, expand: true };
+            }
+            return pre;
+        });
+    }, [isFetching, totalPage, filter]);
 
     return (
         <MainLayout title={t("title")}>
@@ -233,69 +256,121 @@ export const VideoCapturePage = () => {
                 </Box>
 
                 <GridEvent
+                    loading={isFetching}
                     data={dataList}
                     itemSize={viewSize}
                     rowSelection={{
                         keyName: "_id",
-                        selectedRowKeys: [],
+                        selectedRowKeys: deleteIds,
                         onChange: (selectedRowKeys) => {
                             setDeleteIds(selectedRowKeys);
                         }
                     }}
                     onRow={(record, rowIndex) => ({
-                        onClick: () => {
-                            console.log("🚀 ~ onClick - record:", record);
-                        },
+                        // onClick: () => {
+                        //     setDeleteIds((pre) => {
+                        //         if (pre.includes(record._id)) {
+                        //             return pre.filter((item) => item !== record._id);
+                        //         }
+                        //         return [...pre, record._id];
+                        //     });
+                        // },
                         onDoubleClick: () => {
-                            console.log("🚀 ~ onDoubleClick - record:", record);
                             showSnapshot(record as any);
                         }
                     })}
+                    onLoadMore={handleLoadMore}
                 />
 
-                <Table
-                    border
-                    isLoading={isFetching}
-                    columns={columns}
-                    data={filterDataList(dataList, deleteIds)}
-                    // rowSelection={{
-                    //     keyName: "_id",
-                    //     selectedRowKeys: [],
-                    //     onChange: (selectedRowKeys) => {
-                    //         setDeleteIds(selectedRowKeys);
-                    //     }
-                    // }}
-                />
+                <TableContainer
+                    sx={{
+                        border: "1px solid #e0e0e0",
+                        borderRadius: "12px",
+                        overflow: "hidden",
+                        position: "relative",
+                        ".loading-view": {
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            background: "rgba(255, 255, 255, 0.5)",
+                            zIndex: 1000,
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center"
+                        }
+                    }}
+                >
+                    {isFetching && <div className='loading-view' />}
+                    <Table stickyHeader>
+                        <TableHead>
+                            <StyledTableRow>
+                                {columns.map((column) => (
+                                    <StyledTableCell
+                                        key={column.key}
+                                        align={column.align}
+                                        style={{ minWidth: column.minWidth, width: column.width }}
+                                    >
+                                        {column.title}
+                                    </StyledTableCell>
+                                ))}
+                            </StyledTableRow>
+                        </TableHead>
+                        <TableBody>
+                            {showDataList.length > 1 && (
+                                <StyledTableRow>
+                                    <StyledTableCell
+                                        colSpan={columns.length}
+                                        align='center'
+                                        sx={{
+                                            color: "primary.main"
+                                        }}
+                                    >
+                                        {showDataList.length} {tCommon("selected")}
+                                    </StyledTableCell>
+                                </StyledTableRow>
+                            )}
+                            {showDataList.length === 1 &&
+                                showDataList.map((item, index) => {
+                                    return (
+                                        <StyledTableRow key={index}>
+                                            {columns.map((column) => {
+                                                const value = item[column.dataIndex];
+
+                                                if (column.render) {
+                                                    return (
+                                                        <StyledTableCell
+                                                            key={column.key}
+                                                            align={column.align}
+                                                            colSpan={column.colSpan || 1}
+                                                        >
+                                                            {column.render(value, item, index)}
+                                                        </StyledTableCell>
+                                                    );
+                                                }
+
+                                                return (
+                                                    <StyledTableCell key={column.key} align={column.align}>
+                                                        {value}
+                                                    </StyledTableCell>
+                                                );
+                                            })}
+                                        </StyledTableRow>
+                                    );
+                                })}
+                            {showDataList.length === 0 && (
+                                <StyledTableRow>
+                                    <StyledTableCell colSpan={columns.length} align='center'>
+                                        -
+                                    </StyledTableCell>
+                                </StyledTableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </Paper>
 
-            <Box marginTop='12px' display='flex' gap='12px' alignItems='center'>
-                <Button
-                    disabled={isFetching || deleteIds.length === 0}
-                    height='40px'
-                    startIcon={DeleteOutline}
-                    onClick={() => handleDeleteItems(deleteIds)}
-                >
-                    {tCommon("Delete")}
-                </Button>
-                <Box flex={1}>
-                    ({deleteIds.length}) {tCommon("selected")}
-                </Box>
-                {Math.ceil(total / 10) > 1 && (
-                    <Pagination
-                        count={Math.ceil(total / 10)}
-                        page={filter.page}
-                        onChange={(e, page) =>
-                            setFilter((pre) => {
-                                return { ...pre, page };
-                            })
-                        }
-                        sx={{
-                            marginLeft: "auto",
-                            flex: 1
-                        }}
-                    />
-                )}
-            </Box>
             <UserInfoDialog />
 
             <EventDialog

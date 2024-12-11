@@ -9,7 +9,7 @@ const getEventList = async (params: Partial<GetParams>) => {
 };
 
 const deleteEvents = async (params: DeleteEventsReq) => {
-    return apiClient.delete<DeleteEventsReq, DataResponse<unknown>>("/event/delete", {
+    return apiClient.delete<DeleteEventsReq, DataResponse<unknown>>("/event/deletes", {
         data: params
     });
 };

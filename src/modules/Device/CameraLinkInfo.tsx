@@ -29,7 +29,7 @@ export const CameraLinkInfo = ({ onClose = () => "" }: CameraLinkInfoProps) => {
             PaperProps={{
                 sx: {
                     maxWidth: "100%",
-                    width: "1420px",
+                    width: "1080px",
                     height: "auto"
                 }
             }}

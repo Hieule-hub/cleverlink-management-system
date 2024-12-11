@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { Checkbox, Grid2 as Grid, styled } from "@mui/material";
+import { Checkbox, CircularProgress, Grid2 as Grid, styled } from "@mui/material";
+import { debounce } from "@mui/material/utils";
 
 const EventBox = styled("div")`
     border-radius: var(--shape-borderRadius);
@@ -25,10 +26,11 @@ interface DataType {
 interface GridEventProps {
     data: DataType[];
     itemSize?: string;
+    loading?: boolean;
     columns?: number;
     rowSelection?: {
-        onChange?: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => void;
-        selectedRowKeys?: React.Key[];
+        onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => void;
+        selectedRowKeys: React.Key[];
         keyName: string;
     };
     onRow?: (
@@ -40,24 +42,39 @@ interface GridEventProps {
         onMouseEnter?: () => void;
         onMouseLeave?: () => void;
     };
+    onLoadMore?: () => void;
 }
 
-export const GridEvent = ({ data, columns = 16, itemSize = "small", rowSelection, onRow }: GridEventProps) => {
-    const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-    console.log("🚀 ~ selectedRowKeys:", selectedRowKeys);
+export const GridEvent = ({
+    data,
+    columns = 16,
+    loading,
+    itemSize = "small",
+    rowSelection,
+    onRow,
+    onLoadMore
+}: GridEventProps) => {
+    // const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+    const gridRef = useRef<HTMLDivElement>(null);
+    const clickCountRef = useRef(0);
 
-    useEffect(() => {
-        setSelectedRowKeys(rowSelection?.selectedRowKeys || []);
-    }, [data]);
+    // useEffect(() => {
+    //     setSelectedRowKeys(rowSelection?.selectedRowKeys || []);
+    // }, [data]);
 
-    useEffect(() => {
-        if (rowSelection?.onChange) {
-            rowSelection.onChange(
-                selectedRowKeys,
-                data.filter((item) => selectedRowKeys.includes(item[rowSelection.keyName]))
-            );
-        }
-    }, [selectedRowKeys]);
+    const setSelectedRowKeys = useCallback(
+        (selectedRowKeys) => {
+            if (rowSelection) {
+                rowSelection.onChange(
+                    selectedRowKeys,
+                    data.filter((item) => selectedRowKeys.includes(item[rowSelection.keyName]))
+                );
+            }
+        },
+        [data, rowSelection]
+    );
+
+    const selectedRowKeys = useMemo(() => rowSelection?.selectedRowKeys || [], [rowSelection]);
 
     if (rowSelection && !rowSelection.keyName) {
         console.warn("GridEvent component: rowSelection.keyName is required");
@@ -83,36 +100,58 @@ export const GridEvent = ({ data, columns = 16, itemSize = "small", rowSelection
         setSelectedRowKeys(newSelected);
     };
 
-    let clickCount = 0;
-
     const handlePointer = useCallback(
         (item, index, e) => {
-            clickCount++;
+            clickCountRef.current++;
             setTimeout(() => {
-                if (clickCount === 1) {
-                    if (onRow && onRow(item, index).onClick) {
-                        onRow(item, index).onClick(e);
-                    }
-                } else if (clickCount === 2) {
-                    if (onRow && onRow(item, index).onDoubleClick) {
-                        onRow(item, index).onDoubleClick(e);
-                    }
+                if (clickCountRef.current === 1) {
+                    onRow?.(item, index)?.onClick?.(e);
+                } else if (clickCountRef.current === 2) {
+                    onRow?.(item, index)?.onDoubleClick?.(e);
                 }
-                clickCount = 0;
+                clickCountRef.current = 0;
             }, 300);
         },
         [onRow]
     );
 
+    const handleScroll = useCallback(
+        debounce(() => {
+            if (!gridRef.current || !onLoadMore) return;
+            if (loading) return;
+
+            const { scrollTop, scrollHeight, clientHeight } = gridRef.current;
+            if (scrollTop + clientHeight >= scrollHeight - 10) {
+                console.log("load more...");
+
+                onLoadMore(); // Call the loadMore function when scrolled to the bottom
+            }
+        }, 300),
+        [loading, onLoadMore]
+    );
+
+    useEffect(() => {
+        if (!gridRef.current) return;
+        gridRef.current.addEventListener("scroll", handleScroll);
+        return () => {
+            if (!gridRef.current) return;
+            gridRef.current.removeEventListener("scroll", handleScroll);
+        };
+    }, [handleScroll]);
+
     return (
         <Grid
-            maxHeight={"590px"}
-            overflow={"auto"}
+            component={"div"}
+            ref={gridRef}
+            maxHeight={"400px"}
             container
             columns={columns}
-            width={"100%"}
-            spacing={"4px"}
-            marginBottom={2}
+            spacing={1}
+            sx={{
+                width: "100%",
+                overflow: "auto",
+                marginBottom: 2
+            }}
         >
             {data.map((item, index) => {
                 // const randomIndex = Math.floor(Math.random() * item?.images.length);
@@ -142,6 +181,12 @@ export const GridEvent = ({ data, columns = 16, itemSize = "small", rowSelection
                     </Grid>
                 );
             })}
+
+            {loading && (
+                <Grid size={columns} display='flex' justifyContent='center' marginY={1}>
+                    <CircularProgress size={26} color='primary' />
+                </Grid>
+            )}
         </Grid>
     );
 };
