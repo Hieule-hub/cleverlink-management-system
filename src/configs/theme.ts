@@ -179,7 +179,8 @@ export const userThemes: Themes = {
         palette: {
             primary: {
                 main: "#30B689",
-                dark: "#51635D"
+                dark: "#51635D",
+                contrastText: "#fff"
             }
         }
     }),

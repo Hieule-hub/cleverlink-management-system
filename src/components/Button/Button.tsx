@@ -37,6 +37,8 @@ const StyledButton = styled("button")`
     overflow: hidden;
     text-overflow: ellipsis;
 
+    color: #344054;
+
     // Disable
     &:disabled {
         cursor: not-allowed;
@@ -63,7 +65,7 @@ const StyledButton = styled("button")`
     &:not(:disabled) {
         &.default {
             background-color: white;
-            color: #344054;
+            /* color: #344054; */
             border: 1px solid var(--input-border-color);
             :hover {
                 border-color: var(--palette-primary-main);
@@ -73,8 +75,8 @@ const StyledButton = styled("button")`
 
         &.primary {
             border: none;
+            color: var(--palette-primary-contrastText);
             background-color: var(--palette-primary-main);
-            color: white;
 
             :hover {
                 background-color: var(--palette-primary-light);
@@ -83,7 +85,7 @@ const StyledButton = styled("button")`
 
         &.error {
             border: none;
-            color: white;
+            color: var(--palette-error-contrastText);
             background-color: var(--palette-error-main);
 
             :hover {
@@ -93,7 +95,7 @@ const StyledButton = styled("button")`
 
         &.success {
             border: none;
-            color: white;
+            color: var(--palette-success-contrastText);
             background-color: var(--palette-success-main);
 
             :hover {
@@ -103,7 +105,7 @@ const StyledButton = styled("button")`
 
         &.warning {
             border: none;
-            color: white;
+            color: var(--palette-warning-contrastText);
             background-color: var(--palette-warning-main);
 
             :hover {
@@ -113,7 +115,7 @@ const StyledButton = styled("button")`
 
         &.info {
             border: none;
-            color: white;
+            color: var(--palette-info-contrastText);
             background-color: var(--palette-info-main);
 
             :hover {

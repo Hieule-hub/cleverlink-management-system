@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import React from "react";
 
 import { Button } from "@components/Button";
-import { Breadcrumbs } from "@components/Layout/Breadcrumbs";
-import MainLayout from "@components/Layout/MainLayout";
 import { Pagination } from "@components/Pagination";
 import { Paper } from "@components/Paper";
 import { type Column, Table } from "@components/Table";
@@ -14,8 +13,6 @@ import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
 
 import { EventDialog, useEventDialog } from "./EventDialog";
-import { EventNavigation } from "./EventNavigation";
-import { GridEvent } from "./GridEvent";
 import { SnapshotDialog, useSnapshotDialogDialog } from "./SnapshotDialog";
 
 export const EventPage = () => {
@@ -198,10 +195,7 @@ export const EventPage = () => {
     }, []);
 
     return (
-        <MainLayout title={t("title")}>
-            <Box display='flex' justifyContent='space-between'>
-                <Breadcrumbs /> <EventNavigation />
-            </Box>
+        <React.Fragment>
             <Paper title={t("title")}>
                 <Box display='flex' alignItems='center' gap='12px' marginBottom={"12px"}>
                     <div>{tCommon("Search")}</div>
@@ -276,6 +270,6 @@ export const EventPage = () => {
             />
 
             <SnapshotDialog />
-        </MainLayout>
+        </React.Fragment>
     );
 };

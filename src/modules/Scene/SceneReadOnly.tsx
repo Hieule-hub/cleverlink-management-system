@@ -1,19 +1,20 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import React from "react";
 
-import { Button } from "@components/Button";
+import { Breadcrumbs } from "@components/Layout/Breadcrumbs";
+import MainLayout from "@components/Layout/MainLayout";
 import { Pagination } from "@components/Pagination";
 import { Paper } from "@components/Paper";
 import { type Column, Table } from "@components/Table";
 import { UserInfoDialog, useUserInfoDialog } from "@modules/User";
-import { AddCircleOutlineOutlined, DeleteOutline, DescriptionOutlined, Search } from "@mui/icons-material";
-import { Box, IconButton, Link, TextField } from "@mui/material";
+import { DeleteOutline, DescriptionOutlined, Search } from "@mui/icons-material";
+import { Box, IconButton, Link } from "@mui/material";
 import sceneService from "@services/scene";
 import { useTranslations } from "next-intl";
 
 import { SceneDialog, useSceneDialog } from "./SceneDialog";
 
-export const ScenePage = () => {
+export const SceneReadOnly = () => {
     const t = useTranslations("ScenePage");
     const tCommon = useTranslations("Common");
 
@@ -23,9 +24,6 @@ export const ScenePage = () => {
     //Store controller
     const { openDialog } = useSceneDialog();
     const { openDialog: showUserInfo } = useUserInfoDialog();
-
-    //Delete list
-    const [deleteIds, setDeleteIds] = useState([]);
 
     // Filter
     const [total, setTotal] = useState(0);
@@ -68,7 +66,6 @@ export const ScenePage = () => {
                 ids: ids
             });
             fetchDataList(filter);
-            setDeleteIds([]);
         } catch (error) {
             console.log("🚀 ~ handleDeleteItems ~ error:", error);
         } finally {
@@ -138,7 +135,7 @@ export const ScenePage = () => {
                 }
             },
             {
-                title: tCommon("Edit") + "/" + tCommon("Delete"),
+                title: tCommon("Detail"),
                 key: "action",
                 align: "right",
                 render: (_, record) => (
@@ -152,15 +149,6 @@ export const ScenePage = () => {
                         >
                             <DescriptionOutlined fontSize='inherit' />
                         </IconButton>
-                        <IconButton
-                            size='small'
-                            color='error'
-                            onClick={() => {
-                                handleDeleteItems([record._id]);
-                            }}
-                        >
-                            <DeleteOutline fontSize='inherit' />
-                        </IconButton>
                     </Box>
                 )
             }
@@ -169,67 +157,12 @@ export const ScenePage = () => {
 
     return (
         <React.Fragment>
+            <Breadcrumbs />
             <Paper title={t("title")}>
-                <Box display='flex' alignItems='center' gap='12px' marginBottom={"12px"}>
-                    <div>{tCommon("Search")}</div>
-                    <TextField
-                        sx={{
-                            minWidth: 320
-                        }}
-                        size='small'
-                        value={keyword}
-                        onChange={(e) => setKeyword(e.target.value)}
-                        placeholder={t("Placeholder search")}
-                    />
-                    <Button height='48px' startIcon={Search} onClick={handleSearch}>
-                        {tCommon("Search")}
-                    </Button>
-                    {/* <Button height='48px' startIcon={FilterList} onClick={triggerToastDev}>
-                        {tCommon("Filter")}
-                    </Button> */}
-
-                    <Button
-                        style={{
-                            marginLeft: "auto"
-                        }}
-                        height='48px'
-                        color='primary'
-                        startIcon={AddCircleOutlineOutlined}
-                        onClick={() => {
-                            openDialog();
-                        }}
-                    >
-                        {t("Add new record")}
-                    </Button>
-                </Box>
-
-                <Table
-                    border
-                    isLoading={isFetching}
-                    columns={columns}
-                    data={dataList}
-                    rowSelection={{
-                        keyName: "_id",
-                        selectedRowKeys: [],
-                        onChange: (selectedRowKeys) => {
-                            setDeleteIds(selectedRowKeys);
-                        }
-                    }}
-                />
+                <Table border isLoading={isFetching} columns={columns} data={dataList} />
             </Paper>
 
-            <Box marginTop='12px' display='flex' gap='12px' alignItems='center'>
-                <Button
-                    disabled={isFetching || deleteIds.length === 0}
-                    height='40px'
-                    startIcon={DeleteOutline}
-                    onClick={() => handleDeleteItems(deleteIds)}
-                >
-                    {tCommon("Delete")}
-                </Button>
-                <Box flex={1}>
-                    ({deleteIds.length}) {tCommon("selected")}
-                </Box>
+            <Box marginTop='12px' display='flex' gap='12px' alignItems='center' justifyContent={"center"}>
                 {Math.ceil(total / 10) > 1 && (
                     <Pagination
                         count={Math.ceil(total / 10)}
@@ -239,21 +172,11 @@ export const ScenePage = () => {
                                 return { ...pre, page };
                             })
                         }
-                        sx={{
-                            marginLeft: "auto",
-                            flex: 1
-                        }}
                     />
                 )}
             </Box>
 
-            <SceneDialog
-                onClose={(status) => {
-                    if (status === "success") {
-                        handleSearch();
-                    }
-                }}
-            />
+            <SceneDialog readonly />
             <UserInfoDialog />
         </React.Fragment>
     );

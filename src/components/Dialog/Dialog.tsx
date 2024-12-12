@@ -48,6 +48,7 @@ interface DialogProps extends Omit<DialogPropsMui, "title"> {
     loading?: boolean;
     onOk?: () => void;
     onCancel?: () => void;
+    hiddenOk?: boolean;
 }
 
 export const Dialog = ({
@@ -56,6 +57,7 @@ export const Dialog = ({
     showFooter = true,
     onCancel = () => "",
     onOk = () => "",
+    hiddenOk,
     loading,
     children,
     ...props
@@ -91,9 +93,11 @@ export const Dialog = ({
                             >
                                 {props.cancelText || t("Close")}
                             </Button>
-                            <Button loading={loading} height='36px' color='primary' onClick={onOk}>
-                                {props.okText || t("Save")}
-                            </Button>
+                            {!hiddenOk && (
+                                <Button height='36px' loading={loading} onClick={onOk} color='primary'>
+                                    {props.okText || t("Save")}
+                                </Button>
+                            )}
                         </React.Fragment>
                     )}
                 </div>

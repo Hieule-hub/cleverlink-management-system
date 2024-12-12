@@ -9,7 +9,7 @@ import { DrawerHeader, Sidebar } from "./Sidebar";
 
 type Props = {
     children?: ReactNode;
-    title: ReactNode;
+    title?: ReactNode;
 };
 
 export default function MainLayout({ children, title }: Props) {

@@ -97,11 +97,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
         watch
     } = useForm<FormUserValues>({
         resolver: yupResolver(resolver),
-        defaultValues: {
-            userId: "",
-            password: "",
-            startDate: dayjs().format("YYYY-MM-DD")
-        }
+        defaultValues: initFormValues
     });
 
     useEffect(() => {

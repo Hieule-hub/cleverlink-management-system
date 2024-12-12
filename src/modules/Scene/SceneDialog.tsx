@@ -25,6 +25,7 @@ export const useSceneDialog = dialogStore<Scene>();
 
 interface SceneDialogProps {
     onClose?: (status?: string) => void;
+    readonly?: boolean;
 }
 
 const labelSize = 4;
@@ -76,13 +77,12 @@ const initFormValues: FormValues = {
     pEmail: ""
 };
 
-export const SceneDialog = ({ onClose = () => "" }: SceneDialogProps) => {
+export const SceneDialog = ({ onClose = () => "", readonly }: SceneDialogProps) => {
     const t = useTranslations();
     const { areas } = useAppStore((state) => state);
     const { item, open, closeDialog, setItem } = useSceneDialog();
 
     const [isLoading, setIsLoading] = useState(false);
-    const [isFetchingId, setIsFetchingId] = useState(false);
 
     const editMode = useMemo(() => Boolean(item), [item]);
 
@@ -215,37 +215,6 @@ export const SceneDialog = ({ onClose = () => "" }: SceneDialogProps) => {
         })();
     };
 
-    const fetchId = async () => {
-        const areaId = getValues("areaId");
-
-        if (!areaId) {
-            toast.error({ title: "Please select area" });
-            return;
-        }
-
-        //get role code
-        setIsFetchingId(true);
-
-        try {
-            const response = await sceneService.getSceneIdAndUserId({
-                prefixScene: areas.find((o) => o._id === areaId)?.code || "C",
-                prefixUser: "BU"
-            });
-            if (!response.err) {
-                const { userId, sceneId, token, roleId, password } = response.data;
-                setValue("userId", userId);
-                setValue("sceneId", sceneId);
-                setValue("password", password);
-                setValue("token", token);
-                setValue("roleId", roleId._id);
-            }
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setIsFetchingId(false);
-        }
-    };
-
     const fetchCompanies = useCallback((query: string) => {
         return companyService.getCompanyList({ filters: query, limit: 10, page: 1 }).then((res) => {
             if (!res.err) {
@@ -273,10 +242,11 @@ export const SceneDialog = ({ onClose = () => "" }: SceneDialogProps) => {
                 }
             }}
             open={open}
-            title={item ? t("ScenePage.Edit record") : t("ScenePage.Add new record")}
+            title={t("ScenePage.Detail record")}
             onClose={handleClose}
             onCancel={handleClose}
             onOk={handleSave}
+            hiddenOk={readonly}
             loading={isLoading}
         >
             <Stack
@@ -296,7 +266,7 @@ export const SceneDialog = ({ onClose = () => "" }: SceneDialogProps) => {
                     </Grid>
                     <Grid size={inputSize}>
                         <ControllerAsyncSearchSelect
-                            disabled={editMode}
+                            disabled={editMode && readonly}
                             control={control}
                             keyName='company'
                             placeholder='Company'
@@ -322,7 +292,7 @@ export const SceneDialog = ({ onClose = () => "" }: SceneDialogProps) => {
                         <Label required label='Scene name' htmlFor='name' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='name' placeholder='Name' />
+                        <ControllerInput control={control} keyName='name' placeholder='Name' disabled={readonly} />
                     </Grid>
 
                     {/* Area ID Field */}
@@ -331,7 +301,7 @@ export const SceneDialog = ({ onClose = () => "" }: SceneDialogProps) => {
                     </Grid>
                     <Grid size={inputSize}>
                         <ControllerSelect
-                            disabled={editMode}
+                            disabled={editMode && readonly}
                             control={control}
                             keyName='areaId'
                             placeholder='Area'
@@ -366,9 +336,7 @@ export const SceneDialog = ({ onClose = () => "" }: SceneDialogProps) => {
                                 width: "100%"
                             }}
                             height='48px'
-                            disabled={editMode}
-                            onClick={fetchId}
-                            loading={isFetchingId}
+                            disabled={editMode && readonly}
                         >
                             {t("Common.Init")}
                         </Button>
@@ -379,7 +347,12 @@ export const SceneDialog = ({ onClose = () => "" }: SceneDialogProps) => {
                         <Label label='Address' htmlFor='address' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='address' placeholder='Address' />
+                        <ControllerInput
+                            control={control}
+                            keyName='address'
+                            placeholder='Address'
+                            disabled={readonly}
+                        />
                     </Grid>
 
                     {/* Phone number Field */}
@@ -387,7 +360,12 @@ export const SceneDialog = ({ onClose = () => "" }: SceneDialogProps) => {
                         <Label label='Phone number' htmlFor='phone' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='phone' placeholder='Phone Number' />
+                        <ControllerInput
+                            control={control}
+                            keyName='phone'
+                            placeholder='Phone Number'
+                            disabled={readonly}
+                        />
                     </Grid>
 
                     {/* Website Field */}
@@ -395,7 +373,12 @@ export const SceneDialog = ({ onClose = () => "" }: SceneDialogProps) => {
                         <Label label='Website' htmlFor='website' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='website' placeholder='Website' />
+                        <ControllerInput
+                            control={control}
+                            keyName='website'
+                            placeholder='Website'
+                            disabled={readonly}
+                        />
                     </Grid>
 
                     {/* Register Date Field */}
@@ -427,7 +410,12 @@ export const SceneDialog = ({ onClose = () => "" }: SceneDialogProps) => {
                         <Label label='Name' htmlFor='pName' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='pName' placeholder='Name' disabled={editMode} />
+                        <ControllerInput
+                            control={control}
+                            keyName='pName'
+                            placeholder='Name'
+                            disabled={editMode && readonly}
+                        />
                     </Grid>
 
                     {/* PDepartment name Field */}
@@ -439,7 +427,7 @@ export const SceneDialog = ({ onClose = () => "" }: SceneDialogProps) => {
                             control={control}
                             keyName='pDepartment'
                             placeholder='Department name'
-                            disabled={editMode}
+                            disabled={editMode && readonly}
                         />
                     </Grid>
 
@@ -452,7 +440,7 @@ export const SceneDialog = ({ onClose = () => "" }: SceneDialogProps) => {
                             control={control}
                             keyName='pPhone'
                             placeholder='Phone number'
-                            disabled={editMode}
+                            disabled={editMode && readonly}
                         />
                     </Grid>
 
@@ -461,7 +449,12 @@ export const SceneDialog = ({ onClose = () => "" }: SceneDialogProps) => {
                         <Label label='Email' htmlFor='pEmail' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='pEmail' placeholder='Email' disabled={editMode} />
+                        <ControllerInput
+                            control={control}
+                            keyName='pEmail'
+                            placeholder='Email'
+                            disabled={editMode && readonly}
+                        />
                     </Grid>
                 </Grid>
             </Stack>

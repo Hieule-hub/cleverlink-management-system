@@ -17,7 +17,7 @@ const StyledTitleTag = styled("div")`
 
     &.primary {
         background: var(--palette-primary-main);
-        color: white;
+        color: var(--palette-primary-contrastText);
     }
 
     &.default {

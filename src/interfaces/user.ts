@@ -28,6 +28,7 @@ export interface Role {
 export interface UserInfo {
     _id: string;
     userId: string;
+    companyId?: string;
     roleId: Role;
     name: string;
     status: string;

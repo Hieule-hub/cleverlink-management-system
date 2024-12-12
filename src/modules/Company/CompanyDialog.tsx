@@ -79,9 +79,7 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
         reset
     } = useForm<FormCompanyValues>({
         resolver: yupResolver(resolver),
-        defaultValues: {
-            userId: ""
-        }
+        defaultValues: initFormValues
     });
 
     useEffect(() => {

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { RouteConfig, routeConfig } from "@configs/routeConfig";
 import { ChevronRightOutlined } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
+import { useAppStore } from "@providers/AppStoreProvider";
 import { useTranslations } from "next-intl";
 import Menu, { Divider as RcDivider, Item as RcMenuItem, SubMenu as RcSubMenu } from "rc-menu";
 
@@ -201,6 +202,7 @@ const renderMenuItems = (
 // eslint-disable-next-line react/display-name
 export const MenuSidebar = memo(() => {
     const t = useTranslations("Sidebar");
+    const { role } = useAppStore((state) => state);
 
     const router = useRouter();
 
@@ -237,7 +239,11 @@ export const MenuSidebar = memo(() => {
             // 	setKeyPath(e.keyPath);
             // }}
         >
-            {renderMenuItems(routeConfig, handleClick, translate)}
+            {renderMenuItems(
+                routeConfig.filter((item) => item.roles?.includes(role)),
+                handleClick,
+                translate
+            )}
         </Menu>
     );
 });

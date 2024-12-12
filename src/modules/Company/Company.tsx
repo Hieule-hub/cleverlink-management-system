@@ -1,8 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import { Button } from "@components/Button";
-import { Breadcrumbs } from "@components/Layout/Breadcrumbs";
-import MainLayout from "@components/Layout/MainLayout";
 import { Pagination } from "@components/Pagination";
 import { Paper } from "@components/Paper";
 import { type Column, Table } from "@components/Table";
@@ -158,8 +156,7 @@ export const CompanyPage = () => {
     }, []);
 
     return (
-        <MainLayout title={t("title")}>
-            <Breadcrumbs />
+        <React.Fragment>
             <Paper title={t("title")}>
                 <Box display='flex' alignItems='center' gap='12px' marginBottom={"12px"}>
                     <div>{tCommon("Search")}</div>
@@ -247,6 +244,6 @@ export const CompanyPage = () => {
             />
 
             <UserInfoDialog />
-        </MainLayout>
+        </React.Fragment>
     );
 };

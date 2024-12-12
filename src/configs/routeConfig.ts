@@ -19,6 +19,7 @@ export interface RouteConfig {
     hidden?: boolean;
     onClick?: () => void;
     key: string;
+    roles?: string[];
 }
 
 export const routeConfig: RouteConfig[] = [
@@ -27,48 +28,55 @@ export const routeConfig: RouteConfig[] = [
         key: "dashboard",
         label: "Dashboard",
         private: false,
-        icon: DashboardSharp
+        icon: DashboardSharp,
+        roles: ["CIP", "TU", "BU", "GU"]
     },
     {
         path: "/company",
         key: "company",
         label: "Company",
         private: false,
-        icon: BusinessSharp
+        icon: BusinessSharp,
+        roles: ["CIP", "TU"]
     },
     {
         path: "/scene",
         key: "scene",
         label: "Scene",
         private: false,
-        icon: MapSharp
+        icon: MapSharp,
+        roles: ["CIP", "TU", "BU", "GU"]
     },
     {
         path: "/user",
         key: "user",
         label: "User",
         private: false,
-        icon: GroupSharp
+        icon: GroupSharp,
+        roles: ["CIP", "TU", "BU", "GU"]
     },
     {
         path: "/device",
         key: "device",
         label: "Device",
         private: false,
-        icon: ConstructionSharp
+        icon: ConstructionSharp,
+        roles: ["CIP", "TU", "BU", "GU"]
     },
     {
         path: "/camera",
         key: "camera",
         label: "Camera",
         private: false,
-        icon: VideocamSharp
+        icon: VideocamSharp,
+        roles: ["CIP", "TU", "BU", "GU"]
     },
     {
         path: "/event",
         key: "event",
         label: "Event",
         private: false,
-        icon: BugReportSharp
+        icon: BugReportSharp,
+        roles: ["CIP", "TU", "BU", "GU"]
     }
 ];
