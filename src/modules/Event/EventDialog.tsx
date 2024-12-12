@@ -62,7 +62,7 @@ export const EventDialog = ({ onClose = () => "" }: EventDialogProps) => {
                 ...initFormValues,
                 aiCode: item.aiCode,
                 channel: item.channel,
-                deviceId: item.activate.boxId,
+                deviceId: item.activate?.boxId || initFormValues.deviceId,
                 images: item.images,
                 receiver: item.receiver,
                 time: dayjs(item.time).format("YYYY-MM-DD HH:mm:ss"),

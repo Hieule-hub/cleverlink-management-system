@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { redirect } from "next/navigation";
+
 import userService from "@services/user";
 import { toast } from "@store/toastStore";
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
@@ -114,11 +116,16 @@ apiClient.interceptors.response.use(
                         // Process the failed requests
                         processQueue(null, newAccessToken);
                     } else {
+                        // Logout the user
                         throw new Error(response.msg?.message || "Unknown error");
                     }
                 } catch (refreshError) {
-                    processQueue(refreshError, null);
-                    return Promise.reject(refreshError);
+                    localStorage.removeItem("access-token");
+                    Cookies.remove("refresh-token");
+                    redirect("/login");
+
+                    // processQueue(refreshError, null);
+                    // return Promise.reject(refreshError);
                 } finally {
                     isRefreshing = false;
                 }
