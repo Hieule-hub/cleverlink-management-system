@@ -9,25 +9,18 @@ import { useAppStore } from "@providers/AppStoreProvider";
 import { Breadcrumbs } from "@/components/Layout/Breadcrumbs";
 import MainLayout from "@/components/Layout/MainLayout";
 
-import NotFoundPage from "../not-found";
-
 const CompanyPageRole = () => {
     const { role } = useAppStore((state) => state);
 
-    const render = () => {
-        if (role === "TU") {
-            return <CompanyInfo />;
-        } else if (role === "CIP") {
-            return <CompanyPage />;
-        }
-
+    if (role !== "TU" && role !== "CIP") {
         return redirect("/404");
-    };
+    }
 
     return (
         <MainLayout>
             <Breadcrumbs />
-            {render()}
+            {role === "TU" && <CompanyInfo />}
+            {role === "CIP" && <CompanyPage />}
         </MainLayout>
     );
 };

@@ -1,5 +1,7 @@
 import React from "react";
 
+import { usePathname } from "next/navigation";
+
 import { routeConfig } from "@configs/routeConfig";
 import { Link } from "@libs/i18n/routing";
 import { ArrowForwardIosOutlined, HomeOutlined } from "@mui/icons-material";
@@ -8,7 +10,8 @@ import { useTranslations } from "next-intl";
 
 export const Breadcrumbs = (props: BreadcrumbsProps) => {
     const t = useTranslations("Sidebar");
-    const pathnames = location.pathname.split("/").filter((x) => x);
+    const pathName = usePathname();
+    const pathnames = pathName.split("/").filter((x) => x);
 
     const breadcrumbNameMap = routeConfig.reduce<any>((acc, cur) => {
         if (cur.path) {

@@ -1,13 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import React from "react";
 
-import { Breadcrumbs } from "@components/Layout/Breadcrumbs";
-import MainLayout from "@components/Layout/MainLayout";
 import { Pagination } from "@components/Pagination";
 import { Paper } from "@components/Paper";
 import { type Column, Table } from "@components/Table";
 import { UserInfoDialog, useUserInfoDialog } from "@modules/User";
-import { DeleteOutline, DescriptionOutlined, Search } from "@mui/icons-material";
+import { DescriptionOutlined } from "@mui/icons-material";
 import { Box, IconButton, Link } from "@mui/material";
 import sceneService from "@services/scene";
 import { useTranslations } from "next-intl";
@@ -157,7 +155,6 @@ export const SceneReadOnly = () => {
 
     return (
         <React.Fragment>
-            <Breadcrumbs />
             <Paper title={t("title")}>
                 <Table border isLoading={isFetching} columns={columns} data={dataList} />
             </Paper>

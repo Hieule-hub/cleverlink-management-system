@@ -57,7 +57,25 @@ export type UserLoginRes = DataResponse<{
     updatedAt: string;
     refresh: string;
     access: string;
+    passwordAt?: string;
 }>;
+
+export type UserRefreshTokenReq = {
+    refresh: string;
+};
+
+export type UserRefreshTokenRes = DataResponse<{
+    refresh: string;
+    access: string;
+    _id: string;
+}>;
+
+export type UserUpdatePasswordReq = {
+    oldPassword: string;
+    newPassword: string;
+};
+
+export type UserUpdatePasswordRes = DataResponse<unknown>;
 
 //User list request
 export type GetUserListReq = Partial<GetParams>;

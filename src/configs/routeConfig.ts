@@ -45,7 +45,7 @@ export const routeConfig: RouteConfig[] = [
         label: "Scene",
         private: false,
         icon: MapSharp,
-        roles: ["CIP", "TU", "BU", "GU"]
+        roles: ["CIP", "TU", "BU"]
     },
     {
         path: "/user",
@@ -53,7 +53,7 @@ export const routeConfig: RouteConfig[] = [
         label: "User",
         private: false,
         icon: GroupSharp,
-        roles: ["CIP", "TU", "BU", "GU"]
+        roles: ["CIP", "TU", "BU"]
     },
     {
         path: "/device",
@@ -61,7 +61,7 @@ export const routeConfig: RouteConfig[] = [
         label: "Device",
         private: false,
         icon: ConstructionSharp,
-        roles: ["CIP", "TU", "BU", "GU"]
+        roles: ["CIP", "TU", "BU"]
     },
     {
         path: "/camera",
@@ -69,7 +69,7 @@ export const routeConfig: RouteConfig[] = [
         label: "Camera",
         private: false,
         icon: VideocamSharp,
-        roles: ["CIP", "TU", "BU", "GU"]
+        roles: ["CIP", "TU", "BU"]
     },
     {
         path: "/event",
@@ -77,6 +77,6 @@ export const routeConfig: RouteConfig[] = [
         label: "Event",
         private: false,
         icon: BugReportSharp,
-        roles: ["CIP", "TU", "BU", "GU"]
+        roles: ["CIP", "TU", "BU"]
     }
 ];

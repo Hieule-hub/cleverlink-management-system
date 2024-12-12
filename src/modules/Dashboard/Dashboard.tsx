@@ -1,12 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import { Button } from "@components/Button";
-import { Breadcrumbs } from "@components/Layout/Breadcrumbs";
-import MainLayout from "@components/Layout/MainLayout";
 import { Pagination } from "@components/Pagination";
 import { Paper } from "@components/Paper";
 import { type Column, Table } from "@components/Table";
-import { AddCircleOutlineOutlined, DeleteOutline, DescriptionOutlined, FilterList, Search } from "@mui/icons-material";
+import { DescriptionOutlined, FilterList, Search } from "@mui/icons-material";
 import { Box, IconButton, TextField } from "@mui/material";
 import resourceService from "@services/resource";
 import { useTranslations } from "next-intl";
@@ -123,8 +121,7 @@ export const DashboardPage = () => {
     }, []);
 
     return (
-        <MainLayout title={t("title")}>
-            <Breadcrumbs />
+        <React.Fragment>
             <Paper title={t("title")}>
                 <Box display='flex' alignItems='center' gap='12px' marginBottom={"12px"}>
                     <div>{tCommon("Search")}</div>
@@ -170,12 +167,6 @@ export const DashboardPage = () => {
                     />
                 )}
             </Box>
-
-            {/* <UserDialog  onClose={(status) => {
-                    if (status === "success") {
-                        handleSearch();
-                    }
-                }} /> */}
-        </MainLayout>
+        </React.Fragment>
     );
 };

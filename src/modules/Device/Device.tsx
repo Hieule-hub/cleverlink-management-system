@@ -18,8 +18,6 @@ import deviceService from "@services/device";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
 
-import { triggerToastDev } from "@/utils";
-
 import { CameraLinkInfo, useCameraLinkDialog } from "./CameraLinkInfo";
 import { DeviceDialog, useDeviceDialog } from "./DeviceDialog";
 

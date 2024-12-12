@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import userService from "@services/user";
 import { toast } from "@store/toastStore";
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import Cookies from "js-cookie";
@@ -98,13 +99,13 @@ apiClient.interceptors.response.use(
                     }
 
                     // Call the refresh token API
-                    const response = await axios.post(`${baseUrl}/user/refresh`, {
-                        token: refreshToken
+                    const response = await userService.userRefreshToken({
+                        refresh: refreshToken
                     });
 
-                    if (!response.data.err) {
-                        const newAccessToken = response.data.accessToken;
-                        const newRefreshToken = response.data.refreshToken;
+                    if (!response.err) {
+                        const newAccessToken = response.data.access;
+                        const newRefreshToken = response.data.refresh;
 
                         // Update the token in local storage
                         localStorage.setItem("access-token", newAccessToken);
@@ -113,7 +114,7 @@ apiClient.interceptors.response.use(
                         // Process the failed requests
                         processQueue(null, newAccessToken);
                     } else {
-                        throw new Error(response.data.msg);
+                        throw new Error(response.msg?.message || "Unknown error");
                     }
                 } catch (refreshError) {
                     processQueue(refreshError, null);

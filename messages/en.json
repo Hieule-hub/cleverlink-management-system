@@ -162,9 +162,17 @@
         "Password": "Password",
         "Thank you for your visit": "Thank you for your visit",
         "Email address": "Email address",
+        "Username": "Username",
         "Enter username": "Enter username",
         "Enter password": "Enter password",
-        "Contact Us": "Contact Us"
+        "Contact Us": "Contact Us",
+        "Change password": "Change password",
+        "Enter old password": "Enter old password",
+        "Enter new password": "Enter new password",
+        "Re-enter new password": "Re-enter new password",
+        "Old password": "Old password",
+        "New password": "New password",
+        "Re-enter password": "Re-enter password"
     },
 
     "NotFoundPage": {

@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 
-import { useRouter } from "next/navigation";
-
 import { Button, ContactInfoButton } from "@components/Button";
 import { ControllerInput } from "@components/Controller";
 import { Label } from "@components/Label";
@@ -15,6 +13,8 @@ import userService from "@services/user";
 import Cookies from "js-cookie";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
+
+import { ChangePasswordDialog, useChangePasswordDialog } from "./ChangePasswordDialog";
 
 const StyledLoginPage = styled("div")`
     display: flex;
@@ -82,7 +82,9 @@ export const LoginPage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false); // visible password
 
-    const { setUserInfo, fetUserInfo } = useAppStore((state) => state);
+    //Store controller
+    const { fetUserInfo } = useAppStore((state) => state);
+    const { openDialog } = useChangePasswordDialog();
 
     const { handleSubmit, control } = useForm<UserLoginReq>({
         defaultValues: {
@@ -103,11 +105,18 @@ export const LoginPage = () => {
                     if (!response.err) {
                         // login success
                         const { data } = response;
+                        // console.log("🚀 ~ handleSubmit ~ data:", data);
 
                         localStorage.setItem("access-token", data.access);
                         Cookies.set("refresh-token", data.refresh, { expires: 7 });
 
-                        fetUserInfo();
+                        const isFistLogin = !data?.passwordAt || data?.passwordAt === data.createdAt;
+
+                        if (isFistLogin) {
+                            openDialog();
+                        } else {
+                            fetUserInfo();
+                        }
                     }
                 } catch (error) {
                     console.log("🚀 ~ handleSubmit ~ error:", error);
@@ -132,7 +141,7 @@ export const LoginPage = () => {
                     <span className='login-des'>{t("Thank you for your visit")}.</span>
 
                     <div className='field'>
-                        <Label htmlFor='userId' label={t("Email address")} />
+                        <Label htmlFor='userId' label={t("Username")} />
                         <ControllerInput
                             keyName='userId'
                             control={control}
@@ -163,6 +172,7 @@ export const LoginPage = () => {
                             control={control}
                             placeholder={t("Enter password")}
                             inputProps={{
+                                type: showPassword ? "text" : "password",
                                 sx: {
                                     ".MuiInputBase-root": {
                                         height: "56px"
@@ -209,6 +219,14 @@ export const LoginPage = () => {
             </div>
 
             <div className='right-part' />
+
+            <ChangePasswordDialog
+                onClose={() => {
+                    setTimeout(() => {
+                        fetUserInfo();
+                    }, 500);
+                }}
+            />
         </StyledLoginPage>
     );
 };

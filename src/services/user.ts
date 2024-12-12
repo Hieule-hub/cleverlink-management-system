@@ -8,7 +8,11 @@ import {
     GetUserListRes,
     UserInfo,
     UserLoginReq,
-    UserLoginRes
+    UserLoginRes,
+    UserRefreshTokenReq,
+    UserRefreshTokenRes,
+    UserUpdatePasswordReq,
+    UserUpdatePasswordRes
 } from "@interfaces/user";
 import apiClient from "@libs/apiClient";
 import { DataResponse } from "common";
@@ -19,6 +23,14 @@ const userLogin = async (data: UserLoginReq) => {
 
 const userLogout = async () => {
     return apiClient.post<unknown, unknown>("/user/logout");
+};
+
+const userUpdatePassword = async (data: UserUpdatePasswordReq) => {
+    return apiClient.put<UserUpdatePasswordReq, UserUpdatePasswordRes>("/user/change", data);
+};
+
+const userRefreshToken = async (params: UserRefreshTokenReq) => {
+    return apiClient.post<UserRefreshTokenReq, UserRefreshTokenRes>("/user/refresh", params);
 };
 
 const getUserInfo = async () => {
@@ -59,6 +71,17 @@ const deleteUsers = async (params: DeleteUsersReq) => {
     });
 };
 
-const userService = { userLogin, getUserInfo, getUserList, userLogout, deleteUsers, getUserId, createUser, editUser };
+const userService = {
+    userLogin,
+    getUserInfo,
+    getUserList,
+    userLogout,
+    deleteUsers,
+    getUserId,
+    createUser,
+    editUser,
+    userUpdatePassword,
+    userRefreshToken
+};
 
 export default userService;

@@ -45,9 +45,8 @@ export const VideoCapturePage = () => {
     });
 
     const fetchDataList = useCallback(async () => {
-        console.log("🚀 ~ fetchDataList ", filter);
-
         setIsFetching(true);
+
         setTimeout(async () => {
             try {
                 const listRes = await eventService.getEventList(filter);

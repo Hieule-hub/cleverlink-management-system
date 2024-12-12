@@ -162,9 +162,17 @@
         "Password": "비밀번호",
         "Thank you for your visit": "방문해 주셔서 감사합니다.",
         "Email address": "이메일 주소",
+        "Username": "사용자명",
         "Enter username": "사용자 이름을 입력하세요",
         "Enter password": "비밀번호를 입력해주세요",
-        "Contact Us": "문의하기"
+        "Contact Us": "문의하기",
+        "Change password": "Translating",
+        "Enter old password": "Translating",
+        "Enter new password": "Translating",
+        "Re-enter new password": "Translating",
+        "Old password": "Translating",
+        "New password": "Translating",
+        "Re-enter password": "Translating"
     },
 
     "NotFoundPage": {

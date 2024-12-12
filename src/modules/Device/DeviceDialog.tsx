@@ -95,7 +95,6 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
         handleSubmit,
         control,
         formState: { errors },
-        getValues,
         setValue,
         reset
     } = useForm<FormDeviceValues>({
