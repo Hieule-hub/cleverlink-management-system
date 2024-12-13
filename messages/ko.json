@@ -25,7 +25,8 @@
         "Download": "다운로드",
         "Small": "작게",
         "Large": "크게",
-        "List view": "목록보기"
+        "List view": "목록보기",
+        "Confirm description": "계속 하시겠습니까 ?"
     },
 
     "DashboardPage": {
@@ -52,7 +53,8 @@
         "Name": "이름",
         "Scene name": "현장명",
         "Role": "구분",
-        "Notice note": "※위험을 알림받기 위한 연락처 입력란 입니다."
+        "Notice note": "※위험을 알림받기 위한 연락처 입력란 입니다.",
+        "Delete record confirm": "선택한 사용자가 삭제 됩니다."
     },
 
     "ScenePage": {
@@ -70,7 +72,8 @@
         "Scene ID": "현장 ID",
         "Scene name": "현장명",
         "Company name": "기관명",
-        "Address": "주소"
+        "Address": "주소",
+        "Delete record confirm": "Translating"
     },
 
     "CompanyPage": {
@@ -87,7 +90,8 @@
         "Manager": "관리자",
         "Name": "기관명",
         "Devices": "장치",
-        "Company ID": "기관ID"
+        "Company ID": "기관ID",
+        "Delete record confirm": "Translating"
     },
 
     "DevicePage": {
@@ -106,7 +110,8 @@
         "Company name": "기관명",
         "Scene name": "현장명",
         "Manager": "관리자",
-        "Connected camera information": "연결 카메라 정보"
+        "Connected camera information": "연결 카메라 정보",
+        "Delete record confirm": "Translating"
     },
 
     "CameraPage": {
@@ -125,7 +130,8 @@
         "Type": "종류",
         "Factory": "공장",
         "Protocol": "규약",
-        "POE": "POE"
+        "POE": "POE",
+        "Delete record confirm": "Translating"
     },
 
     "EventPage": {
@@ -146,7 +152,8 @@
         "Receiver": "수진자",
         "Manager": "관리자",
         "View snapshot": "스냅샷 보기",
-        "Snapshot note": "※현재 보고있는 스냅샷을 다운로드 합니다."
+        "Snapshot note": "※현재 보고있는 스냅샷을 다운로드 합니다.",
+        "Delete record confirm": "Translating"
     },
 
     "VideoCapturePage": {

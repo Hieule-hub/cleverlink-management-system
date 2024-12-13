@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import { Button } from "@components/Button";
+import { ConfirmDialog } from "@components/Dialog";
 import { Pagination } from "@components/Pagination";
 import { Paper } from "@components/Paper";
 import { type Column, Table } from "@components/Table";
@@ -15,6 +16,7 @@ import {
 } from "@mui/icons-material";
 import { Box, IconButton, Link, TextField } from "@mui/material";
 import deviceService from "@services/device";
+import { useConfirm } from "@store/useConfirm";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
 
@@ -32,6 +34,7 @@ export const DevicePage = () => {
     const { openDialog } = useDeviceDialog();
     const { openDialog: showCameraLinkInfo } = useCameraLinkDialog();
     const { openDialog: showUserInfo } = useUserInfoDialog();
+    const { startConfirm } = useConfirm();
 
     //Delete list
     const [deleteIds, setDeleteIds] = useState([]);
@@ -67,11 +70,8 @@ export const DevicePage = () => {
     }, [filter, fetchDataList]);
 
     const handleDeleteItems = async (ids: string[]) => {
-        if (!confirm("Are you sure you want to delete the selected: " + ids.join(", "))) {
-            return;
-        }
-
         setIsFetching(true);
+
         try {
             await deviceService.deleteDevices({
                 ids: ids
@@ -83,6 +83,14 @@ export const DevicePage = () => {
         } finally {
             setIsFetching(false);
         }
+    };
+
+    const startDeleteItems = (ids: string[]) => {
+        startConfirm({
+            onConfirm: () => {
+                handleDeleteItems(ids);
+            }
+        });
     };
 
     const handleSearch = useCallback(() => {
@@ -175,7 +183,7 @@ export const DevicePage = () => {
                             size='small'
                             color='error'
                             onClick={() => {
-                                handleDeleteItems([record._id]);
+                                startDeleteItems([record._id]);
                             }}
                         >
                             <DeleteOutline fontSize='inherit' />
@@ -242,7 +250,7 @@ export const DevicePage = () => {
                     disabled={isFetching || deleteIds.length === 0}
                     height='40px'
                     startIcon={DeleteOutline}
-                    onClick={() => handleDeleteItems(deleteIds)}
+                    onClick={() => startDeleteItems(deleteIds)}
                 >
                     {tCommon("Delete")}
                 </Button>
@@ -273,8 +281,12 @@ export const DevicePage = () => {
                     }
                 }}
             />
+
             <UserInfoDialog />
+
             <CameraLinkInfo />
+
+            <ConfirmDialog title={tCommon("Delete")} description={t("Delete record confirm")} color='error' />
         </React.Fragment>
     );
 };

@@ -25,7 +25,8 @@
         "Download": "Download",
         "Small": "Small",
         "Large": "Large",
-        "List view": "List view"
+        "List view": "List view",
+        "Confirm description": "Do you want to continue ?"
     },
 
     "DashboardPage": {
@@ -52,7 +53,8 @@
         "Name": "Name",
         "Scene name": "Scene name",
         "Role": "Role",
-        "Notice note": "※This is the contact information input field for receiving risk notifications."
+        "Notice note": "※This is the contact information input field for receiving risk notifications.",
+        "Delete record confirm": "The selected users will be deleted."
     },
 
     "ScenePage": {
@@ -70,7 +72,8 @@
         "Scene ID": "Scene ID",
         "Scene name": "Scene name",
         "Company name": "Company name",
-        "Address": "Address"
+        "Address": "Address",
+        "Delete record confirm": "The selected scenes will be deleted."
     },
 
     "CompanyPage": {
@@ -87,7 +90,8 @@
         "Manager": "Manager",
         "Name": "Company name",
         "Devices": "Devices",
-        "Company ID": "Company ID"
+        "Company ID": "Company ID",
+        "Delete record confirm": "The selected companies will be deleted."
     },
 
     "DevicePage": {
@@ -106,7 +110,8 @@
         "Company name": "Company name",
         "Scene name": "Scene name",
         "Manager": "Manager",
-        "Connected camera information": "Connected camera information"
+        "Connected camera information": "Connected camera information",
+        "Delete record confirm": "The selected devices will be deleted."
     },
 
     "CameraPage": {
@@ -125,7 +130,8 @@
         "Type": "Type",
         "Factory": "Factory",
         "Protocol": "Protocol",
-        "POE": "POE"
+        "POE": "POE",
+        "Delete record confirm": "The selected cameras will be deleted."
     },
 
     "EventPage": {
@@ -146,7 +152,8 @@
         "Receiver": "Receiver",
         "Manager": "Manager",
         "View snapshot": "View snapshot",
-        "Snapshot note": "※Download the snapshot you are currently viewing."
+        "Snapshot note": "※Download the snapshot you are currently viewing.",
+        "Delete record confirm": "The selected events will be deleted."
     },
 
     "VideoCapturePage": {

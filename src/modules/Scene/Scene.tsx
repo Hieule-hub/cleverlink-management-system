@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import React from "react";
 
 import { Button } from "@components/Button";
+import { ConfirmDialog } from "@components/Dialog";
 import { Pagination } from "@components/Pagination";
 import { Paper } from "@components/Paper";
 import { type Column, Table } from "@components/Table";
@@ -9,6 +10,7 @@ import { UserInfoDialog, useUserInfoDialog } from "@modules/User";
 import { AddCircleOutlineOutlined, DeleteOutline, DescriptionOutlined, Search } from "@mui/icons-material";
 import { Box, IconButton, Link, TextField } from "@mui/material";
 import sceneService from "@services/scene";
+import { useConfirm } from "@store/useConfirm";
 import { useTranslations } from "next-intl";
 
 import { SceneDialog, useSceneDialog } from "./SceneDialog";
@@ -23,6 +25,7 @@ export const ScenePage = () => {
     //Store controller
     const { openDialog } = useSceneDialog();
     const { openDialog: showUserInfo } = useUserInfoDialog();
+    const { startConfirm } = useConfirm();
 
     //Delete list
     const [deleteIds, setDeleteIds] = useState([]);
@@ -58,11 +61,8 @@ export const ScenePage = () => {
     }, [filter, fetchDataList]);
 
     const handleDeleteItems = async (ids: string[]) => {
-        if (!confirm("Are you sure you want to delete the selected: " + ids.join(", "))) {
-            return;
-        }
-
         setIsFetching(true);
+
         try {
             await sceneService.deleteScenes({
                 ids: ids
@@ -74,6 +74,14 @@ export const ScenePage = () => {
         } finally {
             setIsFetching(false);
         }
+    };
+
+    const startDeleteItems = (ids: string[]) => {
+        startConfirm({
+            onConfirm: () => {
+                handleDeleteItems(ids);
+            }
+        });
     };
 
     const handleSearch = useCallback(() => {
@@ -156,7 +164,7 @@ export const ScenePage = () => {
                             size='small'
                             color='error'
                             onClick={() => {
-                                handleDeleteItems([record._id]);
+                                startDeleteItems([record._id]);
                             }}
                         >
                             <DeleteOutline fontSize='inherit' />
@@ -223,7 +231,7 @@ export const ScenePage = () => {
                     disabled={isFetching || deleteIds.length === 0}
                     height='40px'
                     startIcon={DeleteOutline}
-                    onClick={() => handleDeleteItems(deleteIds)}
+                    onClick={() => startDeleteItems(deleteIds)}
                 >
                     {tCommon("Delete")}
                 </Button>
@@ -254,7 +262,10 @@ export const ScenePage = () => {
                     }
                 }}
             />
+
             <UserInfoDialog />
+
+            <ConfirmDialog title={tCommon("Delete")} description={t("Delete record confirm")} color='error' />
         </React.Fragment>
     );
 };

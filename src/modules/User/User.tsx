@@ -8,8 +8,11 @@ import { User } from "@interfaces/user";
 import { AddCircleOutlineOutlined, DeleteOutline, DescriptionOutlined, FilterList, Search } from "@mui/icons-material";
 import { Box, IconButton, TextField } from "@mui/material";
 import userService from "@services/user";
+import { useConfirm } from "@store/useConfirm";
 import { useUserStore } from "@store/userStore";
 import { useTranslations } from "next-intl";
+
+import { ConfirmDialog } from "@/components/Dialog";
 
 import { UserDialog } from "./UserDialog";
 
@@ -22,6 +25,7 @@ export const UserPage = () => {
 
     //Store controller
     const { user, openUserDialog } = useUserStore();
+    const { startConfirm } = useConfirm();
 
     //Delete user list
     const [deleteIds, setDeleteIds] = useState([]);
@@ -37,6 +41,7 @@ export const UserPage = () => {
 
     const fetchDataList = useCallback(async (params: typeof filter) => {
         setIsFetching(true);
+
         try {
             const listRes = await userService.getUserList(params);
 
@@ -56,12 +61,9 @@ export const UserPage = () => {
         fetchDataList(filter);
     }, [filter, fetchDataList]);
 
-    const handleDeleteUsers = async (ids: string[]) => {
-        if (!confirm("Are you sure you want to delete the selected users: " + ids.join(", "))) {
-            return;
-        }
-
+    const handleDeleteItems = async (ids: string[]) => {
         setIsFetching(true);
+
         try {
             await userService.deleteUsers({
                 ids: ids
@@ -69,10 +71,18 @@ export const UserPage = () => {
             fetchDataList(filter);
             setDeleteIds([]);
         } catch (error) {
-            console.log("🚀 ~ handleDeleteUsers ~ error:", error);
+            console.log("🚀 ~ handleDeleteItems ~ error:", error);
         } finally {
             setIsFetching(false);
         }
+    };
+
+    const startDeleteItems = (ids: string[]) => {
+        startConfirm({
+            onConfirm: () => {
+                handleDeleteItems(ids);
+            }
+        });
     };
 
     const handleSearch = useCallback(() => {
@@ -132,7 +142,7 @@ export const UserPage = () => {
                             size='small'
                             color='error'
                             onClick={() => {
-                                handleDeleteUsers([record._id]);
+                                startDeleteItems([record._id]);
                             }}
                         >
                             <DeleteOutline fontSize='inherit' />
@@ -197,7 +207,7 @@ export const UserPage = () => {
                     disabled={isFetching || deleteIds.length === 0}
                     height='40px'
                     startIcon={DeleteOutline}
-                    onClick={() => handleDeleteUsers(deleteIds)}
+                    onClick={() => startDeleteItems(deleteIds)}
                 >
                     {tCommon("Delete")}
                 </Button>
@@ -228,6 +238,8 @@ export const UserPage = () => {
                     }
                 }}
             />
+
+            <ConfirmDialog title={tCommon("Delete")} description={t("Delete record confirm")} color='error' />
         </React.Fragment>
     );
 };

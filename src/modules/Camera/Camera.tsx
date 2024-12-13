@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import { Button } from "@components/Button";
+import { ConfirmDialog } from "@components/Dialog";
 import { Pagination } from "@components/Pagination";
 import { Paper } from "@components/Paper";
 import { type Column, Table } from "@components/Table";
 import { AddCircleOutlineOutlined, DeleteOutline, DescriptionOutlined, FilterList, Search } from "@mui/icons-material";
 import { Box, IconButton, TextField } from "@mui/material";
 import deviceService from "@services/device";
+import { useConfirm } from "@store/useConfirm";
 import { useTranslations } from "next-intl";
 
 import { CameraDialog, useCameraDialog } from "./CameraDialog";
@@ -20,6 +22,7 @@ export const CameraPage = () => {
 
     //Store controller
     const { openDialog } = useCameraDialog();
+    const { startConfirm } = useConfirm();
 
     //Delete list
     const [deleteIds, setDeleteIds] = useState([]);
@@ -55,11 +58,8 @@ export const CameraPage = () => {
     }, [filter, fetchDataList]);
 
     const handleDeleteItems = async (ids: string[]) => {
-        if (!confirm("Are you sure you want to delete the selected: " + ids.join(", "))) {
-            return;
-        }
-
         setIsFetching(true);
+
         try {
             await deviceService.deleteCameras({
                 ids: ids
@@ -71,6 +71,14 @@ export const CameraPage = () => {
         } finally {
             setIsFetching(false);
         }
+    };
+
+    const startDeleteItems = (ids: string[]) => {
+        startConfirm({
+            onConfirm: () => {
+                handleDeleteItems(ids);
+            }
+        });
     };
 
     const handleSearch = useCallback(() => {
@@ -148,7 +156,7 @@ export const CameraPage = () => {
                             size='small'
                             color='error'
                             onClick={() => {
-                                handleDeleteItems([record._id]);
+                                startDeleteItems([record._id]);
                             }}
                         >
                             <DeleteOutline fontSize='inherit' />
@@ -215,7 +223,7 @@ export const CameraPage = () => {
                     disabled={isFetching || deleteIds.length === 0}
                     height='40px'
                     startIcon={DeleteOutline}
-                    onClick={() => handleDeleteItems(deleteIds)}
+                    onClick={() => startDeleteItems(deleteIds)}
                 >
                     {tCommon("Delete")}
                 </Button>
@@ -246,6 +254,8 @@ export const CameraPage = () => {
                     }
                 }}
             />
+
+            <ConfirmDialog title={tCommon("Delete")} description={t("Delete record confirm")} color='error' />
         </React.Fragment>
     );
 };
