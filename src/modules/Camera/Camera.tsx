@@ -8,6 +8,7 @@ import { type Column, Table } from "@components/Table";
 import { AddCircleOutlineOutlined, DeleteOutline, DescriptionOutlined, FilterList, Search } from "@mui/icons-material";
 import { Box, IconButton, TextField } from "@mui/material";
 import deviceService from "@services/device";
+import { toast } from "@store/toastStore";
 import { useConfirm } from "@store/useConfirm";
 import { useTranslations } from "next-intl";
 
@@ -66,6 +67,8 @@ export const CameraPage = () => {
             });
             fetchDataList(filter);
             setDeleteIds([]);
+
+            toast.success({ title: t("Delete record success") });
         } catch (error) {
             console.log("🚀 ~ handleDeleteItems ~ error:", error);
         } finally {

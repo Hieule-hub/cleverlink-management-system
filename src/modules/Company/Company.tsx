@@ -9,6 +9,7 @@ import { UserInfoDialog, useUserInfoDialog } from "@modules/User";
 import { AddCircleOutlineOutlined, DeleteOutline, DescriptionOutlined, FilterList, Search } from "@mui/icons-material";
 import { Box, IconButton, Link, TextField } from "@mui/material";
 import companyService from "@services/company";
+import { toast } from "@store/toastStore";
 import { useConfirm } from "@store/useConfirm";
 import { useTranslations } from "next-intl";
 
@@ -64,8 +65,11 @@ export const CompanyPage = () => {
             await companyService.deleteCompanies({
                 ids: ids
             });
+
             fetchDataList(filter);
             setDeleteIds([]);
+
+            toast.success({ title: t("Delete record success") });
         } catch (error) {
             console.log("🚀 ~ handleDeleteItems ~ error:", error);
         } finally {

@@ -10,6 +10,7 @@ import { UserInfoDialog, useUserInfoDialog } from "@modules/User";
 import { DeleteOutline, DescriptionOutlined, FilterList, PhotoCameraBackOutlined, Search } from "@mui/icons-material";
 import { Box, IconButton, Link, TextField, Tooltip, Typography } from "@mui/material";
 import eventService from "@services/event";
+import { toast } from "@store/toastStore";
 import { useConfirm } from "@store/useConfirm";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
@@ -70,8 +71,11 @@ export const EventPage = () => {
             await eventService.deleteEvents({
                 ids: ids
             });
+
             fetchDataList(filter);
             setDeleteIds([]);
+
+            toast.success({ title: t("Delete record success") });
         } catch (error) {
             console.log("🚀 ~ handleDeleteItems ~ error:", error);
         } finally {

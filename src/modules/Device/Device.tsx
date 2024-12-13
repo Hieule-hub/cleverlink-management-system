@@ -16,6 +16,7 @@ import {
 } from "@mui/icons-material";
 import { Box, IconButton, Link, TextField } from "@mui/material";
 import deviceService from "@services/device";
+import { toast } from "@store/toastStore";
 import { useConfirm } from "@store/useConfirm";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
@@ -78,6 +79,8 @@ export const DevicePage = () => {
             });
             fetchDataList(filter);
             setDeleteIds([]);
+
+            toast.success({ title: t("Delete record success") });
         } catch (error) {
             console.log("🚀 ~ handleDeleteItems ~ error:", error);
         } finally {

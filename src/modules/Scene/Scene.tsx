@@ -10,6 +10,7 @@ import { UserInfoDialog, useUserInfoDialog } from "@modules/User";
 import { AddCircleOutlineOutlined, DeleteOutline, DescriptionOutlined, Search } from "@mui/icons-material";
 import { Box, IconButton, Link, TextField } from "@mui/material";
 import sceneService from "@services/scene";
+import { toast } from "@store/toastStore";
 import { useConfirm } from "@store/useConfirm";
 import { useTranslations } from "next-intl";
 
@@ -67,8 +68,11 @@ export const ScenePage = () => {
             await sceneService.deleteScenes({
                 ids: ids
             });
+
             fetchDataList(filter);
             setDeleteIds([]);
+
+            toast.success({ title: t("Delete record success") });
         } catch (error) {
             console.log("🚀 ~ handleDeleteItems ~ error:", error);
         } finally {
