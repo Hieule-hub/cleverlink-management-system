@@ -4,6 +4,7 @@ import { Button } from "@components/Button";
 import { Pagination } from "@components/Pagination";
 import { Paper } from "@components/Paper";
 import { type Column, Table } from "@components/Table";
+import { DeviceInfoDialog, useDeviceInfoDialog } from "@modules/Device";
 import { DescriptionOutlined, FilterList, Search } from "@mui/icons-material";
 import { Box, IconButton, TextField } from "@mui/material";
 import resourceService from "@services/resource";
@@ -19,6 +20,7 @@ export const DashboardPage = () => {
     const [dataList, setDataList] = useState([]);
 
     //Store controller
+    const { openDialog } = useDeviceInfoDialog();
 
     // Filter
     const [total, setTotal] = useState(0);
@@ -108,8 +110,7 @@ export const DashboardPage = () => {
                             size='small'
                             color='info'
                             onClick={() => {
-                                // openUserDialog(record);
-                                triggerToastDev();
+                                openDialog(record);
                             }}
                         >
                             <DescriptionOutlined fontSize='inherit' />
@@ -167,6 +168,8 @@ export const DashboardPage = () => {
                     />
                 )}
             </Box>
+
+            <DeviceInfoDialog />
         </React.Fragment>
     );
 };
