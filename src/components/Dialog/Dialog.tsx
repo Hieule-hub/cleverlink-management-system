@@ -85,7 +85,6 @@ export const Dialog = ({
                         <React.Fragment>
                             <Button
                                 height='36px'
-                                disabled={loading}
                                 onClick={onCancel}
                                 style={{
                                     marginRight: "8px"

@@ -2,6 +2,7 @@ import React from "react";
 
 import { SvgIconComponent } from "@mui/icons-material";
 import { styled } from "@mui/material";
+import clsx from "clsx";
 
 import { SpinIcon } from "../Icon";
 
@@ -133,6 +134,11 @@ const StyledButton = styled("button")`
         font-size: 1.25rem;
     }
 
+    &.loading {
+        pointer-events: none;
+        opacity: 0.6;
+    }
+
     //handle spin
     .spin {
         box-sizing: border-box;
@@ -147,7 +153,7 @@ export const Button = ({ color = "default", loading = false, children, className
     const { startIcon: StartIcon, endIcon: EndIcon } = props;
 
     return (
-        <StyledButton disabled={loading || props.disabled} className={className + " " + color} {...props}>
+        <StyledButton disabled={props.disabled} className={clsx(className, color, loading && "loading")} {...props}>
             {loading && (
                 <span className='spin spinning'>
                     <SpinIcon color='inherit' sx={{ fontSize: "14px" }} />

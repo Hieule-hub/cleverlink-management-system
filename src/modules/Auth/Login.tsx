@@ -208,7 +208,6 @@ export const LoginPage = () => {
                         color='primary'
                         // type='submit'
                         onClick={handleLogin}
-                        disabled={isLoading}
                         loading={isLoading}
                     >
                         {t("Login")}
