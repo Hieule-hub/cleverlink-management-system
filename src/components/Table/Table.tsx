@@ -136,16 +136,7 @@ export const Table = ({ columns, data, isLoading = false, rowSelection, border }
                 border: border ? "1px solid #e0e0e0" : "none",
                 borderRadius: "12px",
                 overflow: "hidden",
-                position: "relative",
-                ".loading-view": {
-                    position: "absolute",
-                    inset: 0,
-                    background: "rgba(255, 255, 255, 0.5)",
-                    zIndex: 1000,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center"
-                }
+                position: "relative"
             }}
         >
             {isLoading && (

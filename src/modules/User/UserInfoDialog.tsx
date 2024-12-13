@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { ControllerInput } from "@components/Controller";
 import { ControllerAsyncSearchSelect, type Option } from "@components/Controller/ControllerAsyncSearchSelect";
@@ -13,6 +13,7 @@ import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 
 import { Button } from "@/components/Button";
+import { Spinner } from "@/components/Spiner";
 
 export const useUserInfoDialog = dialogStore<User>();
 
@@ -56,6 +57,8 @@ export const UserInfoDialog = ({ onClose = () => "" }: UserInfoDialogProps) => {
     const t = useTranslations();
     const { item, open, closeDialog } = useUserInfoDialog();
 
+    const [isFetching, setIsFetching] = useState(false);
+
     const { control, reset } = useForm<FormValues>({
         defaultValues: initFormValues
     });
@@ -75,6 +78,8 @@ export const UserInfoDialog = ({ onClose = () => "" }: UserInfoDialogProps) => {
     };
 
     const fetchUserInformation = useCallback(async (id: string) => {
+        setIsFetching(true);
+
         try {
             const userInfoRes = await userService.getUserList({
                 page: 1,
@@ -108,6 +113,8 @@ export const UserInfoDialog = ({ onClose = () => "" }: UserInfoDialogProps) => {
             }
         } catch (error) {
             console.log("🚀 ~ fetchUserInformation ~ error:", error);
+        } finally {
+            setIsFetching(false);
         }
     }, []);
 
@@ -137,7 +144,13 @@ export const UserInfoDialog = ({ onClose = () => "" }: UserInfoDialogProps) => {
                 direction={{ xs: "column", sm: "row" }}
                 divider={<Divider orientation='vertical' flexItem />}
                 spacing={2}
+                position='relative'
             >
+                {isFetching && (
+                    <div className='loading-view'>
+                        <Spinner />
+                    </div>
+                )}
                 <Grid padding={2} width='100%' gap={2} container spacing={2} columns={12} alignItems='center'>
                     {/* Company Field */}
                     <Grid size={labelSize}>
