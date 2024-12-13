@@ -243,7 +243,7 @@
         "Device": "장비 관리",
         "Camera": "카메라 관리",
         "Event": "이벤트 관리",
-        "Video Capture": "캡쳐영상"
+        "Video capture": "캡쳐영상"
     },
 
     "Resolution": {
