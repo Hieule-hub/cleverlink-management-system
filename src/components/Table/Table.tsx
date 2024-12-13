@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 import { Checkbox, TableBody, TableContainer, TableHead, Table as TableMui, TableRow, styled } from "@mui/material";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 
+import { Empty } from "../Empty";
+import { Spinner } from "../Spiner";
+
 export interface Column<T = any> {
     key: string;
     dataIndex?: string;
@@ -136,10 +139,7 @@ export const Table = ({ columns, data, isLoading = false, rowSelection, border }
                 position: "relative",
                 ".loading-view": {
                     position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
+                    inset: 0,
                     background: "rgba(255, 255, 255, 0.5)",
                     zIndex: 1000,
                     display: "flex",
@@ -148,7 +148,11 @@ export const Table = ({ columns, data, isLoading = false, rowSelection, border }
                 }
             }}
         >
-            {isLoading && <div className='loading-view' />}
+            {isLoading && (
+                <div className='loading-view'>
+                    <Spinner />
+                </div>
+            )}
             <TableMui stickyHeader>
                 <TableHead>
                     <StyledTableRow>
@@ -207,8 +211,14 @@ export const Table = ({ columns, data, isLoading = false, rowSelection, border }
                     })}
                     {data.length === 0 && (
                         <StyledTableRow>
-                            <StyledTableCell colSpan={columns.length} align='center'>
-                                -
+                            <StyledTableCell
+                                colSpan={columns.length + 1}
+                                align='center'
+                                style={{
+                                    height: 200
+                                }}
+                            >
+                                <Empty />
                             </StyledTableCell>
                         </StyledTableRow>
                     )}
