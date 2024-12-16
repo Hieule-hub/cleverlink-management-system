@@ -1,4 +1,4 @@
-import { use, useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { Button } from "@components/Button";
 import { ControllerInput } from "@components/Controller";
@@ -52,6 +52,8 @@ const initFormValues: FormUserValues = {
     userId: "",
     password: "",
     name: "",
+
+    role: "",
     roleId: "",
     company: { label: "", value: "" },
     companyId: "",
@@ -108,6 +110,8 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                 userId: user.userId,
                 password: "11111111",
                 name: user.name,
+
+                role: user.roleId?.code,
                 roleId: user.roleId?.code,
                 company: { label: user.company?.name, value: user.company?._id },
                 companyId: user.company?.companyId,
