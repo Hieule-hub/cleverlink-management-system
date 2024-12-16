@@ -37,7 +37,7 @@ export interface Camera {
     input: string;
     description: string;
     protocol: Protocol;
-    path: string;
+    files: CamFile[];
 }
 
 export interface Active {
@@ -51,6 +51,13 @@ export interface Active {
     status: string;
     updatedAt: string;
     boxId: string;
+}
+
+export interface CamFile {
+    key: string;
+    uploadedAt: string | null;
+    _id: string;
+    url: string;
 }
 
 export interface Channel {
@@ -116,6 +123,16 @@ export type GetActiveListRes = DataResponse<{
     activates: Active[];
 }>;
 
+export type UploadedFileCameraReq = {
+    id: string;
+    uploadedKeys: string[];
+};
+
+export type DeleteFileCameraReq = {
+    id: string;
+    key: string;
+};
+
 // Request type Camera
 
 export type GetCameraListRes = DataResponse<{
@@ -142,9 +159,17 @@ export type CreateCameraReq = {
     resolution: string;
     input: string;
     description: string;
-    path: string;
     token: string;
+    newFiles: File[];
 };
+
+export type CreateCameraRes = DataResponse<{
+    camera: Camera;
+    presignedUrls: {
+        signedUrl: string;
+        key: string;
+    }[];
+}>;
 
 export type EditCameraReq = {
     _id: string;
@@ -156,9 +181,31 @@ export type EditCameraReq = {
     resolution: string;
     input: string;
     description: string;
-    path: string;
+    newFiles: File[];
+    deleteFiles: string[];
 };
+
+export type EditCameraRes = DataResponse<{
+    camera: Camera;
+    presignedUrls: {
+        signedUrl: string;
+        key: string;
+    }[];
+}>;
 
 export type DeleteCamerasReq = {
     ids: string[];
 };
+
+// check type
+
+export function isCamFile(item: any): item is CamFile {
+    return (
+        typeof item === "object" &&
+        item !== null &&
+        typeof item.key === "string" &&
+        (typeof item.uploadedAt === "string" || item.uploadedAt === null) &&
+        typeof item._id === "string" &&
+        typeof item.url === "string"
+    );
+}

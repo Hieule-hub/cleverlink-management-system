@@ -4,7 +4,7 @@ import { ControllerInput } from "@components/Controller";
 import { Dialog } from "@components/Dialog";
 import { Label } from "@components/Label";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Camera } from "@interfaces/device";
+import { CamFile, Camera } from "@interfaces/device";
 import { Chip, Divider, Grid2 as Grid, Stack, Zoom } from "@mui/material";
 import deviceService from "@services/device";
 import { dialogStore } from "@store/dialogStore";
@@ -18,6 +18,8 @@ import { ControllerSelect } from "@/components/Controller/ControllerSelect";
 import { UploadInput } from "@/components/Input";
 import { cameraResolutionOptions, cameraVoltageOptions, poeOptions } from "@/configs/app";
 import { useAppStore } from "@/providers/AppStoreProvider";
+
+import { FileInfo } from "./FileInfo";
 
 export const useCameraDialog = dialogStore<Camera>();
 
@@ -38,7 +40,9 @@ type FormCameraValues = Partial<{
     resolution: string;
     input: string;
     description: string;
-    path: string[];
+    files: CamFile[];
+    newFiles: File[];
+    deleteFiles: string[];
     token: string;
 }>;
 
@@ -52,7 +56,9 @@ const initFormValues: FormCameraValues = {
     resolution: "",
     input: "",
     description: "",
-    path: [],
+    files: [],
+    newFiles: [],
+    deleteFiles: [],
     token: ""
 };
 
@@ -120,15 +126,15 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
             const newValue: FormCameraValues = {
                 ...initFormValues,
                 cameraId: item.cameraId,
-                categoryId: item.category._id,
+                categoryId: item.category?._id,
                 name: item.name,
-                protocolId: item.protocol._id,
+                protocolId: item.protocol?._id,
                 poe: item.poe,
                 factory: item.factory || initFormValues.factory,
                 resolution: item.resolution || initFormValues.resolution,
                 input: item.input || initFormValues.input,
                 description: item.description || initFormValues.description,
-                path: [item.path]
+                files: item.files || initFormValues.files
             };
             reset(newValue);
         } else {
@@ -162,8 +168,8 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
             console.log("🚀 ~ handleSubmit ~ data:", data);
             setIsLoading(true);
 
-            try {
-                if (item) {
+            if (item) {
+                try {
                     const response = await deviceService.editCamera({
                         _id: item._id,
                         categoryId: data.categoryId,
@@ -174,15 +180,24 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
                         resolution: data.resolution,
                         input: data.input,
                         description: data.description,
-                        path: data.path[0] || ""
+                        newFiles: data.newFiles,
+                        deleteFiles: data.deleteFiles
                     });
                     if (!response.err) {
                         toast.success({ title: t("CameraPage.Edit record success") });
                         handleClose("success");
                     } else {
-                        // toast.error({ title: t("CameraPage.Edit record failed") });
+                        toast.error({
+                            title: t("CameraPage.Edit record failed")
+                        });
                     }
-                } else {
+                } catch (error) {
+                    toast.error({ title: t("CameraPage.Edit record failed"), description: error.message });
+                } finally {
+                    setIsLoading(false);
+                }
+            } else {
+                try {
                     const response = await deviceService.createCamera({
                         cameraId: data.cameraId,
                         categoryId: data.categoryId,
@@ -194,19 +209,19 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
                         input: data.input,
                         description: data.description,
                         token: data.token,
-                        path: data.path[0] || ""
+                        newFiles: data.newFiles
                     });
                     if (!response.err) {
                         toast.success({ title: t("CameraPage.Create record success") });
                         handleClose("success");
                     } else {
-                        // toast.error({ title: t("CameraPage.Create record failed") });
+                        toast.error({ title: t("CameraPage.Create record failed") });
                     }
+                } catch (error) {
+                    toast.error({ title: t("CameraPage.Create record failed"), description: error.message });
+                } finally {
+                    setIsLoading(false);
                 }
-            } catch (error) {
-                console.log("🚀 ~ handleSubmit ~ error:", error);
-            } finally {
-                setIsLoading(false);
             }
         })();
     };
@@ -235,6 +250,12 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
         } finally {
             setIsFetchingId(false);
         }
+    };
+
+    const handleChangeFiles = (files: File[]) => {
+        console.log("🚀 ~ handleChangeFiles ~ files:", files);
+        const newFiles = getValues("newFiles");
+        setValue("newFiles", [...newFiles, ...files]);
     };
 
     return (
@@ -433,31 +454,42 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
                     <Label label='Upload file' htmlFor='path' />
                 </Grid>
                 <Grid size={24 - labelSize}>
-                    <UploadInput />
+                    <UploadInput onFileChange={handleChangeFiles} />
                 </Grid>
 
                 {/* Show file list */}
                 <Grid size={labelSize}>
                     <Label label='Download' />
                 </Grid>
-                <Grid size={24 - labelSize}>
-                    {watch("path").map(
-                        (item) =>
-                            item && (
-                                <Chip
-                                    color='primary'
-                                    size='small'
-                                    key={item}
-                                    label={item}
-                                    onDelete={() => {
-                                        setValue(
-                                            "path",
-                                            watch("path").filter((o) => o !== item)
-                                        );
-                                    }}
-                                />
-                            )
-                    )}
+                <Grid size={24 - labelSize} display='flex' gap={1} flexWrap='wrap'>
+                    {watch("files").map((item) => (
+                        <FileInfo
+                            key={item._id}
+                            file={item}
+                            onDelete={() => {
+                                const deleteFiles = getValues("deleteFiles");
+
+                                setValue("deleteFiles", [...deleteFiles, item.key]);
+
+                                setValue(
+                                    "files",
+                                    watch("files").filter((o) => o.key !== item.key)
+                                );
+                            }}
+                        />
+                    ))}
+                    {watch("newFiles").map((item) => (
+                        <FileInfo
+                            key={item.name}
+                            file={item}
+                            onDelete={() =>
+                                setValue(
+                                    "newFiles",
+                                    watch("newFiles").filter((o) => o.name !== item.name)
+                                )
+                            }
+                        />
+                    ))}
                 </Grid>
             </Grid>
         </Dialog>

@@ -9,6 +9,7 @@ const StyledUploadInput = styled(Box)`
     border: 2px dashed;
     border-radius: 20px;
     border-width: 3px;
+
     cursor: pointer;
 
     .title {
@@ -31,13 +32,14 @@ const StyledUploadInput = styled(Box)`
 interface UploadInputProps {
     placeholder?: string;
     acceptType?: string[];
+    onFileChange: (file: File[]) => void;
 }
 
 export const UploadInput = ({
     placeholder = "Please drag and drop files here.",
-    acceptType = ["DPF", "JPG", "PNG"]
+    acceptType = ["DPF", "JPG", "PNG"],
+    onFileChange
 }: UploadInputProps) => {
-    const [file, setFile] = useState<File | null>(null);
     const [dragging, setDragging] = useState(false);
 
     const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
@@ -47,7 +49,7 @@ export const UploadInput = ({
 
         const files = event.dataTransfer.files;
         if (files.length > 0) {
-            setFile(files[0]); // Lấy file đầu tiên
+            onFileChange(Array.from(files));
         }
     };
 
@@ -64,8 +66,9 @@ export const UploadInput = ({
     };
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files?.[0]) {
-            setFile(event.target.files[0]);
+        const files = event.target.files;
+        if (files && files.length > 0) {
+            onFileChange(Array.from(files));
         }
     };
 
@@ -79,7 +82,7 @@ export const UploadInput = ({
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
         >
-            <input type='file' hidden id='upload-input' onChange={handleFileChange} />
+            <input type='file' hidden id='upload-input' onChange={handleFileChange} multiple />
             <label htmlFor='upload-input'>
                 <Backup
                     color='inherit'
