@@ -34,17 +34,12 @@ export type SelectProps = SelectPropsMui & {
     options?: Option[];
 };
 
-export const Select = ({
-    value = null,
-    placeholder = "",
-    displayEmpty = true,
-    options = [],
-    ...otherProps
-}: SelectProps) => {
+export const Select = ({ value, placeholder = "", displayEmpty = true, options = [], ...otherProps }: SelectProps) => {
     const findSelectedOption = useCallback(
         (selected: string | number) => {
             for (const option of options) {
                 if (option.value === selected) return option;
+
                 if (option.options) {
                     const subOption = option.options.find((sub) => sub.value === selected);
                     if (subOption) return subOption;
@@ -57,13 +52,16 @@ export const Select = ({
 
     const renderValue = useCallback(
         (selected: string | number) => {
-            if (!selected || (Array.isArray(selected) && selected.length === 0)) {
-                return <StyledPlaceholder>{placeholder}</StyledPlaceholder>;
+            if (selected === undefined || selected === null || (Array.isArray(selected) && selected.length === 0)) {
+                return;
             }
 
             const selectedOption = findSelectedOption(selected);
 
-            return selectedOption ? selectedOption.label : "Invalid";
+            if (!selectedOption)
+                return selected === "" ? <StyledPlaceholder>{placeholder}</StyledPlaceholder> : selected;
+
+            return selectedOption.label;
         },
         [placeholder, findSelectedOption]
     );
