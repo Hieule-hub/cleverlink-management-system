@@ -1,14 +1,13 @@
 import { useState } from "react";
 
+import { Button } from "@components/Button";
 import { Dialog } from "@components/Dialog";
 import type { Event } from "@interfaces/event";
 import { Download, InfoOutlined, PlayCircle, SkipNext, SkipPrevious } from "@mui/icons-material";
 import { Box, Divider, Grid2 as Grid, IconButton, Typography, Zoom } from "@mui/material";
 import { dialogStore } from "@store/dialogStore";
+import { downloadFile } from "@utils/downloadImage";
 import { useTranslations } from "next-intl";
-
-import { Button } from "@/components/Button";
-import { downloadImage } from "@/utils/downloadImage";
 
 export const useSnapshotDialogDialog = dialogStore<Event>();
 
@@ -32,7 +31,7 @@ export const SnapshotDialog = ({ onClose = () => "" }: SnapshotDialogProps) => {
             return;
         }
 
-        downloadImage(imageSelected, "image-snapshot");
+        downloadFile(imageSelected, "image-snapshot");
     };
 
     const handleNextImage = () => {
