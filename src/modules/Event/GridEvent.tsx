@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 
-import { Checkbox, CircularProgress, Grid2 as Grid, styled } from "@mui/material";
+import { Spinner } from "@components/Spiner";
+import { Checkbox, Grid2 as Grid, styled } from "@mui/material";
 import { debounce } from "@mui/material/utils";
 
 const EventBox = styled("div")`
@@ -183,8 +184,15 @@ export const GridEvent = ({
             })}
 
             {loading && (
-                <Grid size={columns} display='flex' justifyContent='center' marginY={1}>
-                    <CircularProgress size={26} color='primary' />
+                <Grid
+                    size={columns}
+                    display='flex'
+                    justifyContent='center'
+                    alignContent={"center"}
+                    marginY={1}
+                    height={50}
+                >
+                    <Spinner />
                 </Grid>
             )}
         </Grid>

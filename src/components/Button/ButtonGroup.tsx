@@ -37,6 +37,7 @@ const StyledButtonGroup = styled(Box)`
         &.active {
             background-color: #f9fafb;
             color: var(--palette-primary-main);
+            pointer-events: none;
         }
 
         &:hover {
@@ -57,28 +58,15 @@ interface ButtonGroupProps extends BoxProps {
 }
 
 export const ButtonGroup = ({ options, value, onSelected, ...otherProps }: ButtonGroupProps) => {
-    const [currentValue, setCurrentValue] = useState(value);
-
-    useEffect(() => {
-        if (value !== currentValue) {
-            if (onSelected) onSelected(currentValue);
-        }
-    }, [currentValue, onSelected]);
-
-    useEffect(() => {
-        if (currentValue !== value) {
-            setCurrentValue(value);
-        }
-    }, [value]);
-
     return (
         <StyledButtonGroup {...otherProps}>
             {options.map((option) => {
                 return (
                     <button
-                        className={currentValue === option.value ? "active" : ""}
+                        disabled={option.value === value}
+                        className={value === option.value ? "active" : ""}
                         key={option.value}
-                        onClick={() => setCurrentValue(option.value)}
+                        onClick={() => onSelected(option.value)}
                     >
                         {option.label}
                     </button>
