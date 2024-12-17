@@ -1,6 +1,6 @@
 "use client";
 
-import { Breadcrumbs } from "@components/Layout/Breadcrumbs";
+import { Breadcrumbs, RoleBreadcrumbs } from "@components/Layout/Breadcrumbs";
 import MainLayout from "@components/Layout/MainLayout";
 import withProtectedRoute from "@components/withProtectedRoute";
 import { DashboardPage } from "@modules/Dashboard";
@@ -14,6 +14,7 @@ const Page = () => {
     return (
         <MainLayout>
             <Breadcrumbs />
+            <RoleBreadcrumbs />
             {role === "CIP" && <DashboardPage />}
             {role === "TU" && <SceneReadOnly />}
             {role === "BU" && <VideoCapturePage />}

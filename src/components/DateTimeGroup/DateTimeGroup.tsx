@@ -53,7 +53,7 @@ export const DateTimeGroup = (props: BoxProps) => {
             <Typography variant='body1' noWrap>
                 {/* ({t(formatDay)}) */}
             </Typography>
-            <Typography variant='body1' noWrap>
+            <Typography variant='body1' noWrap width={75}>
                 {formatTime}
             </Typography>
         </Box>

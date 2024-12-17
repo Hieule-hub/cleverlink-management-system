@@ -10,8 +10,6 @@ import { Box, IconButton, TextField } from "@mui/material";
 import resourceService from "@services/resource";
 import { useTranslations } from "next-intl";
 
-import { triggerToastDev } from "@/utils";
-
 export const DashboardPage = () => {
     const t = useTranslations("DashboardPage");
     const tCommon = useTranslations("Common");

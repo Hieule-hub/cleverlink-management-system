@@ -20,6 +20,7 @@ export interface RouteConfig {
     onClick?: () => void;
     key: string;
     roles?: string[];
+    breadcrumbRole?: string[];
 }
 
 export const routeConfig: RouteConfig[] = [
@@ -29,7 +30,8 @@ export const routeConfig: RouteConfig[] = [
         label: "Dashboard",
         private: false,
         icon: DashboardSharp,
-        roles: ["CIP", "TU", "BU", "GU"]
+        roles: ["CIP", "TU", "BU", "GU"],
+        breadcrumbRole: []
     },
     {
         path: "/company",
@@ -37,7 +39,8 @@ export const routeConfig: RouteConfig[] = [
         label: "Company",
         private: false,
         icon: BusinessSharp,
-        roles: ["CIP", "TU"]
+        roles: ["CIP", "TU"],
+        breadcrumbRole: ["CIP"]
     },
     {
         path: "/scene",
@@ -45,7 +48,8 @@ export const routeConfig: RouteConfig[] = [
         label: "Scene",
         private: false,
         icon: MapSharp,
-        roles: ["CIP", "TU", "BU"]
+        roles: ["CIP", "TU", "BU"],
+        breadcrumbRole: ["CIP", "TU"]
     },
     {
         path: "/user",
@@ -53,7 +57,8 @@ export const routeConfig: RouteConfig[] = [
         label: "User",
         private: false,
         icon: GroupSharp,
-        roles: ["CIP", "TU", "BU"]
+        roles: ["CIP", "TU", "BU"],
+        breadcrumbRole: ["CIP", "BU"]
     },
     {
         path: "/device",
@@ -61,7 +66,8 @@ export const routeConfig: RouteConfig[] = [
         label: "Device",
         private: false,
         icon: ConstructionSharp,
-        roles: ["CIP", "TU", "BU"]
+        roles: ["CIP", "TU", "BU"],
+        breadcrumbRole: ["CIP", "BU"]
     },
     {
         path: "/camera",
@@ -69,7 +75,8 @@ export const routeConfig: RouteConfig[] = [
         label: "Camera",
         private: false,
         icon: VideocamSharp,
-        roles: ["CIP", "TU", "BU"]
+        roles: ["CIP", "TU", "BU"],
+        breadcrumbRole: ["CIP"]
     },
     {
         path: "/event",
@@ -77,6 +84,7 @@ export const routeConfig: RouteConfig[] = [
         label: "Event",
         private: false,
         icon: BugReportSharp,
-        roles: ["CIP", "TU", "BU"]
+        roles: ["CIP", "TU", "BU"],
+        breadcrumbRole: []
     }
 ];

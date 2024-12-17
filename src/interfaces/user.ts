@@ -28,14 +28,14 @@ export interface Role {
 export interface UserInfo {
     _id: string;
     userId: string;
-    companyId?: string;
+    companyId?: Company;
     roleId: Role;
     name: string;
     status: string;
     __v: number;
     createdAt: string;
     updatedAt: string;
-    scene?: Scene;
+    sceneId?: Scene;
 }
 
 // Interface for request
