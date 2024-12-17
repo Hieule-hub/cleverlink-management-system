@@ -44,6 +44,7 @@ const StyledButton = styled("button")`
     &:disabled {
         cursor: not-allowed;
         pointer-events: none;
+        color: var(--palette-text-disabled);
         background-color: var(--bg-container-disabled);
         opacity: var(--palette-action-opacity);
     }

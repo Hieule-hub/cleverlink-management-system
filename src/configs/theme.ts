@@ -91,6 +91,13 @@ export const theme: ThemeOptions = {
                             padding: "var(--input-padding)"
                         },
 
+                        "&.Mui-disabled": {
+                            input: {
+                                color: "var(--palette-text-disabled)",
+                                WebkitTextFillColor: "var(--palette-text-disabled)"
+                            }
+                        },
+
                         "&:not(&.Mui-disabled)": {
                             "&:hover fieldset": {
                                 borderColor: "var(--input-border-hover-color)"
