@@ -26,9 +26,9 @@ export const DateTimeGroup = (props: BoxProps) => {
     // Format the date, time, and day
     const formatDate = currentTime.toLocaleDateString("en-CA"); // YYYY.MM.DD
     const formatTime = currentTime.toLocaleTimeString(); // HH:MM:SS
-    const formatDay = currentTime.toLocaleDateString("en-US", {
-        weekday: "short"
-    }); // Mon, Tue, etc.
+    // const formatDay = currentTime.toLocaleDateString("en-US", {
+    //     weekday: "short"
+    // }); // Mon, Tue, etc.
 
     return (
         <Box
@@ -36,25 +36,29 @@ export const DateTimeGroup = (props: BoxProps) => {
             display={"flex"}
             justifyContent={"center"}
             alignItems={"center"}
-            gap={1}
+            // gap={1}
             color={"black"}
             {...props}
         >
             {/* Render the icon to the left */}
             <AccessTime
                 sx={{
-                    fontSize: 18
+                    fontSize: 18,
+                    marginRight: 1
                 }}
             />
 
-            <Typography variant='body1' noWrap>
+            <Typography variant='body1' noWrap marginRight={1}>
                 {formatDate}
             </Typography>
-            <Typography variant='body1' noWrap>
+            <Typography variant='body1' noWrap marginRight={1}>
                 {/* ({t(formatDay)}) */}
             </Typography>
-            <Typography variant='body1' noWrap width={75}>
-                {formatTime}
+            <Typography variant='body1' noWrap width={48} marginRight={"1px"}>
+                {formatTime.split(" ")[0]}
+            </Typography>
+            <Typography variant='body1' noWrap>
+                {formatTime.split(" ")[1]}
             </Typography>
         </Box>
     );

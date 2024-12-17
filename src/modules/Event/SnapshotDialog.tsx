@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@components/Button";
 import { Dialog } from "@components/Dialog";
 import type { Event } from "@interfaces/event";
-import { Download, InfoOutlined, PlayCircle, SkipNext, SkipPrevious } from "@mui/icons-material";
+import { Download, InfoOutlined, PauseCircle, PlayCircle, SkipNext, SkipPrevious } from "@mui/icons-material";
 import { Box, Divider, Grid2 as Grid, IconButton, Typography, Zoom } from "@mui/material";
 import { dialogStore } from "@store/dialogStore";
 import { downloadFile } from "@utils/downloadImage";
@@ -19,11 +19,34 @@ export const SnapshotDialog = ({ onClose = () => "" }: SnapshotDialogProps) => {
     const t = useTranslations();
     const { item, open, closeDialog } = useSnapshotDialogDialog();
     const [imageSelected, setImageSelected] = useState(item?.images[0] || "");
+    const [isPlaying, setIsPlaying] = useState(false);
+
+    useEffect(() => {
+        setImageSelected(item?.images[0]);
+        setIsPlaying(false);
+    }, [item]);
+
+    useEffect(() => {
+        let timer: NodeJS.Timeout | undefined;
+
+        if (isPlaying) {
+            timer = setInterval(() => {
+                handleNextImage();
+            }, 2000);
+        } else {
+            if (timer) clearInterval(timer);
+        }
+
+        return () => {
+            if (timer) clearInterval(timer);
+        };
+    }, [isPlaying, imageSelected]);
 
     const handleClose = (status?: string) => {
         onClose(status);
         closeDialog();
         setImageSelected("");
+        setIsPlaying(false); // Stop playing on close
     };
 
     const handleDownloadImage = async () => {
@@ -35,13 +58,19 @@ export const SnapshotDialog = ({ onClose = () => "" }: SnapshotDialogProps) => {
     };
 
     const handleNextImage = () => {
-        const index = item?.images.indexOf(imageSelected) + 1;
-        setImageSelected(item?.images[index]);
+        const currentIndex = item?.images.indexOf(imageSelected) ?? 0;
+        const nextIndex = (currentIndex + 1) % item?.images.length;
+        setImageSelected(item?.images[nextIndex]);
     };
 
     const handlePreviousImage = () => {
-        const index = item?.images.indexOf(imageSelected) - 1;
-        setImageSelected(item?.images[index]);
+        const currentIndex = item?.images.indexOf(imageSelected) ?? 0;
+        const prevIndex = (currentIndex - 1 + item?.images.length) % item?.images.length;
+        setImageSelected(item?.images[prevIndex]);
+    };
+
+    const togglePlayPause = () => {
+        setIsPlaying((prev) => !prev);
     };
 
     return (
@@ -105,8 +134,8 @@ export const SnapshotDialog = ({ onClose = () => "" }: SnapshotDialogProps) => {
                 <IconButton color='inherit' onClick={handlePreviousImage}>
                     <SkipPrevious color='inherit' />
                 </IconButton>
-                <IconButton color='inherit'>
-                    <PlayCircle color='inherit' />
+                <IconButton color='inherit' onClick={togglePlayPause}>
+                    {isPlaying ? <PauseCircle color='inherit' /> : <PlayCircle color='inherit' />}
                 </IconButton>
                 <IconButton color='inherit' onClick={handleNextImage}>
                     <SkipNext color='inherit' />
