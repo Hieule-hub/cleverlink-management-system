@@ -1,23 +1,23 @@
 import { useEffect, useMemo, useState } from "react";
 
+import { Button } from "@components/Button";
 import { ControllerInput } from "@components/Controller";
+import { ControllerSelect } from "@components/Controller/ControllerSelect";
 import { Dialog } from "@components/Dialog";
+import { UploadInput } from "@components/Input";
 import { Label } from "@components/Label";
+import { cameraResolutionOptions, cameraVoltageOptions, poeOptions } from "@configs/app";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { CamFile, Camera } from "@interfaces/device";
 import { Chip, Divider, Grid2 as Grid, Stack, Zoom } from "@mui/material";
+import { useAppStore } from "@providers/AppStoreProvider";
 import deviceService from "@services/device";
 import { dialogStore } from "@store/dialogStore";
 import { toast } from "@store/toastStore";
+import { downloadFile } from "@utils/downloadImage";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-
-import { Button } from "@/components/Button";
-import { ControllerSelect } from "@/components/Controller/ControllerSelect";
-import { UploadInput } from "@/components/Input";
-import { cameraResolutionOptions, cameraVoltageOptions, poeOptions } from "@/configs/app";
-import { useAppStore } from "@/providers/AppStoreProvider";
 
 import { FileInfo } from "./FileInfo";
 
@@ -145,10 +145,6 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
     const handleClose = (status?: string) => {
         onClose(status);
         closeDialog();
-    };
-
-    const handleReset = () => {
-        setItem(null);
     };
 
     const handleSave = () => {
@@ -462,22 +458,27 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
                     <Label label='Download' />
                 </Grid>
                 <Grid size={24 - labelSize} display='flex' gap={1} flexWrap='wrap'>
-                    {watch("files").map((item) => (
-                        <FileInfo
-                            key={item._id}
-                            file={item}
-                            onDelete={() => {
-                                const deleteFiles = getValues("deleteFiles");
+                    {watch("files")
+                        .filter((item) => item.uploadedAt)
+                        .map((item) => (
+                            <FileInfo
+                                key={item._id}
+                                file={item}
+                                onDownload={() => {
+                                    downloadFile(item.url, item.name);
+                                }}
+                                onDelete={() => {
+                                    const deleteFiles = getValues("deleteFiles");
 
-                                setValue("deleteFiles", [...deleteFiles, item.key]);
+                                    setValue("deleteFiles", [...deleteFiles, item.key]);
 
-                                setValue(
-                                    "files",
-                                    watch("files").filter((o) => o.key !== item.key)
-                                );
-                            }}
-                        />
-                    ))}
+                                    setValue(
+                                        "files",
+                                        watch("files").filter((o) => o.key !== item.key)
+                                    );
+                                }}
+                            />
+                        ))}
                     {watch("newFiles").map((item) => (
                         <FileInfo
                             key={item.name}

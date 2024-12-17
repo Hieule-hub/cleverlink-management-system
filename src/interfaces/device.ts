@@ -55,6 +55,7 @@ export interface Active {
 
 export interface CamFile {
     key: string;
+    name: string;
     uploadedAt: string | null;
     _id: string;
     url: string;

@@ -111,7 +111,10 @@ const editCamera = async (params: EditCameraReq) => {
         });
     }
 
-    const editRes = await apiClient.put<CreateDeviceReq, EditCameraRes>(`/camera/edit/` + _id, otherParams);
+    const editRes = await apiClient.put<CreateDeviceReq, EditCameraRes>(`/camera/edit/` + _id, {
+        ...otherParams,
+        fileList: fileList
+    });
 
     if (fileList.length === 0 && editRes.err) {
         return editRes;
@@ -130,16 +133,21 @@ const editCamera = async (params: EditCameraReq) => {
 
     await Promise.all(uploadPromiseAll);
 
-    if (deleteFiles.length > 0) {
-        const deletePromiseAll = deleteFiles.map((key) => {
-            return deleteFileCamera({
+    function sleep(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    async function deleteFilesWithDelay(deleteFiles) {
+        for (const key of deleteFiles) {
+            await deleteFileCamera({
                 id: _id,
                 key: key
             });
-        });
-
-        await Promise.all(deletePromiseAll);
+            await sleep(300);
+        }
     }
+
+    await deleteFilesWithDelay(deleteFiles);
 
     return editRes;
 };

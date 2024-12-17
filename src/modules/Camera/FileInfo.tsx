@@ -1,7 +1,7 @@
 import React from "react";
 
 import { type CamFile, isCamFile } from "@interfaces/device";
-import { Cancel, TextSnippet } from "@mui/icons-material";
+import { Cancel, Download, TextSnippet } from "@mui/icons-material";
 import { IconButton, Tooltip, Typography, styled } from "@mui/material";
 
 const StyledFileInfo = styled("div")`
@@ -11,7 +11,7 @@ const StyledFileInfo = styled("div")`
     padding: 10px;
     border-radius: var(--shape-borderRadius);
     cursor: pointer;
-    gap: 10px;
+    gap: 6px;
     border: 1px solid;
     border-color: var(--palette-grey-400);
     transition: border-color 0.3s ease;
@@ -36,8 +36,9 @@ const StyledFileInfo = styled("div")`
 interface FileInfoProps {
     file: File | CamFile;
     onDelete?: () => void;
+    onDownload?: () => void;
 }
-export const FileInfo = ({ file, onDelete }: FileInfoProps) => {
+export const FileInfo = ({ file, onDelete, onDownload }: FileInfoProps) => {
     let url = "";
     let fileName = "";
     let fileType = "";
@@ -51,7 +52,7 @@ export const FileInfo = ({ file, onDelete }: FileInfoProps) => {
         }
     } else if (isCamFile(file)) {
         url = file.url;
-        fileName = file.key;
+        fileName = file.name || file.key;
 
         if (file.url.includes("png") || file.url.includes("jpg") || file.url.includes("jpeg")) {
             fileType = "image";
@@ -85,9 +86,15 @@ export const FileInfo = ({ file, onDelete }: FileInfoProps) => {
                 </Typography>
             </Tooltip>
 
+            {onDownload && (
+                <IconButton onClick={onDownload} size='small'>
+                    <Download fontSize='small' />
+                </IconButton>
+            )}
+
             {onDelete && (
-                <IconButton onClick={onDelete}>
-                    <Cancel />
+                <IconButton onClick={onDelete} size='small'>
+                    <Cancel fontSize='small' />
                 </IconButton>
             )}
         </StyledFileInfo>

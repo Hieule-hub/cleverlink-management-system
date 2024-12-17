@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 
 import { Backup } from "@mui/icons-material";
 import { Box, Chip, Stack, styled } from "@mui/material";
@@ -37,10 +37,25 @@ interface UploadInputProps {
 
 export const UploadInput = ({
     placeholder = "Please drag and drop files here.",
-    acceptType = ["DPF", "JPG", "PNG"],
+    acceptType = ["PDF", "JPG", "PNG"],
     onFileChange
 }: UploadInputProps) => {
     const [dragging, setDragging] = useState(false);
+
+    const checkFileType = useCallback(
+        (file: File) => {
+            if (!file.type) return false;
+
+            const fileType = file.type.split("/")[1];
+
+            if (acceptType.includes(fileType.toUpperCase())) {
+                return true;
+            }
+
+            return false;
+        },
+        [acceptType]
+    );
 
     const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
@@ -49,7 +64,9 @@ export const UploadInput = ({
 
         const files = event.dataTransfer.files;
         if (files.length > 0) {
-            onFileChange(Array.from(files));
+            const validFiles = Array.from(files).filter(checkFileType);
+
+            onFileChange(validFiles);
         }
     };
 
@@ -68,7 +85,9 @@ export const UploadInput = ({
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
         if (files && files.length > 0) {
-            onFileChange(Array.from(files));
+            const validFiles = Array.from(files).filter(checkFileType);
+
+            onFileChange(validFiles);
         }
     };
 
@@ -82,7 +101,14 @@ export const UploadInput = ({
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
         >
-            <input type='file' hidden id='upload-input' onChange={handleFileChange} multiple />
+            <input
+                type='file'
+                hidden
+                id='upload-input'
+                onChange={handleFileChange}
+                multiple
+                accept={acceptType.map((type) => `.${type}`).join(",")}
+            />
             <label htmlFor='upload-input'>
                 <Backup
                     color='inherit'
