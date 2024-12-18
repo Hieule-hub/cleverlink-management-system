@@ -55,7 +55,9 @@ const initFormValues: FormCompanyValues = {
 };
 
 export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
-    const t = useTranslations();
+    const t = useTranslations("CompanyPage");
+    const tCommon = useTranslations("Common");
+
     const { organizations } = useAppStore((state) => state);
     const { item, open, closeDialog, setItem } = useCompanyDialog();
 
@@ -140,10 +142,10 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
                         organizationId: data.organizationId
                     });
                     if (!response.err) {
-                        toast.success({ title: t("CompanyPage.Edit record success") });
+                        toast.success({ title: t("Edit record success") });
                         handleClose("success");
                     } else {
-                        // toast.error({ title: t("CompanyPage.Edit record failed") });
+                        // toast.error({ title: t("Edit record failed") });
                     }
                 } else {
                     const response = await companyService.createCompany({
@@ -159,10 +161,10 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
                         token: data.token
                     });
                     if (!response.err) {
-                        toast.success({ title: t("CompanyPage.Create record success") });
+                        toast.success({ title: t("Create record success") });
                         handleClose("success");
                     } else {
-                        // toast.error({ title: t("CompanyPage.Create record failed") });
+                        // toast.error({ title: t("Create record failed") });
                     }
                 }
             } catch (error) {
@@ -218,39 +220,39 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
                 }
             }}
             open={open}
-            title={item ? t("CompanyPage.Edit record") : t("CompanyPage.Add new record")}
+            title={item ? t("Edit record") : t("Add new record")}
             onClose={handleClose}
             onCancel={handleClose}
             onOk={handleSave}
             loading={isLoading}
         >
             <Grid padding={2} width='100%' gap={2} container spacing={2} columns={24} alignItems='center'>
-                {/* Company name Field */}
+                {/* Name Field */}
                 <Grid size={labelSize}>
-                    <Label required label='Company name' htmlFor='name' />
+                    <Label required label={t("Name")} htmlFor='name' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput control={control} keyName='name' placeholder='Name' />
+                    <ControllerInput control={control} keyName='name' placeholder={t("Name")} />
                 </Grid>
 
                 {/* Address Field */}
                 <Grid size={labelSize}>
-                    <Label label='Address' htmlFor='address' />
+                    <Label label={t("Address")} htmlFor='address' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput control={control} keyName='address' placeholder='Address' />
+                    <ControllerInput control={control} keyName='address' placeholder={t("Address")} />
                 </Grid>
 
                 {/* Organization ID Field */}
                 <Grid size={labelSize}>
-                    <Label required label='Organization' htmlFor='organizationId' />
+                    <Label required label={t("Organization")} htmlFor='organizationId' />
                 </Grid>
                 <Grid size={inputSize}>
                     <ControllerSelect
                         disabled={editMode}
                         control={control}
                         keyName='organizationId'
-                        placeholder='Organization'
+                        placeholder={t("Organization")}
                         selectProps={{
                             options: organizations.map((o) => ({
                                 value: o._id,
@@ -262,34 +264,34 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
 
                 {/* Phone number Field */}
                 <Grid size={labelSize}>
-                    <Label label='Phone number' htmlFor='phone' />
+                    <Label label={t("Phone number")} htmlFor='phone' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput control={control} keyName='phone' placeholder='Phone Number' />
+                    <ControllerInput control={control} keyName='phone' placeholder={t("Phone number")} />
                 </Grid>
 
                 {/* Company ID Field */}
                 <Grid size={labelSize}>
-                    <Label label='Company ID' htmlFor='companyId' />
+                    <Label label={t("Company ID")} htmlFor='companyId' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput control={control} keyName='companyId' placeholder='Company ID' disabled />
+                    <ControllerInput control={control} keyName='companyId' placeholder={t("Company ID")} disabled />
                 </Grid>
 
                 {/* Website Field */}
                 <Grid size={labelSize}>
-                    <Label label='Website' htmlFor='website' />
+                    <Label label={t("Website")} htmlFor='website' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput control={control} keyName='website' placeholder='Website' />
+                    <ControllerInput control={control} keyName='website' placeholder={t("Website")} />
                 </Grid>
 
                 {/* User ID Field */}
                 <Grid size={labelSize}>
-                    <Label required label='User ID' htmlFor='userId' />
+                    <Label required label={t("User ID")} htmlFor='userId' />
                 </Grid>
                 <Grid size={inputSize - 3}>
-                    <ControllerInput control={control} keyName='userId' placeholder='User ID' disabled />
+                    <ControllerInput control={control} keyName='userId' placeholder={t("User ID")} disabled />
                 </Grid>
                 <Grid size={3}>
                     <Button
@@ -302,16 +304,16 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
                         onClick={fetchId}
                         loading={isFetchingId}
                     >
-                        {t("Common.Init")}
+                        {tCommon("Init")}
                     </Button>
                 </Grid>
 
-                {/* Register Date Field */}
+                {/* Register date Field */}
                 <Grid size={labelSize}>
-                    <Label label='Register Date' htmlFor='startDate' />
+                    <Label label={t("Register date")} htmlFor='startDate' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput control={control} keyName='startDate' placeholder='Register Date' disabled />
+                    <ControllerInput control={control} keyName='startDate' placeholder={t("Register date")} disabled />
                 </Grid>
             </Grid>
         </Dialog>

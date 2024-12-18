@@ -70,7 +70,8 @@ const initFormValues: FormUserValues = {
 };
 
 export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
-    const t = useTranslations();
+    const t = useTranslations("UserPage");
+    const tCommon = useTranslations("Common");
     const { roles } = useAppStore((state) => state);
     const { user, open, closeUserDialog, setUser } = useUserStore();
 
@@ -170,10 +171,10 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                         telegram: data.telegram
                     });
                     if (!response.err) {
-                        toast.success({ title: t("UserPage.Edit record success") });
+                        toast.success({ title: t("Edit record success") });
                         handleClose("success");
                     } else {
-                        // toast.error({ title: t("UserPage.Edit record failed") });
+                        // toast.error({ title: t("Edit record failed") });
                     }
                 } else {
                     const response = await userService.createUser({
@@ -191,10 +192,10 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                         token: data.token
                     });
                     if (!response.err) {
-                        toast.success({ title: t("UserPage.Create record success") });
+                        toast.success({ title: t("Create record success") });
                         handleClose("success");
                     } else {
-                        // toast.error({ title: t("UserPage.Create record failed") });
+                        // toast.error({ title: t("Create record failed") });
                     }
                 }
             } catch (error) {
@@ -277,7 +278,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                 }
             }}
             open={open}
-            title={user ? t("UserPage.Edit record") : t("UserPage.Add new record")}
+            title={user ? t("Edit record") : t("Add new record")}
             onClose={handleClose}
             onCancel={handleClose}
             onOk={handleSave}
@@ -286,14 +287,14 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
             <Grid padding={2} width='100%' gap={2} container spacing={2} columns={24} alignItems='center'>
                 {/* Company Field */}
                 <Grid size={labelSize}>
-                    <Label required label='Company' htmlFor='company' />
+                    <Label required label={t("Company")} htmlFor='company' />
                 </Grid>
                 <Grid size={inputSize}>
                     <ControllerAsyncSearchSelect
                         disabled={editMode}
                         control={control}
                         keyName='company'
-                        placeholder='Company'
+                        placeholder={t("Company")}
                         request={fetchCompanies}
                         onchangeField={(value) => {
                             if (value) {
@@ -305,30 +306,30 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
 
                 {/* User name Field */}
                 <Grid size={labelSize}>
-                    <Label required label='User Name' htmlFor='name' />
+                    <Label required label={t("User Name")} htmlFor='name' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput control={control} keyName='name' placeholder='Name' />
+                    <ControllerInput control={control} keyName='name' placeholder={t("User Name")} />
                 </Grid>
 
                 {/* Company ID Field */}
                 <Grid size={labelSize}>
-                    <Label label='Company ID' htmlFor='companyId' />
+                    <Label label={t("Company ID")} htmlFor='companyId' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput control={control} keyName='companyId' placeholder='Company ID' disabled />
+                    <ControllerInput control={control} keyName='companyId' placeholder={t("Company ID")} disabled />
                 </Grid>
 
                 {/* Role Field */}
                 <Grid size={labelSize}>
-                    <Label required label='Role' htmlFor='role' />
+                    <Label required label={t("Role")} htmlFor='role' />
                 </Grid>
                 <Grid size={inputSize}>
                     <ControllerSelect
                         disabled={editMode}
                         control={control}
                         keyName='role'
-                        placeholder='Department name'
+                        placeholder={t("Role")}
                         selectProps={{
                             options: roles.map((org) => ({
                                 value: org.code,
@@ -343,13 +344,13 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
 
                 {/* Scene Field */}
                 <Grid size={labelSize}>
-                    <Label label='Scene' htmlFor='scene' />
+                    <Label label={t("Scene")} htmlFor='scene' />
                 </Grid>
                 <Grid size={inputSize}>
                     <ControllerAsyncSearchSelect
                         control={control}
                         keyName='scene'
-                        placeholder='Scene'
+                        placeholder={t("Scene")}
                         request={fetchScenes}
                         onchangeField={(value) => {
                             if (value) {
@@ -357,50 +358,50 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                             }
                         }}
                     />
-                    <ControllerInput hidden control={control} keyName='sceneId' placeholder='Scene ID' />
+                    <ControllerInput hidden control={control} keyName='sceneId' placeholder={t("Scene ID")} />
                 </Grid>
 
                 {/* Role ID Field */}
                 <Grid size={labelSize}>
-                    <Label label='Role ID' htmlFor='roleId' />
+                    <Label label={t("Role ID")} htmlFor='roleId' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput control={control} keyName='roleId' placeholder='Role ID' disabled />
+                    <ControllerInput control={control} keyName='roleId' placeholder={t("Role ID")} disabled />
                 </Grid>
 
                 {/* Task Field */}
                 <Grid size={labelSize}>
-                    <Label label='Task' htmlFor='task' />
+                    <Label label={t("Task")} htmlFor='task' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput control={control} keyName='task' placeholder='Task' />
+                    <ControllerInput control={control} keyName='task' placeholder={t("Task")} />
                 </Grid>
 
                 {/* User ID Field */}
                 <Grid size={labelSize}>
-                    <Label required label='User ID' htmlFor='userId' />
+                    <Label required label={t("User ID")} htmlFor='userId' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput control={control} keyName='userId' placeholder='User ID' disabled />
+                    <ControllerInput control={control} keyName='userId' placeholder={t("User ID")} disabled />
                 </Grid>
 
-                {/* Register Date Field */}
+                {/* Register date Field */}
                 <Grid size={labelSize}>
-                    <Label label='Register Date' htmlFor='startDate' />
+                    <Label label={t("Register date")} htmlFor='startDate' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput control={control} keyName='startDate' placeholder='Register Date' disabled />
+                    <ControllerInput control={control} keyName='startDate' placeholder={t("Register date")} disabled />
                 </Grid>
 
                 {/* Password Field */}
                 <Grid size={labelSize}>
-                    <Label required label='PW' htmlFor='password' />
+                    <Label required label={t("PW")} htmlFor='password' />
                 </Grid>
                 <Grid size={5}>
                     <ControllerInput
                         control={control}
                         keyName='password'
-                        placeholder='Password'
+                        placeholder={t("PW")}
                         disabled
                         inputProps={{
                             type: "password"
@@ -418,7 +419,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                         onClick={fetchingUserId}
                         loading={isFetchingId}
                     >
-                        {t("Common.Init")}
+                        {tCommon("Init")}
                     </Button>
                 </Grid>
             </Grid>
@@ -428,43 +429,43 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
             <Grid padding={2} width='100%' gap={2} container spacing={2} columns={24} alignItems='center'>
                 {/* Phone number Field */}
                 <Grid size={labelSize}>
-                    <Label label='Phone number' htmlFor='phone' />
+                    <Label label={t("Phone number")} htmlFor='phone' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput control={control} keyName='phone' placeholder='Phone Number' />
+                    <ControllerInput control={control} keyName='phone' placeholder={t("Phone number")} />
                 </Grid>
 
                 {/* ID Kakao Field */}
                 <Grid size={labelSize}>
-                    <Label label='KakaoTalk ID' htmlFor='kakao' />
+                    <Label label={t("KakaoTalk ID")} htmlFor='kakao' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput control={control} keyName='kakao' placeholder='KakaoTalk ID' />
+                    <ControllerInput control={control} keyName='kakao' placeholder={t("KakaoTalk ID")} />
                 </Grid>
 
                 {/* Email Field */}
                 <Grid size={labelSize}>
-                    <Label label='Email' htmlFor='email' />
+                    <Label label={t("Email")} htmlFor='email' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput control={control} keyName='email' placeholder='Email' />
+                    <ControllerInput control={control} keyName='email' placeholder={t("Email")} />
                 </Grid>
 
                 {/* Telegram Field */}
                 <Grid size={labelSize}>
-                    <Label label='Telegram ID' htmlFor='telegram' />
+                    <Label label={t("Telegram ID")} htmlFor='telegram' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput control={control} keyName='telegram' placeholder='Telegram ID' />
+                    <ControllerInput control={control} keyName='telegram' placeholder={t("Telegram ID")} />
                 </Grid>
 
                 {/* Token Field */}
-                <ControllerInput hidden control={control} keyName='token' placeholder='Token' />
+                <ControllerInput hidden control={control} keyName='token' placeholder={t("Token")} />
 
                 {editMode && (
                     <Grid size={24} textAlign={"end"}>
                         <Typography variant='body1' color='primary'>
-                            {t("UserPage.Notice note")}
+                            {t("Notice note")}
                         </Typography>
                     </Grid>
                 )}

@@ -53,29 +53,11 @@ export const SceneReadOnly = () => {
         fetchDataList(filter);
     }, [filter, fetchDataList]);
 
-    const handleDeleteItems = async (ids: string[]) => {
-        if (!confirm("Are you sure you want to delete the selected: " + ids.join(", "))) {
-            return;
-        }
-
-        setIsFetching(true);
-        try {
-            await sceneService.deleteScenes({
-                ids: ids
-            });
-            fetchDataList(filter);
-        } catch (error) {
-            console.log("🚀 ~ handleDeleteItems ~ error:", error);
-        } finally {
-            setIsFetching(false);
-        }
-    };
-
-    const handleSearch = useCallback(() => {
-        setFilter((pre) => {
-            return { ...pre, page: 1, filters: keyword };
-        });
-    }, [keyword]);
+    // const handleSearch = useCallback(() => {
+    //     setFilter((pre) => {
+    //         return { ...pre, page: 1, filters: keyword };
+    //     });
+    // }, [keyword]);
 
     const columns = useMemo((): Column[] => {
         return [

@@ -69,7 +69,8 @@ const initFormValues: FormDeviceValues = {
 };
 
 export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
-    const t = useTranslations();
+    const t = useTranslations("DevicePage");
+
     const { item, open, closeDialog, setItem } = useDeviceDialog();
 
     const [isLoading, setIsLoading] = useState(false);
@@ -185,10 +186,10 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
                         place: data.place
                     });
                     if (!response.err) {
-                        toast.success({ title: t("DevicePage.Edit record success") });
+                        toast.success({ title: t("Edit record success") });
                         handleClose("success");
                     } else {
-                        // toast.error({ title: t("DevicePage.Edit record failed") });
+                        // toast.error({ title: t("Edit record failed") });
                     }
                 } else {
                     const response = await deviceService.createDevice({
@@ -199,10 +200,10 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
                         activateId: data.active?.value as string
                     });
                     if (!response.err) {
-                        toast.success({ title: t("DevicePage.Create record success") });
+                        toast.success({ title: t("Create record success") });
                         handleClose("success");
                     } else {
-                        // toast.error({ title: t("DevicePage.Create record failed") });
+                        // toast.error({ title: t("Create record failed") });
                     }
                 }
             } catch (error) {
@@ -288,7 +289,7 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
                 }
             }}
             open={open}
-            title={editMode ? t("DevicePage.Edit record") : t("DevicePage.Add new record")}
+            title={editMode ? t("Edit record") : t("Add new record")}
             onClose={handleClose}
             onCancel={handleClose}
             onOk={handleSave}
@@ -302,13 +303,13 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
                 <Grid padding={2} width='100%' gap={2} container spacing={2} columns={12} alignItems='center'>
                     {/* Company Field */}
                     <Grid size={labelSize}>
-                        <Label required label='Company' htmlFor='company' />
+                        <Label required label={t("Company")} htmlFor='company' />
                     </Grid>
                     <Grid size={inputSize}>
                         <ControllerAsyncSearchSelect
                             control={control}
                             keyName='company'
-                            placeholder='Company'
+                            placeholder={t("Company")}
                             request={fetchCompanies}
                             // onchangeField={(value) => {
                             //     if (value) {
@@ -320,13 +321,13 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
 
                     {/* Scene Field */}
                     <Grid size={labelSize}>
-                        <Label label='Scene' htmlFor='scene' required />
+                        <Label label={t("Scene")} htmlFor='scene' required />
                     </Grid>
                     <Grid size={inputSize}>
                         <ControllerAsyncSearchSelect
                             control={control}
                             keyName='scene'
-                            placeholder='Scene'
+                            placeholder={t("Scene")}
                             request={fetchScenes}
                             // onchangeField={(value) => {
                             //     if (value) {
@@ -334,26 +335,26 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
                             //     }
                             // }}
                         />
-                        <ControllerInput hidden control={control} keyName='sceneId' placeholder='Scene ID' />
+                        <ControllerInput hidden control={control} keyName='sceneId' placeholder={t("Scene ID")} />
                     </Grid>
 
                     {/* Emplacement Field */}
                     <Grid size={labelSize}>
-                        <Label label='Emplacement' htmlFor='place' />
+                        <Label label={t("Emplacement")} htmlFor='place' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='place' placeholder='Emplacement' />
+                        <ControllerInput control={control} keyName='place' placeholder={t("Emplacement")} />
                     </Grid>
 
                     {/* Device ID Field */}
                     <Grid size={labelSize}>
-                        <Label label='Device ID' htmlFor='active' required />
+                        <Label label={t("Device ID")} htmlFor='active' required />
                     </Grid>
                     <Grid size={inputSize}>
                         <ControllerAsyncSearchSelect
                             control={control}
                             keyName='active'
-                            placeholder='Device ID'
+                            placeholder={t("Device ID")}
                             request={fetchActivates}
                             onchangeField={(option) => {
                                 if (option) {
@@ -398,18 +399,18 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
 
                     {/* IP Address Field */}
                     <Grid size={labelSize}>
-                        <Label label='IP Address' htmlFor='ipAddress' />
+                        <Label label={t("IP Address")} htmlFor='ipAddress' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='ipAddress' placeholder='IP Address' disabled />
+                        <ControllerInput control={control} keyName='ipAddress' placeholder={t("IP Address")} disabled />
                     </Grid>
 
                     {/* MAC Field */}
                     <Grid size={labelSize}>
-                        <Label label='MAC' htmlFor='mac' />
+                        <Label label={t("MAC")} htmlFor='mac' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='mac' placeholder='MAC' disabled />
+                        <ControllerInput control={control} keyName='mac' placeholder={t("MAC")} disabled />
                     </Grid>
                 </Grid>
 
@@ -425,13 +426,13 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
                 >
                     {/* Manager Field */}
                     <Grid size={labelSize}>
-                        <Label label='Manager' htmlFor='manager' required />
+                        <Label label={t("Manager")} htmlFor='manager' required />
                     </Grid>
                     <Grid size={inputSize}>
                         <ControllerAsyncSearchSelect
                             control={control}
                             keyName='manager'
-                            placeholder='Manager'
+                            placeholder={t("Manager")}
                             request={fetchUsers}
                             onchangeField={(option) => {
                                 if (option) {
@@ -446,26 +447,26 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
 
                     {/* User ID Field */}
                     <Grid size={labelSize}>
-                        <Label label='User ID' htmlFor='userId' />
+                        <Label label={t("User ID")} htmlFor='userId' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='userId' placeholder='User ID' disabled />
+                        <ControllerInput control={control} keyName='userId' placeholder={t("User ID")} disabled />
                     </Grid>
 
                     {/* Phone number Field */}
                     <Grid size={labelSize}>
-                        <Label label='Phone number' htmlFor='phone' />
+                        <Label label={t("Phone number")} htmlFor='phone' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='phone' placeholder='Phone number' disabled />
+                        <ControllerInput control={control} keyName='phone' placeholder={t("Phone number")} disabled />
                     </Grid>
 
                     {/* Email Field */}
                     <Grid size={labelSize}>
-                        <Label label='Email' htmlFor='email' />
+                        <Label label={t("Email")} htmlFor='email' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='email' placeholder='Email' disabled />
+                        <ControllerInput control={control} keyName='email' placeholder={t("Email")} disabled />
                     </Grid>
                 </Grid>
             </Stack>

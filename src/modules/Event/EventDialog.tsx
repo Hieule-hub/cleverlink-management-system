@@ -44,7 +44,8 @@ const initFormValues: FormValues = {
 };
 
 export const EventDialog = ({ onClose = () => "" }: EventDialogProps) => {
-    const t = useTranslations();
+    const t = useTranslations("EventPage");
+
     const { item, open, closeDialog, setItem } = useEventDialog();
     const [isLoading, setIsLoading] = useState(false);
 
@@ -96,10 +97,10 @@ export const EventDialog = ({ onClose = () => "" }: EventDialogProps) => {
                         solve: data.solve
                     });
                     if (!response.err) {
-                        toast.success({ title: t("EventPage.Edit record success") });
+                        toast.success({ title: t("Edit record success") });
                         handleClose("success");
                     } else {
-                        // toast.error({ title: t("EventPage.Edit record failed") });
+                        // toast.error({ title: t("Edit record failed") });
                     }
                 }
             } catch (error) {
@@ -123,7 +124,7 @@ export const EventDialog = ({ onClose = () => "" }: EventDialogProps) => {
                 }
             }}
             open={open}
-            title={item ? t("EventPage.Edit record") : t("EventPage.Add new record")}
+            title={item ? t("Edit record") : t("Add new record")}
             onClose={handleClose}
             onCancel={handleClose}
             onOk={handleSave}
@@ -137,46 +138,46 @@ export const EventDialog = ({ onClose = () => "" }: EventDialogProps) => {
                 <Grid padding={2} width='100%' gap={2} container spacing={2} columns={12} alignItems='center'>
                     {/* AI Code Field */}
                     <Grid size={labelSize}>
-                        <Label label='AI Code' htmlFor='aiCode' />
+                        <Label label={t("AI Code")} htmlFor='aiCode' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput disabled control={control} keyName='aiCode' placeholder='Company ID' />
+                        <ControllerInput disabled control={control} keyName='aiCode' placeholder={t("Company ID")} />
                     </Grid>
 
                     {/* Event time Field */}
                     <Grid size={labelSize}>
-                        <Label label='Event time' htmlFor='time' />
+                        <Label label={t("Event time")} htmlFor='time' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput disabled control={control} keyName='time' placeholder='Event time' />
+                        <ControllerInput disabled control={control} keyName='time' placeholder={t("Event time")} />
                     </Grid>
 
                     {/* Device ID Field */}
                     <Grid size={labelSize}>
-                        <Label label='Device ID' htmlFor='deviceId' />
+                        <Label label={t("Device ID")} htmlFor='deviceId' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput disabled control={control} keyName='deviceId' placeholder='Device ID' />
+                        <ControllerInput disabled control={control} keyName='deviceId' placeholder={t("Device ID")} />
                     </Grid>
 
                     {/* Channel Field */}
                     <Grid size={labelSize}>
-                        <Label label='Channel' htmlFor='channel' />
+                        <Label label={t("Channel")} htmlFor='channel' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput disabled control={control} keyName='channel' placeholder='Channel' />
+                        <ControllerInput disabled control={control} keyName='channel' placeholder={t("Channel")} />
                     </Grid>
 
                     {/* Warning device/location Field */}
                     <Grid size={labelSize}>
-                        <Label label='Warning device/location' htmlFor='notifyCode' />
+                        <Label label={t("Warning device/location")} htmlFor='notifyCode' />
                     </Grid>
                     <Grid size={inputSize}>
                         <ControllerInput
                             disabled
                             control={control}
                             keyName='notifyCode'
-                            placeholder='Warning device/location'
+                            placeholder={t("Warning device/location")}
                         />
                     </Grid>
                 </Grid>
@@ -193,13 +194,13 @@ export const EventDialog = ({ onClose = () => "" }: EventDialogProps) => {
                 >
                     {/* Action taken Field */}
                     <Grid size={12}>
-                        <Label label='Action taken' htmlFor='solve' />
+                        <Label label={t("Action taken")} htmlFor='solve' />
                     </Grid>
                     <Grid size={"grow"}>
                         <ControllerInput
                             control={control}
                             keyName='solve'
-                            placeholder='Action taken'
+                            placeholder={t("Action taken")}
                             inputProps={{
                                 multiline: true,
                                 rows: 10
@@ -223,7 +224,7 @@ export const EventDialog = ({ onClose = () => "" }: EventDialogProps) => {
             >
                 {/* Maximum resolution Field */}
                 <Grid size={labelSize}>
-                    <Label label='Recipient list' htmlFor='receiver' />
+                    <Label label={t("Recipient list")} htmlFor='receiver' />
                 </Grid>
                 <Grid
                     size={24 - labelSize}

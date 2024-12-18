@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState } from "react";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import { RouteConfig, routeConfig } from "@configs/routeConfig";
 import { ChevronRightOutlined } from "@mui/icons-material";
@@ -203,16 +203,17 @@ const renderMenuItems = (
 export const MenuSidebar = memo(() => {
     const t = useTranslations("Sidebar");
     const { role } = useAppStore((state) => state);
+    const pathName = usePathname();
 
     const router = useRouter();
 
     const [keyPath, setKeyPath] = useState<string[]>([]);
 
     useEffect(() => {
-        const path = location.pathname;
-        const pathKeys = path.split("/").filter((item) => item);
-        setKeyPath(pathKeys);
-    }, [location]);
+        const pathnames = pathName.split("/").filter((x) => x);
+        // const pathKeys = path.split("/").filter((item) => item);
+        setKeyPath(pathnames);
+    }, [pathName]);
 
     const handleClick = (route: RouteConfig) => {
         if (route?.path) {

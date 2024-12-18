@@ -176,32 +176,32 @@ export const CompanyInfo = ({ companyId }: CompanyInfoProps) => {
                     columns={{ xs: 12, md: 24 }}
                     alignItems='center'
                 >
-                    {/* Company name Field */}
+                    {/* Name Field */}
                     <Grid size={labelSize}>
-                        <Label align='right' required label='Company name' htmlFor='name' />
+                        <Label align='right' required label={t("Name")} htmlFor='name' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='name' placeholder='Name' disabled />
+                        <ControllerInput control={control} keyName='name' placeholder={t("Name")} disabled />
                     </Grid>
 
                     {/* Address Field */}
                     <Grid size={labelSize}>
-                        <Label align='right' label='Address' htmlFor='address' />
+                        <Label align='right' label={t("Address")} htmlFor='address' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='address' placeholder='Address' />
+                        <ControllerInput control={control} keyName='address' placeholder={t("Address")} />
                     </Grid>
 
                     {/* Organization ID Field */}
                     <Grid size={labelSize}>
-                        <Label align='right' required label='Organization' htmlFor='organizationId' />
+                        <Label align='right' required label={t("Organization")} htmlFor='organizationId' />
                     </Grid>
                     <Grid size={inputSize}>
                         <ControllerSelect
                             disabled
                             control={control}
                             keyName='organizationId'
-                            placeholder='Organization'
+                            placeholder={t("Organization")}
                             selectProps={{
                                 options: organizations.map((o) => ({
                                     value: o._id,
@@ -213,42 +213,47 @@ export const CompanyInfo = ({ companyId }: CompanyInfoProps) => {
 
                     {/* Phone number Field */}
                     <Grid size={labelSize}>
-                        <Label align='right' label='Phone number' htmlFor='phone' />
+                        <Label align='right' label={t("Phone number")} htmlFor='phone' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='phone' placeholder='Phone Number' />
+                        <ControllerInput control={control} keyName='phone' placeholder={t("Phone Number")} />
                     </Grid>
 
                     {/* Company ID Field */}
                     <Grid size={labelSize}>
-                        <Label align='right' label='Company ID' htmlFor='companyId' />
+                        <Label align='right' label={t("Company ID")} htmlFor='companyId' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='companyId' placeholder='Company ID' disabled />
+                        <ControllerInput control={control} keyName='companyId' placeholder={t("Company ID")} disabled />
                     </Grid>
 
                     {/* Website Field */}
                     <Grid size={labelSize}>
-                        <Label align='right' label='Website' htmlFor='website' />
+                        <Label align='right' label={t("Website")} htmlFor='website' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='website' placeholder='Website' />
+                        <ControllerInput control={control} keyName='website' placeholder={t("Website")} />
                     </Grid>
 
                     {/* User ID Field */}
                     <Grid size={labelSize}>
-                        <Label align='right' required label='User ID' htmlFor='userId' />
+                        <Label align='right' required label={t("User ID")} htmlFor='userId' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='userId' placeholder='User ID' disabled />
+                        <ControllerInput control={control} keyName='userId' placeholder={t("User ID")} disabled />
                     </Grid>
 
-                    {/* Register Date Field */}
+                    {/* Register date Field */}
                     <Grid size={labelSize}>
-                        <Label align='right' label='Register Date' htmlFor='startDate' />
+                        <Label align='right' label={t("Register date")} htmlFor='startDate' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='startDate' placeholder='Register Date' disabled />
+                        <ControllerInput
+                            control={control}
+                            keyName='startDate'
+                            placeholder={t("Register date")}
+                            disabled
+                        />
                     </Grid>
                 </Grid>
             </Paper>
@@ -259,9 +264,5 @@ export const CompanyInfo = ({ companyId }: CompanyInfoProps) => {
                 </Button>
             </Box>
         </React.Fragment>
-        // <MainLayout title={t("title")}>
-        //     <Breadcrumbs />
-
-        // </MainLayout>
     );
 };

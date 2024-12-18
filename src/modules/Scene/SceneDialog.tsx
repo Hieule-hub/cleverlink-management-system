@@ -78,7 +78,9 @@ const initFormValues: FormValues = {
 };
 
 export const SceneDialog = ({ onClose = () => "", readonly }: SceneDialogProps) => {
-    const t = useTranslations();
+    const t = useTranslations("ScenePage");
+    const tCommon = useTranslations("Common");
+
     const { areas } = useAppStore((state) => state);
     const { item, open, closeDialog, setItem } = useSceneDialog();
 
@@ -177,10 +179,10 @@ export const SceneDialog = ({ onClose = () => "", readonly }: SceneDialogProps) 
                         address: data.address
                     });
                     if (!response.err) {
-                        toast.success({ title: t("ScenePage.Edit record success") });
+                        toast.success({ title: t("Edit record success") });
                         handleClose("success");
                     } else {
-                        // toast.error({ title: t("ScenePage.Edit record failed") });
+                        // toast.error({ title: t("Edit record failed") });
                     }
                 } else {
                     const response = await sceneService.createScene({
@@ -201,10 +203,10 @@ export const SceneDialog = ({ onClose = () => "", readonly }: SceneDialogProps) 
                         token: data.token
                     });
                     if (!response.err) {
-                        toast.success({ title: t("ScenePage.Create record success") });
+                        toast.success({ title: t("Create record success") });
                         handleClose("success");
                     } else {
-                        // toast.error({ title: t("ScenePage.Create record failed") });
+                        // toast.error({ title: t("Create record failed") });
                     }
                 }
             } catch (error) {
@@ -242,7 +244,7 @@ export const SceneDialog = ({ onClose = () => "", readonly }: SceneDialogProps) 
                 }
             }}
             open={open}
-            title={t("ScenePage.Detail record")}
+            title={t("Detail record")}
             onClose={handleClose}
             onCancel={handleClose}
             onOk={handleSave}
@@ -257,19 +259,19 @@ export const SceneDialog = ({ onClose = () => "", readonly }: SceneDialogProps) 
                 <Grid padding={2} width='100%' gap={2} container spacing={2} columns={12} alignItems='center'>
                     {/* Title Tag */}
                     <Grid size={12}>
-                        <TitleTag title={t("ScenePage.title")} />
+                        <TitleTag title={t("title")} />
                     </Grid>
 
                     {/* Company Field */}
                     <Grid size={labelSize}>
-                        <Label required label='Company' htmlFor='company' />
+                        <Label required label={t("Company")} htmlFor='company' />
                     </Grid>
                     <Grid size={inputSize}>
                         <ControllerAsyncSearchSelect
                             disabled={editMode && readonly}
                             control={control}
                             keyName='company'
-                            placeholder='Company'
+                            placeholder={t("Company")}
                             request={fetchCompanies}
                             onchangeField={(value) => {
                                 if (value) {
@@ -281,30 +283,30 @@ export const SceneDialog = ({ onClose = () => "", readonly }: SceneDialogProps) 
 
                     {/* Company ID Field */}
                     <Grid size={labelSize}>
-                        <Label label='Company ID' htmlFor='companyId' />
+                        <Label label={t("Company ID")} htmlFor='companyId' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='companyId' placeholder='Company ID' disabled />
+                        <ControllerInput control={control} keyName='companyId' placeholder={t("Company ID")} disabled />
                     </Grid>
 
                     {/* Scene name Field */}
                     <Grid size={labelSize}>
-                        <Label required label='Scene name' htmlFor='name' />
+                        <Label required label={t("Scene name")} htmlFor='name' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='name' placeholder='Name' disabled={readonly} />
+                        <ControllerInput control={control} keyName='name' placeholder={t("Name")} disabled={readonly} />
                     </Grid>
 
                     {/* Area ID Field */}
                     <Grid size={labelSize}>
-                        <Label required label='Area' htmlFor='areaId' />
+                        <Label required label={t("Area")} htmlFor='areaId' />
                     </Grid>
                     <Grid size={inputSize}>
                         <ControllerSelect
                             disabled={editMode && readonly}
                             control={control}
                             keyName='areaId'
-                            placeholder='Area'
+                            placeholder={t("Area")}
                             selectProps={{
                                 options: areas.map((o) => ({
                                     value: o._id,
@@ -316,18 +318,18 @@ export const SceneDialog = ({ onClose = () => "", readonly }: SceneDialogProps) 
 
                     {/* Scene ID Field */}
                     <Grid size={labelSize}>
-                        <Label label='Scene ID' htmlFor='sceneId' />
+                        <Label label={t("Scene ID")} htmlFor='sceneId' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='sceneId' placeholder='Scene ID' disabled />
+                        <ControllerInput control={control} keyName='sceneId' placeholder={t("Scene ID")} disabled />
                     </Grid>
 
                     {/* User ID Field */}
                     <Grid size={labelSize}>
-                        <Label required label='User ID' htmlFor='userId' />
+                        <Label required label={t("User ID")} htmlFor='userId' />
                     </Grid>
                     <Grid size={inputSize - 3}>
-                        <ControllerInput control={control} keyName='userId' placeholder='User ID' disabled />
+                        <ControllerInput control={control} keyName='userId' placeholder={t("User ID")} disabled />
                     </Grid>
                     <Grid size={3}>
                         <Button
@@ -338,55 +340,60 @@ export const SceneDialog = ({ onClose = () => "", readonly }: SceneDialogProps) 
                             height='48px'
                             disabled={editMode && readonly}
                         >
-                            {t("Common.Init")}
+                            {tCommon("Init")}
                         </Button>
                     </Grid>
 
                     {/* Address Field */}
                     <Grid size={labelSize}>
-                        <Label label='Address' htmlFor='address' />
+                        <Label label={t("Address")} htmlFor='address' />
                     </Grid>
                     <Grid size={inputSize}>
                         <ControllerInput
                             control={control}
                             keyName='address'
-                            placeholder='Address'
+                            placeholder={t("Address")}
                             disabled={readonly}
                         />
                     </Grid>
 
                     {/* Phone number Field */}
                     <Grid size={labelSize}>
-                        <Label label='Phone number' htmlFor='phone' />
+                        <Label label={t("Phone number")} htmlFor='phone' />
                     </Grid>
                     <Grid size={inputSize}>
                         <ControllerInput
                             control={control}
                             keyName='phone'
-                            placeholder='Phone Number'
+                            placeholder={t("Phone number")}
                             disabled={readonly}
                         />
                     </Grid>
 
                     {/* Website Field */}
                     <Grid size={labelSize}>
-                        <Label label='Website' htmlFor='website' />
+                        <Label label={t("Website")} htmlFor='website' />
                     </Grid>
                     <Grid size={inputSize}>
                         <ControllerInput
                             control={control}
                             keyName='website'
-                            placeholder='Website'
+                            placeholder={t("Website")}
                             disabled={readonly}
                         />
                     </Grid>
 
                     {/* Register Date Field */}
                     <Grid size={labelSize}>
-                        <Label label='Register date' htmlFor='startDate' />
+                        <Label label={t("Register date")} htmlFor='startDate' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='startDate' placeholder='Register Date' disabled />
+                        <ControllerInput
+                            control={control}
+                            keyName='startDate'
+                            placeholder={t("Register date")}
+                            disabled
+                        />
                     </Grid>
                 </Grid>
 
@@ -402,57 +409,57 @@ export const SceneDialog = ({ onClose = () => "", readonly }: SceneDialogProps) 
                 >
                     {/* PTitle button */}
                     <Grid size={12}>
-                        <TitleTag title={t("ScenePage.Manager")} />
+                        <TitleTag title={t("Manager")} />
                     </Grid>
 
                     {/* PName Field */}
                     <Grid size={labelSize}>
-                        <Label label='Name' htmlFor='pName' />
+                        <Label label={t("Name")} htmlFor='pName' />
                     </Grid>
                     <Grid size={inputSize}>
                         <ControllerInput
                             control={control}
                             keyName='pName'
-                            placeholder='Name'
+                            placeholder={t("Name")}
                             disabled={editMode && readonly}
                         />
                     </Grid>
 
                     {/* PDepartment name Field */}
                     <Grid size={labelSize}>
-                        <Label label='Department name' htmlFor='pDepartment' />
+                        <Label label={t("Department name")} htmlFor='pDepartment' />
                     </Grid>
                     <Grid size={inputSize}>
                         <ControllerInput
                             control={control}
                             keyName='pDepartment'
-                            placeholder='Department name'
+                            placeholder={t("Department name")}
                             disabled={editMode && readonly}
                         />
                     </Grid>
 
                     {/* PPhone number Field */}
                     <Grid size={labelSize}>
-                        <Label label='Phone number' htmlFor='pPhone' />
+                        <Label label={t("Phone number")} htmlFor='pPhone' />
                     </Grid>
                     <Grid size={inputSize}>
                         <ControllerInput
                             control={control}
                             keyName='pPhone'
-                            placeholder='Phone number'
+                            placeholder={t("Phone number")}
                             disabled={editMode && readonly}
                         />
                     </Grid>
 
                     {/* PEmail Field */}
                     <Grid size={labelSize}>
-                        <Label label='Email' htmlFor='pEmail' />
+                        <Label label={t("Email")} htmlFor='pEmail' />
                     </Grid>
                     <Grid size={inputSize}>
                         <ControllerInput
                             control={control}
                             keyName='pEmail'
-                            placeholder='Email'
+                            placeholder={t("Email")}
                             disabled={editMode && readonly}
                         />
                     </Grid>

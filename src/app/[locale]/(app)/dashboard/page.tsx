@@ -1,7 +1,8 @@
 "use client";
 
+import React from "react";
+
 import { Breadcrumbs, RoleBreadcrumbs } from "@components/Layout/Breadcrumbs";
-import MainLayout from "@components/Layout/MainLayout";
 import withProtectedRoute from "@components/withProtectedRoute";
 import { DashboardPage } from "@modules/Dashboard";
 import { VideoCapturePage } from "@modules/Event";
@@ -12,13 +13,13 @@ const Page = () => {
     const { role } = useAppStore((state) => state);
 
     return (
-        <MainLayout>
+        <React.Fragment>
             <Breadcrumbs />
             <RoleBreadcrumbs />
             {role === "CIP" && <DashboardPage />}
             {role === "TU" && <SceneReadOnly />}
             {role === "BU" && <VideoCapturePage />}
-        </MainLayout>
+        </React.Fragment>
     );
 };
 
