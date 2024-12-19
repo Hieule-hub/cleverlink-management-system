@@ -16,7 +16,6 @@ export default function MainLayout({ children, title }: Props) {
     const [isMenuCollapse, setIsMenuCollapse] = useState(true);
 
     const handleResize = () => {
-        console.log("🚀 ~ handleResize ~ window.innerWidth:", window.innerWidth);
         if (window.innerWidth <= 768) {
             setIsMenuCollapse(false);
         }

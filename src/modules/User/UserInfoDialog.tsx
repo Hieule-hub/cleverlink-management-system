@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 
+import { Button } from "@components/Button";
 import { ControllerInput } from "@components/Controller";
 import { ControllerAsyncSearchSelect, type Option } from "@components/Controller/ControllerAsyncSearchSelect";
 import { Dialog } from "@components/Dialog";
 import { Label } from "@components/Label";
+import { Spinner } from "@components/Spiner";
 import { User } from "@interfaces/user";
 import { Divider, Grid2 as Grid, Stack, Zoom } from "@mui/material";
 import userService from "@services/user";
@@ -11,9 +13,6 @@ import { dialogStore } from "@store/dialogStore";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
-
-import { Button } from "@/components/Button";
-import { Spinner } from "@/components/Spiner";
 
 export const useUserInfoDialog = dialogStore<User>();
 

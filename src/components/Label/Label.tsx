@@ -13,15 +13,6 @@ const StyledLabel = styled("label")`
     font-size: 16px;
     font-weight: 500;
     color: #667085;
-    position: relative;
-
-    /* .required {
-        color: red;
-        position: absolute;
-        top: 0;
-        left: -10px;
-        line-height: 1;
-    } */
 `;
 
 export const Label = ({ label, required, align = "left", ...props }: LabelProps) => {
@@ -32,19 +23,15 @@ export const Label = ({ label, required, align = "left", ...props }: LabelProps)
                     fontSize: "inherit",
                     fontWeight: "inherit",
                     position: "relative",
-                    ".required": {
-                        color: "red",
-                        position: "absolute",
-                        top: 0,
-                        left: "-10px",
-                        lineHeight: 1
+                    "&:before ": {
+                        content: required ? '"*"' : '""',
+                        color: "var(--palette-error-main)"
                     }
                 }}
                 align={align}
                 noWrap
             >
                 {label}
-                {required && <span className='required'>*</span>}
             </Typography>
         </StyledLabel>
     );

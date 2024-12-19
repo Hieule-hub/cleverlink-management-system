@@ -7,18 +7,22 @@ import { ControllerSelect } from "@components/Controller/ControllerSelect";
 import { Dialog } from "@components/Dialog";
 import { Label } from "@components/Label";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { User } from "@interfaces/user";
 import { Divider, Grid2 as Grid, Typography, Zoom } from "@mui/material";
 import { useAppStore } from "@providers/AppStoreProvider";
 import companyService from "@services/company";
 import sceneService from "@services/scene";
 import userService from "@services/user";
 import { toast } from "@store/toastStore";
-import { useUserStore } from "@store/userStore";
 import { RoleCode } from "common";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
+
+import { useYupLocale } from "@/configs/yupConfig";
+import { dialogStore } from "@/store/dialogStore";
+
+export const useUserDialog = dialogStore<User>();
 
 interface UserDialogProps {
     onClose?: (status?: string) => void;
@@ -55,9 +59,9 @@ const initFormValues: FormUserValues = {
 
     role: "",
     roleId: "",
-    company: { label: "", value: "" },
+    company: undefined,
     companyId: "",
-    scene: { label: "", value: "" },
+    scene: undefined,
     sceneId: "",
 
     task: "",
@@ -72,22 +76,38 @@ const initFormValues: FormUserValues = {
 export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
     const t = useTranslations("UserPage");
     const tCommon = useTranslations("Common");
+
+    const { yup, translateRequiredMessage, translateInvalidMessage } = useYupLocale({
+        page: "UserPage"
+    });
+
     const { roles } = useAppStore((state) => state);
-    const { user, open, closeUserDialog, setUser } = useUserStore();
 
     const [isLoading, setIsLoading] = useState(false);
     const [isFetchingId, setIsFetchingId] = useState(false);
 
-    const editMode = useMemo(() => Boolean(user), [user]);
+    const { item, open, closeDialog } = useUserDialog();
+
+    const editMode = useMemo(() => Boolean(item), [item]);
 
     const resolver = yup.object({
-        userId: yup.string().required("User ID is required"),
-        password: yup.string().required("Password is required"),
-        name: yup.string().required("Name is required"),
-        sceneId: yup.string().required("Scene is required"),
-        companyId: yup.string().required("Company is required"),
-        roleId: yup.string().required("Role is required"),
-        email: yup.string().email("Email is not valid")
+        userId: yup.string().required(translateRequiredMessage("User ID")),
+        password: yup.string().required(translateRequiredMessage("PW")),
+        name: yup.string().required(translateRequiredMessage("User Name")),
+        role: yup.string().required(translateRequiredMessage("Role")),
+        email: yup.string().email(translateInvalidMessage("Email")),
+        company: yup.object().when("role", {
+            is: "TU",
+            then(schema) {
+                return schema.required(translateRequiredMessage("Company"));
+            }
+        }),
+        scene: yup.object().when("role", {
+            is: "BU",
+            then(schema) {
+                return schema.required(translateRequiredMessage("Scene"));
+            }
+        })
     });
 
     const {
@@ -99,71 +119,55 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
         reset,
         watch
     } = useForm<FormUserValues>({
-        resolver: yupResolver(resolver),
+        resolver: yupResolver(resolver) as any,
         defaultValues: initFormValues
     });
 
     useEffect(() => {
         //fill form with user data
-        if (user) {
+        if (item) {
             const newValue: FormUserValues = {
                 ...initFormValues,
-                userId: user.userId,
+                userId: item.userId,
                 password: "11111111",
-                name: user.name,
+                name: item.name,
 
-                role: user.roleId?.code,
-                roleId: user.roleId?.code,
-                company: { label: user.company?.name, value: user.company?._id },
-                companyId: user.company?.companyId,
-                scene: { label: user.scene?.name, value: user.scene?._id },
-                sceneId: user.scene?._id,
-                task: user?.task || initFormValues.task,
-                phone: user?.phone || initFormValues.phone,
-                email: user?.email || initFormValues.email,
-                kakao: user?.kakao || initFormValues.kakao,
-                telegram: user?.telegram || initFormValues.telegram,
-                startDate: dayjs(user.createdAt).format("YYYY-MM-DD HH:mm:ss")
+                role: item.roleId?.code,
+                roleId: item.roleId?.code,
+                company: { label: item.company?.name, value: item.company?._id },
+                companyId: item.company?.companyId,
+                scene: { label: item.scene?.name, value: item.scene?._id },
+                sceneId: item.scene?._id,
+                task: item?.task || initFormValues.task,
+                phone: item?.phone || initFormValues.phone,
+                email: item?.email || initFormValues.email,
+                kakao: item?.kakao || initFormValues.kakao,
+                telegram: item?.telegram || initFormValues.telegram,
+                startDate: dayjs(item.createdAt).format("YYYY-MM-DD HH:mm:ss")
             };
 
             reset(newValue);
         } else {
             reset(initFormValues);
         }
-    }, [user, reset]);
+    }, [item, reset]);
 
     const handleClose = (status?: string) => {
         onClose(status);
-        closeUserDialog();
-    };
-
-    const handleReset = () => {
-        setUser(null);
+        closeDialog();
     };
 
     const handleSave = () => {
-        if (errors) {
-            for (const key in errors) {
-                if (errors.hasOwnProperty(key)) {
-                    const element = errors[key];
-
-                    if (element?.message) {
-                        toast.error({ title: element.message });
-                    }
-                }
-            }
-        }
-
         handleSubmit(async (data: FormUserValues) => {
             console.log("🚀 ~ handleSubmit ~ data:", data);
             setIsLoading(true);
 
             try {
-                if (user) {
+                if (item) {
                     const response = await userService.editUser({
-                        userId: user._id,
+                        userId: item._id,
                         name: data.name,
-                        sceneId: data.sceneId,
+                        sceneId: data.sceneId || "DEFAULT",
                         task: data.task,
                         phone: data.phone,
                         email: data.email,
@@ -182,8 +186,8 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                         password: data.password,
                         name: data.name,
                         roleId: roles.find((role) => role.code === data.roleId)?._id || "",
-                        companyId: (data.company?.value || "") as string,
-                        sceneId: data.sceneId,
+                        companyId: (data.company?.value || "DEFAULT") as string,
+                        sceneId: data.sceneId || "DEFAULT",
                         task: data.task,
                         phone: data.phone,
                         email: data.email,
@@ -231,12 +235,17 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
         }
     };
 
+    const companySelected = watch("company");
+
     const fetchScenes = useCallback(
         (query: string) => {
-            const companyId = watch("company.value");
-
             return sceneService
-                .getSceneList({ filters: query, limit: 10, page: 1, companyId: companyId as string })
+                .getSceneList({
+                    filters: query,
+                    limit: 10,
+                    page: 1,
+                    companyId: (companySelected?.value || "") as string
+                })
                 .then((res) => {
                     if (!res.err) {
                         return res.data.scenes.map((scene) => ({
@@ -248,7 +257,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                     }
                 });
         },
-        [watch("company.value")]
+        [companySelected]
     );
 
     const fetchCompanies = useCallback((query: string) => {
@@ -278,7 +287,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                 }
             }}
             open={open}
-            title={user ? t("Edit record") : t("Add new record")}
+            title={editMode ? t("Edit record") : t("Add new record")}
             onClose={handleClose}
             onCancel={handleClose}
             onOk={handleSave}
@@ -287,7 +296,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
             <Grid padding={2} width='100%' gap={2} container spacing={2} columns={24} alignItems='center'>
                 {/* Company Field */}
                 <Grid size={labelSize}>
-                    <Label required label={t("Company")} htmlFor='company' />
+                    <Label label={t("Company")} htmlFor='company' />
                 </Grid>
                 <Grid size={inputSize}>
                     <ControllerAsyncSearchSelect
@@ -338,6 +347,18 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                         }}
                         onChangeField={(value) => {
                             setValue("roleId", value);
+
+                            if (value === "CIP") {
+                                setValue("company", undefined);
+                                setValue("companyId", "");
+                                setValue("scene", undefined);
+                                setValue("sceneId", "");
+                            }
+
+                            if (value === "TU") {
+                                setValue("scene", undefined);
+                                setValue("sceneId", "");
+                            }
                         }}
                     />
                 </Grid>
@@ -349,6 +370,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                 <Grid size={inputSize}>
                     <ControllerAsyncSearchSelect
                         control={control}
+                        disabled={!companySelected}
                         keyName='scene'
                         placeholder={t("Scene")}
                         request={fetchScenes}
@@ -408,13 +430,13 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                         }}
                     />
                 </Grid>
-                <Grid size={3}>
+                <Grid size={3} alignSelf={"start"}>
                     <Button
                         color='primary'
                         style={{
                             width: "100%"
                         }}
-                        height='48px'
+                        height='51px'
                         disabled={editMode}
                         onClick={fetchingUserId}
                         loading={isFetchingId}

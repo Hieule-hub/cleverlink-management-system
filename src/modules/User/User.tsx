@@ -11,10 +11,9 @@ import { Box, IconButton, TextField } from "@mui/material";
 import userService from "@services/user";
 import { toast } from "@store/toastStore";
 import { useConfirm } from "@store/useConfirm";
-import { useUserStore } from "@store/userStore";
 import { useTranslations } from "next-intl";
 
-import { UserDialog } from "./UserDialog";
+import { UserDialog, useUserDialog } from "./UserDialog";
 
 export const UserPage = () => {
     const t = useTranslations("UserPage");
@@ -24,7 +23,7 @@ export const UserPage = () => {
     const [dataList, setDataList] = useState<User[]>([]);
 
     //Store controller
-    const { user, openUserDialog } = useUserStore();
+    const { openDialog } = useUserDialog();
     const { startConfirm } = useConfirm();
 
     //Delete user list
@@ -136,7 +135,7 @@ export const UserPage = () => {
                             size='small'
                             color='info'
                             onClick={() => {
-                                openUserDialog(record);
+                                openDialog(record);
                             }}
                         >
                             <DescriptionOutlined fontSize='inherit' />
@@ -184,7 +183,7 @@ export const UserPage = () => {
                         height='48px'
                         color='primary'
                         startIcon={AddCircleOutlineOutlined}
-                        onClick={() => openUserDialog()}
+                        onClick={() => openDialog()}
                     >
                         {t("Add new record")}
                     </Button>
