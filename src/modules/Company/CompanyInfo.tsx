@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import React from "react";
 
 import { Button } from "@components/Button";
@@ -6,17 +6,18 @@ import { ControllerInput } from "@components/Controller";
 import { ControllerSelect } from "@components/Controller/ControllerSelect";
 import { Label } from "@components/Label";
 import { Paper } from "@components/Paper";
+import { Spinner } from "@components/Spiner";
+import { useYupLocale } from "@configs/yupConfig";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Company } from "@interfaces/company";
 import { Save } from "@mui/icons-material";
-import { Box, Grid2 as Grid, Typography, Zoom } from "@mui/material";
+import { Box, Grid2 as Grid } from "@mui/material";
 import { useAppStore } from "@providers/AppStoreProvider";
 import companyService from "@services/company";
 import { toast } from "@store/toastStore";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
 
 interface CompanyInfoProps {
     companyId?: string;
@@ -57,23 +58,22 @@ export const CompanyInfo = ({ companyId }: CompanyInfoProps) => {
     const t = useTranslations("CompanyPage");
     const tCommon = useTranslations("Common");
 
+    const { yup, translateRequiredMessage } = useYupLocale({
+        page: "CompanyPage"
+    });
+
     const { organizations } = useAppStore((state) => state);
     const [item, setItem] = useState<Company>(null as Company);
 
     const [isLoading, setIsLoading] = useState(false);
 
     const resolver = yup.object({
-        userId: yup.string().required("User ID is required"),
-        organizationId: yup.string().required("Organization is required"),
-        name: yup.string().required("Company name is required")
+        userId: yup.string().required(translateRequiredMessage("User ID")),
+        organizationId: yup.string().required(translateRequiredMessage("Organization")),
+        name: yup.string().required(translateRequiredMessage("Name"))
     });
 
-    const {
-        handleSubmit,
-        control,
-        formState: { errors },
-        reset
-    } = useForm<FormCompanyValues>({
+    const { handleSubmit, control, reset } = useForm<FormCompanyValues>({
         resolver: yupResolver(resolver),
         defaultValues: initFormValues
     });
@@ -124,18 +124,6 @@ export const CompanyInfo = ({ companyId }: CompanyInfoProps) => {
     }, [item, reset]);
 
     const handleSave = () => {
-        if (errors) {
-            for (const key in errors) {
-                if (errors.hasOwnProperty(key)) {
-                    const element = errors[key];
-
-                    if (element?.message) {
-                        toast.error({ title: element.message });
-                    }
-                }
-            }
-        }
-
         handleSubmit(async (data: FormCompanyValues) => {
             console.log("🚀 ~ handleSubmit ~ data:", data);
             setIsLoading(true);
@@ -175,7 +163,13 @@ export const CompanyInfo = ({ companyId }: CompanyInfoProps) => {
                     spacing={2}
                     columns={{ xs: 12, md: 24 }}
                     alignItems='center'
+                    position='relative'
                 >
+                    {isLoading && (
+                        <div className='loading-view'>
+                            <Spinner />
+                        </div>
+                    )}
                     {/* Name Field */}
                     <Grid size={labelSize}>
                         <Label align='right' required label={t("Name")} htmlFor='name' />
