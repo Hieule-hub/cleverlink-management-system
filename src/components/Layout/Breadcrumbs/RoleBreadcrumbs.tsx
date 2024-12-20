@@ -22,6 +22,7 @@ const StyledBreadcrumbs = styled("div")`
     .btn {
         box-shadow: 0px 4px 4px 0px #00000026;
         height: 35px;
+        font-size: 18px;
         padding: 0 6px 0 10px;
     }
 `;
