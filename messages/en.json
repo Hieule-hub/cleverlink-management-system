@@ -230,13 +230,14 @@
         "Enter password": "Enter password",
         "Contact Us": "Contact Us",
         "Change password": "Change password",
-        "Enter old password": "Enter old password",
+        "Enter current password": "Enter current password",
         "Enter new password": "Enter new password",
         "Re-enter new password": "Re-enter new password",
-        "Old password": "Old password",
+        "Current password": "Current password",
         "New password": "New password",
         "Re-enter password": "Re-enter password",
-        "Error login message": "The username or password you entered is incorrect."
+        "Error login message": "The username or password you entered is incorrect.",
+        "Passwords must match": "Passwords must match."
     },
 
     "NotFoundPage": {

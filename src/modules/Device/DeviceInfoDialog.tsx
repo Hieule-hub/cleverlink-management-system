@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { ControllerInput } from "@components/Controller";
-import { ControllerAsyncSearchSelect, Option } from "@components/Controller/ControllerAsyncSearchSelect";
+import { ControllerAsyncSearchSelect, ControllerInput, Option } from "@components/Controller";
 import { Dialog } from "@components/Dialog";
 import { Label } from "@components/Label";
 import { Device } from "@interfaces/device";

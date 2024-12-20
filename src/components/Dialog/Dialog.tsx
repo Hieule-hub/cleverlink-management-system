@@ -90,7 +90,7 @@ export const Dialog = ({
                                     marginRight: "8px"
                                 }}
                             >
-                                {props.cancelText || t("Close")}
+                                {props.cancelText || t("Cancel")}
                             </Button>
                             {!hiddenOk && (
                                 <Button height='36px' loading={loading} onClick={onOk} color='primary'>

@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { Button } from "@components/Button";
-import { ControllerInput } from "@components/Controller";
-import { ControllerAsyncSearchSelect, type Option } from "@components/Controller/ControllerAsyncSearchSelect";
+import { ControllerAsyncSearchSelect, ControllerInput, type Option } from "@components/Controller";
 import { Dialog } from "@components/Dialog";
 import { Label } from "@components/Label";
 import { Spinner } from "@components/Spiner";
@@ -135,7 +134,7 @@ export const UserInfoDialog = ({ onClose = () => "" }: UserInfoDialogProps) => {
             onCancel={handleClose}
             footer={
                 <Button height='36px' onClick={() => handleClose()}>
-                    {t("Common.Close")}
+                    {t("Common.Cancel")}
                 </Button>
             }
         >

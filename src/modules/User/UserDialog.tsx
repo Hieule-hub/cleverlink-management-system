@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { Button } from "@components/Button";
-import { ControllerInput } from "@components/Controller";
-import { ControllerAsyncSearchSelect, type Option } from "@components/Controller/ControllerAsyncSearchSelect";
-import { ControllerSelect } from "@components/Controller/ControllerSelect";
+import { ControllerAsyncSearchSelect, ControllerInput, ControllerSelect, type Option } from "@components/Controller";
 import { Dialog } from "@components/Dialog";
 import { Label } from "@components/Label";
+import { useYupLocale } from "@configs/yupConfig";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { User } from "@interfaces/user";
 import { Divider, Grid2 as Grid, Typography, Zoom } from "@mui/material";
@@ -13,14 +12,12 @@ import { useAppStore } from "@providers/AppStoreProvider";
 import companyService from "@services/company";
 import sceneService from "@services/scene";
 import userService from "@services/user";
+import { dialogStore } from "@store/dialogStore";
 import { toast } from "@store/toastStore";
 import { RoleCode } from "common";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
-
-import { useYupLocale } from "@/configs/yupConfig";
-import { dialogStore } from "@/store/dialogStore";
 
 export const useUserDialog = dialogStore<User>();
 

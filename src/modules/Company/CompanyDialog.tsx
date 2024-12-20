@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { Button } from "@components/Button";
-import { ControllerInput } from "@components/Controller";
-import { ControllerSelect } from "@components/Controller/ControllerSelect";
+import { ControllerInput, ControllerSelect } from "@components/Controller";
 import { Dialog } from "@components/Dialog";
 import { Label } from "@components/Label";
 import { useYupLocale } from "@configs/yupConfig";
@@ -69,6 +68,14 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
     const [isFetchingId, setIsFetchingId] = useState(false);
 
     const editMode = useMemo(() => Boolean(item), [item]);
+    const organizationOptions = useMemo(
+        () =>
+            organizations.map((o) => ({
+                value: o._id,
+                label: `${o.code} - ${o.name}`
+            })),
+        [organizations]
+    );
 
     const resolver = yup.object({
         userId: yup.string().required(translateRequiredMessage("User ID")),
@@ -237,10 +244,7 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
                         keyName='organizationId'
                         placeholder={t("Organization")}
                         selectProps={{
-                            options: organizations.map((o) => ({
-                                value: o._id,
-                                label: o.name
-                            }))
+                            options: organizationOptions
                         }}
                     />
                 </Grid>

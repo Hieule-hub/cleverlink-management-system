@@ -3,11 +3,12 @@ import React from "react";
 
 import { Button } from "@components/Button";
 import { ConfirmDialog } from "@components/Dialog";
+import { EditIcon } from "@components/Icon";
 import { Pagination } from "@components/Pagination";
 import { Paper } from "@components/Paper";
 import { type Column, Table } from "@components/Table";
 import { UserInfoDialog, useUserInfoDialog } from "@modules/User";
-import { AddCircleOutlineOutlined, DeleteOutline, DescriptionOutlined, Search } from "@mui/icons-material";
+import { AddCircleOutlineOutlined, DeleteOutline, Search } from "@mui/icons-material";
 import { Box, IconButton, Link, TextField } from "@mui/material";
 import sceneService from "@services/scene";
 import { toast } from "@store/toastStore";
@@ -162,7 +163,7 @@ export const ScenePage = () => {
                                 openDialog(record);
                             }}
                         >
-                            <DescriptionOutlined fontSize='inherit' />
+                            <EditIcon fontSize='inherit' />
                         </IconButton>
                         <IconButton
                             size='small'

@@ -2,8 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import React from "react";
 
 import { Button } from "@components/Button";
-import { ControllerInput } from "@components/Controller";
-import { ControllerSelect } from "@components/Controller/ControllerSelect";
+import { ControllerInput, ControllerSelect } from "@components/Controller";
 import { Label } from "@components/Label";
 import { Paper } from "@components/Paper";
 import { Spinner } from "@components/Spiner";

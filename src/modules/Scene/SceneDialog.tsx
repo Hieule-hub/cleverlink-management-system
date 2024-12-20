@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { Button } from "@components/Button";
-import { ControllerInput } from "@components/Controller";
-import { ControllerAsyncSearchSelect, type Option } from "@components/Controller/ControllerAsyncSearchSelect";
-import { ControllerSelect } from "@components/Controller/ControllerSelect";
+import { ControllerAsyncSearchSelect, ControllerInput, ControllerSelect, type Option } from "@components/Controller";
 import { Dialog } from "@components/Dialog";
 import { Label } from "@components/Label";
 import { TitleTag } from "@components/TitleTag";
@@ -87,6 +85,10 @@ export const SceneDialog = ({ onClose = () => "", readonly }: SceneDialogProps) 
     const [isFetchingId, setIsFetchingId] = useState(false);
 
     const editMode = useMemo(() => Boolean(item), [item]);
+    const areaOptions = useMemo(
+        () => areas.map((area) => ({ label: `${area.code} - ${area.name}`, value: area._id })),
+        [areas]
+    );
 
     const resolver = yup.object({
         company: yup.object().required(translateRequiredMessage("Company")),
@@ -315,10 +317,7 @@ export const SceneDialog = ({ onClose = () => "", readonly }: SceneDialogProps) 
                             keyName='areaId'
                             placeholder={t("Area")}
                             selectProps={{
-                                options: areas.map((o) => ({
-                                    value: o._id,
-                                    label: `${o.code} - ${o.name}`
-                                }))
+                                options: areaOptions
                             }}
                         />
                     </Grid>

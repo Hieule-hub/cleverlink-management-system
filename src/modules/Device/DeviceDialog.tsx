@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { ControllerInput } from "@components/Controller";
-import { ControllerAsyncSearchSelect, Option } from "@components/Controller/ControllerAsyncSearchSelect";
+import { ControllerAsyncSearchSelect, ControllerInput, Option } from "@components/Controller";
 import { Dialog } from "@components/Dialog";
 import { Label } from "@components/Label";
 import { useYupLocale } from "@configs/yupConfig";
@@ -211,7 +210,7 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
     }, []);
 
     const fetchActivates = useCallback((query: string) => {
-        return deviceService.getActiveList({ filters: query, limit: 10, page: 1 }).then((res) => {
+        return deviceService.getActiveList({ filters: query, limit: 10, page: 1, status: "unactive" }).then((res) => {
             if (!res.err) {
                 return res.data.activates.map((active) => ({
                     label: active.boxId,

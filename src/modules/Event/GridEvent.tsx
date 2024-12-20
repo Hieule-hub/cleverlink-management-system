@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
 
 import { Spinner } from "@components/Spiner";
+import { Check } from "@mui/icons-material";
 import { Checkbox, Grid2 as Grid, styled } from "@mui/material";
 import { debounce } from "@mui/material/utils";
 
@@ -13,10 +14,38 @@ const EventBox = styled("div")`
     background-size: cover;
     background-position: center;
     transition: border 0.3s ease;
-    display: flex;
+    border: 2px solid var(--input-border-color);
 
     &.active {
         border: 2px solid var(--palette-primary-main);
+    }
+
+    .check-icon {
+        width: 20px;
+        height: 20px;
+        border-radius: 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .icon {
+            width: 100%;
+            height: 100%;
+            border: 1px solid var(--input-border-color);
+            background-color: white;
+            border-radius: 4px;
+        }
+
+        .checked-icon {
+            width: 100%;
+            height: 100%;
+            background-color: #0072ff;
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
     }
 `;
 
@@ -111,7 +140,7 @@ export const GridEvent = ({
                     onRow?.(item, index)?.onDoubleClick?.(e);
                 }
                 clickCountRef.current = 0;
-            }, 300);
+            }, 200);
         },
         [onRow]
     );
@@ -173,8 +202,19 @@ export const GridEvent = ({
                         >
                             <Checkbox
                                 onClick={(e) => e.stopPropagation()}
-                                size='small'
                                 className='checkbox'
+                                icon={
+                                    <div className='check-icon'>
+                                        <div className='icon' />
+                                    </div>
+                                }
+                                checkedIcon={
+                                    <div className='check-icon'>
+                                        <div className='checked-icon'>
+                                            <Check fontSize='inherit' />
+                                        </div>
+                                    </div>
+                                }
                                 checked={selectedRowKeys.includes(item[rowSelection.keyName]) || false}
                                 onChange={(e) => handleSelectClick(e, item[rowSelection.keyName])}
                             />

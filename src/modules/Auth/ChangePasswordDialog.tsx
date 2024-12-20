@@ -3,6 +3,7 @@ import { useState } from "react";
 import { ControllerInput } from "@components/Controller";
 import { Dialog } from "@components/Dialog";
 import { Label } from "@components/Label";
+import { useYupLocale } from "@configs/yupConfig";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { User } from "@interfaces/user";
 import { Grid2 as Grid, Zoom } from "@mui/material";
@@ -11,7 +12,6 @@ import { dialogStore } from "@store/dialogStore";
 import { toast } from "@store/toastStore";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
 
 export const useChangePasswordDialog = dialogStore<User>();
 
@@ -36,17 +36,22 @@ const initFormValues: FormDeviceValues = {
 
 export const ChangePasswordDialog = ({ onClose = () => "" }: ChangePasswordDialogProps) => {
     const t = useTranslations("LoginPage");
+
     const { open, closeDialog } = useChangePasswordDialog();
+
+    const { yup, translateRequiredMessage } = useYupLocale({
+        page: "LoginPage"
+    });
 
     const [isLoading, setIsLoading] = useState(false);
 
     const resolver = yup.object({
         confirmPassword: yup
             .string()
-            .required(t("Confirm password is required"))
+            .required(translateRequiredMessage("Re-enter password"))
             .oneOf([yup.ref("newPassword"), null], t("Passwords must match")),
-        newPassword: yup.string().required(t("New password is required")),
-        oldPassword: yup.string().required(t("Old password is required"))
+        newPassword: yup.string().required(translateRequiredMessage("New password")),
+        oldPassword: yup.string().required(translateRequiredMessage("Current password"))
     });
 
     const {
@@ -119,12 +124,16 @@ export const ChangePasswordDialog = ({ onClose = () => "" }: ChangePasswordDialo
             loading={isLoading}
         >
             <Grid padding={2} width='100%' gap={2} container spacing={2} columns={12} alignItems='center'>
-                {/* Old password Field */}
+                {/* Current password Field */}
                 <Grid size={labelSize}>
-                    <Label label={t("Old password")} htmlFor='oldPassword' />
+                    <Label label={t("Current password")} htmlFor='oldPassword' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput control={control} keyName='oldPassword' placeholder={t("Enter old password")} />
+                    <ControllerInput
+                        control={control}
+                        keyName='oldPassword'
+                        placeholder={t("Enter current password")}
+                    />
                 </Grid>
 
                 {/* New password Field */}

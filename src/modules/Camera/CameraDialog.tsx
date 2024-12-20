@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { Button } from "@components/Button";
-import { ControllerInput } from "@components/Controller";
-import { ControllerSelect } from "@components/Controller/ControllerSelect";
+import { ControllerInput, ControllerSelect } from "@components/Controller";
 import { Dialog } from "@components/Dialog";
 import { UploadInput } from "@components/Input";
 import { Label } from "@components/Label";

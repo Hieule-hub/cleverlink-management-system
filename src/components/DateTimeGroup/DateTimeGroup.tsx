@@ -36,7 +36,6 @@ export const DateTimeGroup = (props: BoxProps) => {
             display={"flex"}
             justifyContent={"center"}
             alignItems={"center"}
-            // gap={1}
             color={"black"}
             {...props}
         >
@@ -54,7 +53,7 @@ export const DateTimeGroup = (props: BoxProps) => {
             <Typography variant='body1' noWrap marginRight={1}>
                 {/* ({t(formatDay)}) */}
             </Typography>
-            <Typography variant='body1' noWrap width={50} marginRight={"1px"}>
+            <Typography variant='body1' noWrap minWidth={50} marginRight={"1px"}>
                 {formatTime.split(" ")[0]}
             </Typography>
             <Typography variant='body1' noWrap>

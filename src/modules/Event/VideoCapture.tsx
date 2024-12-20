@@ -256,18 +256,18 @@ export const VideoCapturePage = () => {
                         keyName: "_id",
                         selectedRowKeys: deleteIds,
                         onChange: (selectedRowKeys) => {
-                            setDeleteIds(selectedRowKeys);
+                            // setDeleteIds(selectedRowKeys);
                         }
                     }}
                     onRow={(record, rowIndex) => ({
-                        // onClick: () => {
-                        //     setDeleteIds((pre) => {
-                        //         if (pre.includes(record._id)) {
-                        //             return pre.filter((item) => item !== record._id);
-                        //         }
-                        //         return [...pre, record._id];
-                        //     });
-                        // },
+                        onClick: () => {
+                            setDeleteIds((pre) => {
+                                if (pre.includes(record._id)) {
+                                    return pre.filter((item) => item !== record._id);
+                                }
+                                return [...pre, record._id];
+                            });
+                        },
                         onDoubleClick: () => {
                             showSnapshot(record as any);
                         }

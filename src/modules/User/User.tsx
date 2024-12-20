@@ -2,11 +2,12 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import { Button } from "@components/Button";
 import { ConfirmDialog } from "@components/Dialog";
+import { EditIcon } from "@components/Icon";
 import { Pagination } from "@components/Pagination";
 import { Paper } from "@components/Paper";
 import { type Column, Table } from "@components/Table";
 import { User } from "@interfaces/user";
-import { AddCircleOutlineOutlined, DeleteOutline, DescriptionOutlined, FilterList, Search } from "@mui/icons-material";
+import { AddCircleOutlineOutlined, DeleteOutline, FilterList, Search } from "@mui/icons-material";
 import { Box, IconButton, TextField } from "@mui/material";
 import userService from "@services/user";
 import { toast } from "@store/toastStore";
@@ -138,7 +139,7 @@ export const UserPage = () => {
                                 openDialog(record);
                             }}
                         >
-                            <DescriptionOutlined fontSize='inherit' />
+                            <EditIcon fontSize='inherit' />
                         </IconButton>
                         <IconButton
                             size='small'
