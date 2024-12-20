@@ -118,7 +118,7 @@ export const VideoCapturePage = () => {
             },
             {
                 key: "aiCode",
-                title: tEvent("AI code"),
+                title: tEvent("AI Code"),
                 dataIndex: "aiCode",
                 width: 200,
                 render: (value) => value?.place

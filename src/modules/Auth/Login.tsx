@@ -3,8 +3,11 @@
 import { useState } from "react";
 
 import { Button, ContactInfoButton } from "@components/Button";
+import { LanguageButton } from "@components/Button/LanguageButton";
 import { ControllerInput } from "@components/Controller";
 import { Label } from "@components/Label";
+import { useYupLocale } from "@configs/yupConfig";
+import { yupResolver } from "@hookform/resolvers/yup";
 import type { UserLoginReq } from "@interfaces/user";
 import { EmailOutlined, LockOutlined, Visibility, VisibilityOff } from "@mui/icons-material";
 import { IconButton, InputAdornment, styled } from "@mui/material";
@@ -74,56 +77,88 @@ const StyledLoginPage = styled("div")`
         height: 36px;
         width: 175px;
     }
+
+    .error-msg {
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px;
+        color: var(--palette-error-main);
+    }
+
+    .language-view {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+    }
 `;
+
+type FormValues = Partial<{
+    userId: string;
+    password: string;
+}>;
 
 export const LoginPage = () => {
     const t = useTranslations("LoginPage");
 
+    const { yup, translateRequiredMessage } = useYupLocale({
+        page: "LoginPage"
+    });
+
     const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false); // visible password
+    const [errorMsg, setErrorMsg] = useState("");
 
     //Store controller
     const { fetUserInfo } = useAppStore((state) => state);
     const { openDialog } = useChangePasswordDialog();
 
-    const { handleSubmit, control } = useForm<UserLoginReq>({
+    const validateSchema = yup.object({
+        userId: yup.string().required(translateRequiredMessage("Username")),
+        password: yup.string().required(translateRequiredMessage("Password"))
+    });
+
+    const { handleSubmit, control } = useForm<FormValues>({
+        resolver: yupResolver(validateSchema),
         defaultValues: {
-            userId: "CIP0000001",
-            password: "cip0000000"
+            userId: "",
+            password: ""
+            // userId: "CIP0000001",
+            // password: "cip0000000"
         }
     });
 
-    const handleLogin = () => {
+    const handleLogin = async (data: UserLoginReq) => {
         // e.preventDefault();
         setIsLoading(true);
 
-        setTimeout(() => {
-            handleSubmit(async (data: UserLoginReq) => {
-                try {
-                    const response = await userService.userLogin(data);
+        setTimeout(async () => {
+            try {
+                const response = await userService.userLogin(data);
 
-                    if (!response.err) {
-                        // login success
-                        const { data } = response;
-                        // console.log("🚀 ~ handleSubmit ~ data:", data);
+                if (!response.err) {
+                    // login success
+                    const { data } = response;
+                    // console.log("🚀 ~ handleSubmit ~ data:", data);
 
-                        localStorage.setItem("access-token", data.access);
-                        Cookies.set("refresh-token", data.refresh, { expires: 7 });
+                    localStorage.setItem("access-token", data.access);
+                    Cookies.set("refresh-token", data.refresh, { expires: 7 });
 
-                        const isFistLogin = !data?.passwordAt || data?.passwordAt === data.createdAt;
+                    const isFistLogin = !data?.passwordAt || data?.passwordAt === data.createdAt;
 
-                        if (isFistLogin) {
-                            openDialog();
-                        } else {
-                            fetUserInfo();
-                        }
+                    if (isFistLogin) {
+                        openDialog();
+                    } else {
+                        fetUserInfo();
                     }
-                } catch (error) {
-                    console.log("🚀 ~ handleSubmit ~ error:", error);
-                } finally {
-                    setIsLoading(false);
+                } else {
+                    setErrorMsg(t("Error login message"));
                 }
-            })();
+            } catch (error) {
+                console.log("🚀 ~ handleSubmit ~ error:", error);
+                setErrorMsg(error.message);
+            } finally {
+                setIsLoading(false);
+            }
         }, 1000);
     };
 
@@ -134,11 +169,14 @@ export const LoginPage = () => {
 
     return (
         <StyledLoginPage>
-            <div className='left-part'>
+            <div className='language-view'>
+                <LanguageButton />
+            </div>
+            <form className='left-part' onSubmit={handleSubmit(handleLogin)}>
                 <div className='login-form'>
                     <div className='login-logo' />
                     <span className='login-title'>{t("Login title")}</span>
-                    <span className='login-des'>{t("Thank you for your visit")}.</span>
+                    <span className='login-des'>{t("Thank you for your visit")}</span>
 
                     <div className='field'>
                         <Label htmlFor='userId' label={t("Username")} />
@@ -202,20 +240,15 @@ export const LoginPage = () => {
                         />
                     </div>
 
-                    <Button
-                        fullWidth
-                        height={"56px"}
-                        color='primary'
-                        // type='submit'
-                        onClick={handleLogin}
-                        loading={isLoading}
-                    >
+                    {errorMsg && <span className='error-msg'>{errorMsg}</span>}
+
+                    <Button fullWidth height={"56px"} color='primary' type='submit' loading={isLoading}>
                         {t("Login")}
                     </Button>
 
                     <ContactInfoButton margin={"auto"}>{t("Contact Us")}</ContactInfoButton>
                 </div>
-            </div>
+            </form>
 
             <div className='right-part' />
 

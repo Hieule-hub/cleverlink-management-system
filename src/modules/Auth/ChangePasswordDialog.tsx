@@ -35,18 +35,18 @@ const initFormValues: FormDeviceValues = {
 };
 
 export const ChangePasswordDialog = ({ onClose = () => "" }: ChangePasswordDialogProps) => {
-    const t = useTranslations();
-    const { item, open, closeDialog } = useChangePasswordDialog();
+    const t = useTranslations("LoginPage");
+    const { open, closeDialog } = useChangePasswordDialog();
 
     const [isLoading, setIsLoading] = useState(false);
 
     const resolver = yup.object({
         confirmPassword: yup
             .string()
-            .required(t("LoginPage.Confirm password is required"))
-            .oneOf([yup.ref("newPassword"), null], t("LoginPage.Passwords must match")),
-        newPassword: yup.string().required(t("LoginPage.New password is required")),
-        oldPassword: yup.string().required(t("LoginPage.Old password is required"))
+            .required(t("Confirm password is required"))
+            .oneOf([yup.ref("newPassword"), null], t("Passwords must match")),
+        newPassword: yup.string().required(t("New password is required")),
+        oldPassword: yup.string().required(t("Old password is required"))
     });
 
     const {
@@ -86,10 +86,10 @@ export const ChangePasswordDialog = ({ onClose = () => "" }: ChangePasswordDialo
                     newPassword: data.newPassword as string
                 });
                 if (!response.err) {
-                    toast.success({ title: t("LoginPage.Update password success") });
+                    toast.success({ title: t("Update password success") });
                     handleClose("success");
                 } else {
-                    // toast.error({ title: t("LoginPage.Create record failed") });
+                    // toast.error({ title: t("Create record failed") });
                 }
             } catch (error) {
                 console.log("🚀 ~ handleSubmit ~ error:", error);
@@ -112,7 +112,7 @@ export const ChangePasswordDialog = ({ onClose = () => "" }: ChangePasswordDialo
                 }
             }}
             open={open}
-            title={t("LoginPage.Change password")}
+            title={t("Change password")}
             onClose={handleClose}
             onCancel={handleClose}
             onOk={handleSave}
@@ -121,37 +121,29 @@ export const ChangePasswordDialog = ({ onClose = () => "" }: ChangePasswordDialo
             <Grid padding={2} width='100%' gap={2} container spacing={2} columns={12} alignItems='center'>
                 {/* Old password Field */}
                 <Grid size={labelSize}>
-                    <Label label={t("LoginPage.Old password")} htmlFor='oldPassword' />
+                    <Label label={t("Old password")} htmlFor='oldPassword' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput
-                        control={control}
-                        keyName='oldPassword'
-                        placeholder={t("LoginPage.Enter old password")}
-                    />
+                    <ControllerInput control={control} keyName='oldPassword' placeholder={t("Enter old password")} />
                 </Grid>
 
                 {/* New password Field */}
                 <Grid size={labelSize}>
-                    <Label label={t("LoginPage.New password")} htmlFor='newPassword' />
+                    <Label label={t("New password")} htmlFor='newPassword' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput
-                        control={control}
-                        keyName='newPassword'
-                        placeholder={t("LoginPage.Enter new password")}
-                    />
+                    <ControllerInput control={control} keyName='newPassword' placeholder={t("Enter new password")} />
                 </Grid>
 
                 {/* Confirm password Field */}
                 <Grid size={labelSize}>
-                    <Label label={t("LoginPage.Re-enter password")} htmlFor='confirmPassword' />
+                    <Label label={t("Re-enter password")} htmlFor='confirmPassword' />
                 </Grid>
                 <Grid size={inputSize}>
                     <ControllerInput
                         control={control}
                         keyName='confirmPassword'
-                        placeholder={t("LoginPage.Re-enter new password")}
+                        placeholder={t("Re-enter new password")}
                     />
                 </Grid>
             </Grid>

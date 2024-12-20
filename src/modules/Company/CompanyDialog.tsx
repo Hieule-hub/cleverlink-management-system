@@ -5,9 +5,10 @@ import { ControllerInput } from "@components/Controller";
 import { ControllerSelect } from "@components/Controller/ControllerSelect";
 import { Dialog } from "@components/Dialog";
 import { Label } from "@components/Label";
+import { useYupLocale } from "@configs/yupConfig";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Company } from "@interfaces/company";
-import { Grid2 as Grid, Typography, Zoom } from "@mui/material";
+import { Grid2 as Grid, Zoom } from "@mui/material";
 import { useAppStore } from "@providers/AppStoreProvider";
 import companyService from "@services/company";
 import { dialogStore } from "@store/dialogStore";
@@ -15,7 +16,6 @@ import { toast } from "@store/toastStore";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
 
 export const useCompanyDialog = dialogStore<Company>();
 
@@ -58,8 +58,12 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
     const t = useTranslations("CompanyPage");
     const tCommon = useTranslations("Common");
 
+    const { yup, translateRequiredMessage } = useYupLocale({
+        page: "CompanyPage"
+    });
+
     const { organizations } = useAppStore((state) => state);
-    const { item, open, closeDialog, setItem } = useCompanyDialog();
+    const { item, open, closeDialog } = useCompanyDialog();
 
     const [isLoading, setIsLoading] = useState(false);
     const [isFetchingId, setIsFetchingId] = useState(false);
@@ -67,19 +71,12 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
     const editMode = useMemo(() => Boolean(item), [item]);
 
     const resolver = yup.object({
-        userId: yup.string().required("User ID is required"),
-        organizationId: yup.string().required("Organization is required"),
-        name: yup.string().required("Company name is required")
+        userId: yup.string().required(translateRequiredMessage("User ID")),
+        organizationId: yup.string().required(translateRequiredMessage("Organization")),
+        name: yup.string().required(translateRequiredMessage("Name"))
     });
 
-    const {
-        handleSubmit,
-        control,
-        formState: { errors },
-        getValues,
-        setValue,
-        reset
-    } = useForm<FormCompanyValues>({
+    const { handleSubmit, control, getValues, setValue, reset, clearErrors } = useForm<FormCompanyValues>({
         resolver: yupResolver(resolver),
         defaultValues: initFormValues
     });
@@ -110,23 +107,7 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
         closeDialog();
     };
 
-    const handleReset = () => {
-        setItem(null);
-    };
-
     const handleSave = () => {
-        if (errors) {
-            for (const key in errors) {
-                if (errors.hasOwnProperty(key)) {
-                    const element = errors[key];
-
-                    if (element?.message) {
-                        toast.error({ title: element.message });
-                    }
-                }
-            }
-        }
-
         handleSubmit(async (data: FormCompanyValues) => {
             console.log("🚀 ~ handleSubmit ~ data:", data);
             setIsLoading(true);
@@ -179,7 +160,7 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
         const organizationId = getValues("organizationId");
 
         if (!organizationId) {
-            toast.error({ title: "Please select organization" });
+            toast.error({ title: translateRequiredMessage("Organization") });
             return;
         }
 
@@ -195,6 +176,8 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
             if (!response.err) {
                 const { userId, companyId, token, roleId, password } = response.data;
                 setValue("userId", userId);
+                clearErrors("userId");
+
                 setValue("password", password);
                 setValue("companyId", companyId);
                 setValue("token", token);
@@ -293,13 +276,13 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
                 <Grid size={inputSize - 3}>
                     <ControllerInput control={control} keyName='userId' placeholder={t("User ID")} disabled />
                 </Grid>
-                <Grid size={3}>
+                <Grid size={3} alignSelf={"start"}>
                     <Button
                         color='primary'
                         style={{
                             width: "100%"
                         }}
-                        height='48px'
+                        height='51px'
                         disabled={editMode}
                         onClick={fetchId}
                         loading={isFetchingId}

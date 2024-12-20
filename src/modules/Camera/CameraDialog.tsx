@@ -7,9 +7,10 @@ import { Dialog } from "@components/Dialog";
 import { UploadInput } from "@components/Input";
 import { Label } from "@components/Label";
 import { cameraResolutionOptions, cameraVoltageOptions, poeOptions } from "@configs/app";
+import { useYupLocale } from "@configs/yupConfig";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { CamFile, Camera } from "@interfaces/device";
-import { Chip, Divider, Grid2 as Grid, Stack, Zoom } from "@mui/material";
+import { Divider, Grid2 as Grid, Stack, Zoom } from "@mui/material";
 import { useAppStore } from "@providers/AppStoreProvider";
 import deviceService from "@services/device";
 import { dialogStore } from "@store/dialogStore";
@@ -17,7 +18,6 @@ import { toast } from "@store/toastStore";
 import { downloadFile } from "@utils/downloadImage";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
 
 import { FileInfo } from "./FileInfo";
 
@@ -67,8 +67,12 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
     const tCommon = useTranslations("Common");
     const tGlobal = useTranslations();
 
+    const { yup, translateRequiredMessage } = useYupLocale({
+        page: "CameraPage"
+    });
+
     const { categories, protocols } = useAppStore((state) => state);
-    const { item, open, closeDialog, setItem } = useCameraDialog();
+    const { item, open, closeDialog } = useCameraDialog();
 
     const [isLoading, setIsLoading] = useState(false);
     const [isFetchingId, setIsFetchingId] = useState(false);
@@ -103,21 +107,14 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
     }, [tGlobal]);
 
     const resolver = yup.object({
-        cameraId: yup.string().required("Camera ID is required"),
-        categoryId: yup.string().required("Category ID is required"),
-        name: yup.string().required("Name is required"),
-        protocolId: yup.string().required("Protocol ID is required")
+        cameraId: yup.string().required(translateRequiredMessage("Camera ID")),
+        categoryId: yup.string().required(translateRequiredMessage("Camera type")),
+        name: yup.string().required(translateRequiredMessage("Model name")),
+        protocolId: yup.string().required(translateRequiredMessage("Protocol")),
+        poe: yup.number().required(translateRequiredMessage("POE"))
     });
 
-    const {
-        handleSubmit,
-        control,
-        formState: { errors },
-        getValues,
-        setValue,
-        reset,
-        watch
-    } = useForm<FormCameraValues>({
+    const { handleSubmit, control, getValues, setValue, reset, watch, clearErrors } = useForm<FormCameraValues>({
         resolver: yupResolver(resolver) as any,
         defaultValues: initFormValues
     });
@@ -151,18 +148,6 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
     };
 
     const handleSave = () => {
-        if (errors) {
-            for (const key in errors) {
-                if (errors.hasOwnProperty(key)) {
-                    const element = errors[key];
-
-                    if (element?.message) {
-                        toast.error({ title: element.message });
-                    }
-                }
-            }
-        }
-
         handleSubmit(async (data: FormCameraValues) => {
             console.log("🚀 ~ handleSubmit ~ data:", data);
             setIsLoading(true);
@@ -183,15 +168,15 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
                         deleteFiles: data.deleteFiles
                     });
                     if (!response.err) {
-                        toast.success({ title: t("CameraPage.Edit record success") });
+                        toast.success({ title: t("Edit record success") });
                         handleClose("success");
                     } else {
                         toast.error({
-                            title: t("CameraPage.Edit record failed")
+                            title: t("Edit record failed")
                         });
                     }
                 } catch (error) {
-                    toast.error({ title: t("CameraPage.Edit record failed"), description: error.message });
+                    toast.error({ title: t("Edit record failed"), description: error.message });
                 } finally {
                     setIsLoading(false);
                 }
@@ -211,13 +196,13 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
                         newFiles: data.newFiles
                     });
                     if (!response.err) {
-                        toast.success({ title: t("CameraPage.Create record success") });
+                        toast.success({ title: t("Create record success") });
                         handleClose("success");
                     } else {
-                        toast.error({ title: t("CameraPage.Create record failed") });
+                        toast.error({ title: t("Create record failed") });
                     }
                 } catch (error) {
-                    toast.error({ title: t("CameraPage.Create record failed"), description: error.message });
+                    toast.error({ title: t("Create record failed"), description: error.message });
                 } finally {
                     setIsLoading(false);
                 }
@@ -229,7 +214,7 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
         const categoryId = getValues("categoryId");
 
         if (!categoryId) {
-            toast.error({ title: "Please select category" });
+            toast.error({ title: translateRequiredMessage("Camera type") });
             return;
         }
 
@@ -243,6 +228,8 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
                 const { token, cameraId } = response.data;
                 setValue("token", token);
                 setValue("cameraId", cameraId);
+
+                clearErrors("cameraId");
             }
         } catch (error) {
             console.log("🚀 ~ fetchId ~ error:", error);
@@ -270,7 +257,7 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
                 }
             }}
             open={open}
-            title={editMode ? t("CameraPage.Edit record") : t("CameraPage.Add new record")}
+            title={editMode ? t("Edit record") : t("Add new record")}
             onClose={handleClose}
             onCancel={handleClose}
             onOk={handleSave}
@@ -317,13 +304,13 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
                         <ControllerInput control={control} keyName='cameraId' placeholder={t("Camera ID")} disabled />
                     </Grid>
 
-                    <Grid size={3}>
+                    <Grid size={3} alignSelf={"start"}>
                         <Button
                             color='primary'
                             style={{
                                 width: "100%"
                             }}
-                            height='48px'
+                            height='51px'
                             disabled={editMode}
                             onClick={fetchId}
                             loading={isFetchingId}

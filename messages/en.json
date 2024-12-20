@@ -223,7 +223,7 @@
         "Login title": "CLEVER-LINK Cloud Service",
         "Login": "Login",
         "Password": "Password",
-        "Thank you for your visit": "Thank you for your visit",
+        "Thank you for your visit": "Thank you for your visit.",
         "Email address": "Email address",
         "Username": "Username",
         "Enter username": "Enter username",
@@ -235,7 +235,8 @@
         "Re-enter new password": "Re-enter new password",
         "Old password": "Old password",
         "New password": "New password",
-        "Re-enter password": "Re-enter password"
+        "Re-enter password": "Re-enter password",
+        "Error login message": "The username or password you entered is incorrect."
     },
 
     "NotFoundPage": {
@@ -326,5 +327,10 @@
         "24V": "24V DC",
         "48V": "48V DC (PoE)",
         "220V": "220V AC"
+    },
+
+    "Validation": {
+        "required": "{path} is required.",
+        "invalid": "{path} is invalid."
     }
 }

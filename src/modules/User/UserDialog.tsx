@@ -59,9 +59,9 @@ const initFormValues: FormUserValues = {
 
     role: "",
     roleId: "",
-    company: undefined,
+    company: null,
     companyId: "",
-    scene: undefined,
+    scene: null,
     sceneId: "",
 
     task: "",
@@ -96,29 +96,30 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
         name: yup.string().required(translateRequiredMessage("User Name")),
         role: yup.string().required(translateRequiredMessage("Role")),
         email: yup.string().email(translateInvalidMessage("Email")),
-        company: yup.object().when("role", {
-            is: "TU",
-            then(schema) {
-                return schema.required(translateRequiredMessage("Company"));
-            }
-        }),
+        company: yup
+            .object()
+            .nullable()
+            .when("role", {
+                is: (val) => ["TU", "BU", "GU"].includes(val),
+                then(schema) {
+                    return schema.required(translateRequiredMessage("Company"));
+                },
+                otherwise(schema) {
+                    return schema.nullable();
+                }
+            }),
         scene: yup.object().when("role", {
-            is: "BU",
+            is: (val) => val === "BU" || val === "GU",
             then(schema) {
                 return schema.required(translateRequiredMessage("Scene"));
+            },
+            otherwise(schema) {
+                return schema.nullable();
             }
         })
     });
 
-    const {
-        handleSubmit,
-        control,
-        formState: { errors },
-        getValues,
-        setValue,
-        reset,
-        watch
-    } = useForm<FormUserValues>({
+    const { handleSubmit, control, getValues, setValue, reset, watch, clearErrors } = useForm<FormUserValues>({
         resolver: yupResolver(resolver) as any,
         defaultValues: initFormValues
     });
@@ -236,6 +237,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
     };
 
     const companySelected = watch("company");
+    const roleSelected = watch("role");
 
     const fetchScenes = useCallback(
         (query: string) => {
@@ -300,15 +302,18 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                 </Grid>
                 <Grid size={inputSize}>
                     <ControllerAsyncSearchSelect
-                        disabled={editMode}
+                        disabled={editMode || roleSelected === "CIP"}
                         control={control}
                         keyName='company'
                         placeholder={t("Company")}
                         request={fetchCompanies}
                         onchangeField={(value) => {
-                            if (value) {
-                                setValue("companyId", value?.id as string);
-                            }
+                            setValue("companyId", (value?.id || "") as string);
+
+                            //reset scene
+                            setValue("scene", null);
+                            setValue("sceneId", "");
+                            clearErrors("scene");
                         }}
                     />
                 </Grid>
@@ -349,15 +354,19 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                             setValue("roleId", value);
 
                             if (value === "CIP") {
-                                setValue("company", undefined);
+                                setValue("company", null);
+                                clearErrors("company");
                                 setValue("companyId", "");
-                                setValue("scene", undefined);
+
+                                setValue("scene", null);
                                 setValue("sceneId", "");
+                                clearErrors("scene");
                             }
 
                             if (value === "TU") {
-                                setValue("scene", undefined);
+                                setValue("scene", null);
                                 setValue("sceneId", "");
+                                clearErrors("scene");
                             }
                         }}
                     />
@@ -370,7 +379,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                 <Grid size={inputSize}>
                     <ControllerAsyncSearchSelect
                         control={control}
-                        disabled={!companySelected}
+                        disabled={!companySelected || ["CIP", "TU"].includes(roleSelected)}
                         keyName='scene'
                         placeholder={t("Scene")}
                         request={fetchScenes}

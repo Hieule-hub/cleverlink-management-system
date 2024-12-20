@@ -4,6 +4,7 @@ import { ControllerInput } from "@components/Controller";
 import { ControllerAsyncSearchSelect, Option } from "@components/Controller/ControllerAsyncSearchSelect";
 import { Dialog } from "@components/Dialog";
 import { Label } from "@components/Label";
+import { useYupLocale } from "@configs/yupConfig";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Device } from "@interfaces/device";
 import { Divider, Grid2 as Grid, Stack, Zoom } from "@mui/material";
@@ -15,7 +16,6 @@ import { dialogStore } from "@store/dialogStore";
 import { toast } from "@store/toastStore";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
 
 export const useDeviceDialog = dialogStore<Device>();
 
@@ -40,29 +40,13 @@ type FormDeviceValues = Partial<{
 }>;
 
 const initFormValues: FormDeviceValues = {
-    company: {
-        value: "",
-        label: "",
-        id: ""
-    },
-    scene: {
-        value: "",
-        label: "",
-        id: ""
-    },
+    company: null,
+    scene: null,
     place: "",
-    active: {
-        value: "",
-        label: "",
-        id: ""
-    },
+    active: null,
     mac: "",
     ipAddress: "",
-    manager: {
-        value: "",
-        label: "",
-        id: ""
-    },
+    manager: null,
     userId: "",
     phone: "",
     email: ""
@@ -70,37 +54,26 @@ const initFormValues: FormDeviceValues = {
 
 export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
     const t = useTranslations("DevicePage");
+    const { yup, translateRequiredMessage } = useYupLocale({
+        page: "DevicePage"
+    });
 
-    const { item, open, closeDialog, setItem } = useDeviceDialog();
+    const { item, open, closeDialog } = useDeviceDialog();
 
     const [isLoading, setIsLoading] = useState(false);
 
     const editMode = useMemo(() => Boolean(item), [item]);
 
     const resolver = yup.object({
-        company: yup.object({
-            value: yup.string().required("Company is required")
-        }),
-        scene: yup.object().shape({
-            value: yup.string().required("Scene is required")
-        }),
-        active: yup.object().shape({
-            value: yup.string().required("Device is required")
-        }),
-        manager: yup.object().shape({
-            value: yup.string().required("Manager is required")
-        })
+        company: yup.object().required(translateRequiredMessage("Company")),
+        scene: yup.object().required(translateRequiredMessage("Scene")),
+        active: yup.object().required(translateRequiredMessage("Device ID")),
+        manager: yup.object().required(translateRequiredMessage("Manager"))
     });
 
-    const {
-        handleSubmit,
-        control,
-        formState: { errors },
-        setValue,
-        reset
-    } = useForm<FormDeviceValues>({
-        resolver: yupResolver(resolver) as any
-        // defaultValues: initFormValues
+    const { handleSubmit, control, setValue, reset, watch, clearErrors } = useForm<FormDeviceValues>({
+        resolver: yupResolver(resolver) as any,
+        defaultValues: initFormValues
     });
 
     useEffect(() => {
@@ -155,23 +128,7 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
         closeDialog();
     };
 
-    const handleReset = () => {
-        setItem(null);
-    };
-
     const handleSave = () => {
-        if (errors) {
-            for (const key in errors) {
-                if (errors.hasOwnProperty(key)) {
-                    const element = errors[key];
-
-                    if (element?.message) {
-                        toast.error({ title: element.message });
-                    }
-                }
-            }
-        }
-
         handleSubmit(async (data: FormDeviceValues) => {
             console.log("🚀 ~ handleSubmit ~ data:", data);
             setIsLoading(true);
@@ -214,18 +171,30 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
         })();
     };
 
-    const fetchScenes = useCallback((query: string) => {
-        return sceneService.getSceneList({ filters: query, limit: 10, page: 1 }).then((res) => {
-            if (!res.err) {
-                return res.data.scenes.map((scene) => ({
-                    label: scene.name,
-                    value: scene._id
-                }));
-            } else {
-                return [];
-            }
-        });
-    }, []);
+    const companySelected = watch("company");
+
+    const fetchScenes = useCallback(
+        (query: string) => {
+            return sceneService
+                .getSceneList({
+                    filters: query,
+                    limit: 10,
+                    page: 1,
+                    companyId: (companySelected?.value || "") as string
+                })
+                .then((res) => {
+                    if (!res.err) {
+                        return res.data.scenes.map((scene) => ({
+                            label: scene.name,
+                            value: scene._id
+                        }));
+                    } else {
+                        return [];
+                    }
+                });
+        },
+        [companySelected]
+    );
 
     const fetchCompanies = useCallback((query: string) => {
         return companyService.getCompanyList({ filters: query, limit: 10, page: 1 }).then((res) => {
@@ -311,11 +280,11 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
                             keyName='company'
                             placeholder={t("Company")}
                             request={fetchCompanies}
-                            // onchangeField={(value) => {
-                            //     if (value) {
-                            //         setValue("companyId", value?.id as string);
-                            //     }
-                            // }}
+                            onchangeField={() => {
+                                //reset scene
+                                setValue("scene", null);
+                                clearErrors("scene");
+                            }}
                         />
                     </Grid>
 
@@ -326,14 +295,10 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
                     <Grid size={inputSize}>
                         <ControllerAsyncSearchSelect
                             control={control}
+                            disabled={!companySelected}
                             keyName='scene'
                             placeholder={t("Scene")}
                             request={fetchScenes}
-                            // onchangeField={(value) => {
-                            //     if (value) {
-                            //         setValue("sceneId", value?.value as string);
-                            //     }
-                            // }}
                         />
                         <ControllerInput hidden control={control} keyName='sceneId' placeholder={t("Scene ID")} />
                     </Grid>

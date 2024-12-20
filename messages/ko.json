@@ -235,7 +235,8 @@
         "Re-enter new password": "새 비밀번호를 다시 입력하세요",
         "Old password": "이전 비밀번호",
         "New password": "새 비밀번호",
-        "Re-enter password": "비밀번호를 다시 입력하세요"
+        "Re-enter password": "비밀번호를 다시 입력하세요",
+        "Error login message": "*사용자명이나 비밀번호가 일치하지 않습니다."
     },
 
     "NotFoundPage": {
@@ -326,5 +327,10 @@
         "24V": "24V DC",
         "48V": "48V DC (PoE)",
         "220V": "220V AC"
+    },
+
+    "Validation": {
+        "required": "{path} 필수입니다.",
+        "invalid": "{path} 유효하지 않습니다."
     }
 }

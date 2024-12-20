@@ -22,16 +22,26 @@ export const ControllerInput = ({
         <ControllerRHF
             control={control}
             name={keyName}
-            render={({ field }) => {
+            render={({ field, fieldState }) => {
                 if (hidden) {
                     return (
-                        <input id={keyName} placeholder={placeholder} disabled={disabled} type='hidden' {...field} />
+                        <input
+                            id={keyName}
+                            placeholder={placeholder}
+                            disabled={disabled}
+                            type='hidden'
+                            {...field}
+                            value={field.value ?? ""}
+                        />
                     );
                 }
 
                 return (
                     <TextField
                         {...field}
+                        value={field.value ?? ""}
+                        error={!!fieldState.error}
+                        helperText={fieldState.error?.message ?? null}
                         id={keyName}
                         placeholder={placeholder}
                         fullWidth

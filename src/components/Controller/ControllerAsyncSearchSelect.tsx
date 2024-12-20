@@ -43,23 +43,22 @@ export const ControllerAsyncSearchSelect = ({
     const [options, setOptions] = useState<Option[]>([]);
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        fetchOptions("");
-    }, []);
+    const fetchOptions = useCallback(
+        async (query: string) => {
+            setLoading(true);
 
-    const fetchOptions = useCallback(async (query: string) => {
-        setLoading(true);
+            try {
+                const options = await request(query);
 
-        try {
-            const options = await request(query);
-
-            setOptions(options);
-        } catch (error) {
-            console.log("🚀 ~ fetchOptions ~ error:", error);
-        } finally {
-            setLoading(false);
-        }
-    }, []);
+                setOptions(options);
+            } catch (error) {
+                console.log("🚀 ~ fetchOptions ~ error:", error);
+            } finally {
+                setLoading(false);
+            }
+        },
+        [request]
+    );
 
     // Memoize the debounced fetch function
     const debouncedFetch = useMemo(() => debounce(fetchOptions, 500), [fetchOptions]);
@@ -75,11 +74,15 @@ export const ControllerAsyncSearchSelect = ({
         [debouncedFetch]
     );
 
+    useEffect(() => {
+        debouncedFetch("");
+    }, [debouncedFetch]);
+
     return (
         <ControllerRHF
             control={control}
             name={keyName}
-            render={({ field }) => {
+            render={({ field, fieldState }) => {
                 const { onChange, value, ref, onBlur } = field;
 
                 return (
@@ -103,6 +106,8 @@ export const ControllerAsyncSearchSelect = ({
                             <TextField
                                 {...params}
                                 inputRef={ref}
+                                error={!!fieldState.error}
+                                helperText={fieldState.error ? fieldState.error?.message : null}
                                 placeholder={placeholder}
                                 slotProps={{
                                     input: {

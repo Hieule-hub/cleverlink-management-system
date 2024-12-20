@@ -6,20 +6,19 @@ import { ControllerAsyncSearchSelect, type Option } from "@components/Controller
 import { ControllerSelect } from "@components/Controller/ControllerSelect";
 import { Dialog } from "@components/Dialog";
 import { Label } from "@components/Label";
+import { TitleTag } from "@components/TitleTag";
+import { useYupLocale } from "@configs/yupConfig";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Scene } from "@interfaces/scene";
 import { Divider, Grid2 as Grid, Stack, Zoom } from "@mui/material";
 import { useAppStore } from "@providers/AppStoreProvider";
+import companyService from "@services/company";
 import sceneService from "@services/scene";
 import { dialogStore } from "@store/dialogStore";
 import { toast } from "@store/toastStore";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
-
-import { TitleTag } from "@/components/TitleTag";
-import companyService from "@/services/company";
 
 export const useSceneDialog = dialogStore<Scene>();
 
@@ -53,11 +52,7 @@ type FormValues = Partial<{
 }>;
 
 const initFormValues: FormValues = {
-    company: {
-        label: "",
-        value: "",
-        id: ""
-    },
+    company: null,
     companyId: "",
     name: "",
     areaId: "",
@@ -81,32 +76,29 @@ export const SceneDialog = ({ onClose = () => "", readonly }: SceneDialogProps) 
     const t = useTranslations("ScenePage");
     const tCommon = useTranslations("Common");
 
+    const { yup, translateRequiredMessage, translateInvalidMessage } = useYupLocale({
+        page: "ScenePage"
+    });
+
     const { areas } = useAppStore((state) => state);
-    const { item, open, closeDialog, setItem } = useSceneDialog();
+    const { item, open, closeDialog } = useSceneDialog();
 
     const [isLoading, setIsLoading] = useState(false);
+    const [isFetchingId, setIsFetchingId] = useState(false);
 
     const editMode = useMemo(() => Boolean(item), [item]);
 
     const resolver = yup.object({
-        userId: yup.string().required("User ID is required"),
-        areaId: yup.string().required("Area is required"),
-        name: yup.string().required("Scene name is required"),
-        companyId: yup.string().required("Company ID is required")
+        company: yup.object().required(translateRequiredMessage("Company")),
+        userId: yup.string().required(translateRequiredMessage("User ID")),
+        areaId: yup.string().required(translateRequiredMessage("Area")),
+        name: yup.string().required(translateRequiredMessage("Name")),
+        pEmail: yup.string().email(translateInvalidMessage("Email"))
     });
 
-    const {
-        handleSubmit,
-        control,
-        formState: { errors },
-        getValues,
-        setValue,
-        reset
-    } = useForm<FormValues>({
-        resolver: yupResolver(resolver),
-        defaultValues: {
-            userId: ""
-        }
+    const { handleSubmit, control, setValue, reset, getValues, clearErrors } = useForm<FormValues>({
+        resolver: yupResolver(resolver) as any,
+        defaultValues: initFormValues
     });
 
     useEffect(() => {
@@ -147,23 +139,7 @@ export const SceneDialog = ({ onClose = () => "", readonly }: SceneDialogProps) 
         closeDialog();
     };
 
-    const handleReset = () => {
-        setItem(null);
-    };
-
     const handleSave = () => {
-        if (errors) {
-            for (const key in errors) {
-                if (errors.hasOwnProperty(key)) {
-                    const element = errors[key];
-
-                    if (element?.message) {
-                        toast.error({ title: element.message });
-                    }
-                }
-            }
-        }
-
         handleSubmit(async (data: FormValues) => {
             console.log("🚀 ~ handleSubmit ~ data:", data);
             setIsLoading(true);
@@ -217,6 +193,39 @@ export const SceneDialog = ({ onClose = () => "", readonly }: SceneDialogProps) 
         })();
     };
 
+    const fetchId = async () => {
+        const areaId = getValues("areaId");
+
+        if (!areaId) {
+            toast.error({ title: translateRequiredMessage("Area") });
+            return;
+        }
+
+        //get role code
+        setIsFetchingId(true);
+
+        try {
+            const response = await sceneService.getSceneIdAndUserId({
+                prefixScene: areas.find((o) => o._id === areaId)?.code || "C",
+                prefixUser: "BU"
+            });
+            if (!response.err) {
+                const { userId, sceneId, token, roleId, password } = response.data;
+                setValue("userId", userId);
+                clearErrors("userId");
+
+                setValue("sceneId", sceneId);
+                setValue("password", password);
+                setValue("token", token);
+                setValue("roleId", roleId._id);
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsFetchingId(false);
+        }
+    };
+
     const fetchCompanies = useCallback((query: string) => {
         return companyService.getCompanyList({ filters: query, limit: 10, page: 1 }).then((res) => {
             if (!res.err) {
@@ -244,7 +253,7 @@ export const SceneDialog = ({ onClose = () => "", readonly }: SceneDialogProps) 
                 }
             }}
             open={open}
-            title={t("Detail record")}
+            title={editMode ? t("Edit record") : t("Add new record")}
             onClose={handleClose}
             onCancel={handleClose}
             onOk={handleSave}
@@ -274,9 +283,7 @@ export const SceneDialog = ({ onClose = () => "", readonly }: SceneDialogProps) 
                             placeholder={t("Company")}
                             request={fetchCompanies}
                             onchangeField={(value) => {
-                                if (value) {
-                                    setValue("companyId", value?.id as string);
-                                }
+                                setValue("companyId", (value?.id || "") as string);
                             }}
                         />
                     </Grid>
@@ -331,14 +338,16 @@ export const SceneDialog = ({ onClose = () => "", readonly }: SceneDialogProps) 
                     <Grid size={inputSize - 3}>
                         <ControllerInput control={control} keyName='userId' placeholder={t("User ID")} disabled />
                     </Grid>
-                    <Grid size={3}>
+                    <Grid size={3} alignSelf={"start"}>
                         <Button
                             color='primary'
                             style={{
                                 width: "100%"
                             }}
-                            height='48px'
+                            height='51px'
                             disabled={editMode && readonly}
+                            onClick={fetchId}
+                            loading={isFetchingId}
                         >
                             {tCommon("Init")}
                         </Button>

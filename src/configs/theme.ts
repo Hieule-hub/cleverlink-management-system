@@ -39,27 +39,33 @@ export const theme: ThemeOptions = {
         MuiSelect: {
             styleOverrides: {
                 root: {
+                    fieldset: {
+                        transition: "all 0.3s ease",
+                        borderColor: "var(--input-border-color)"
+                    },
+
                     "&:hover": {
                         ".MuiSelect-select": {
                             borderColor: "var(--input-border-active-color)"
                         }
                     },
+
                     "& .MuiSelect-select": {
-                        transition: "all 0.3s ease",
-                        border: "1px solid var(--input-border-color)",
                         color: "var(--input-color)",
                         boxSizing: "border-box",
-                        height: "var(--input-height) !important",
-                        padding: "11px 12px"
+                        padding: "14px 12px"
                     },
-                    "& .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "transparent !important"
-                    },
+
                     "&.Mui-disabled": {
                         backgroundColor: "var(--bg-container-disabled)",
                         "& .MuiSelect-select": {
                             borderColor: "var(--palette-action-disabled)"
                         }
+                    },
+
+                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "var(--input-border-active-color)",
+                        borderWidth: 1
                     }
                 }
             }
@@ -70,6 +76,13 @@ export const theme: ThemeOptions = {
                     "& .MuiDialog-paper": {
                         boxShadow: "var(--dialog-box-shadow)"
                     }
+                }
+            }
+        },
+        MuiFormHelperText: {
+            styleOverrides: {
+                root: {
+                    marginLeft: 0
                 }
             }
         },
@@ -98,11 +111,12 @@ export const theme: ThemeOptions = {
                             }
                         },
 
-                        "&:not(&.Mui-disabled)": {
+                        "&:not(&.Mui-disabled):not(&.Mui-error)": {
                             "&:hover fieldset": {
                                 borderColor: "var(--input-border-hover-color)"
                             }
                         },
+
                         "&.Mui-focused fieldset": {
                             borderColor: "var(--input-border-active-color)",
                             borderWidth: 1
@@ -126,8 +140,7 @@ export const theme: ThemeOptions = {
                         }
                     },
                     "& .MuiInputBase-root": {
-                        height: "var(--input-height)",
-                        paddingLeft: 0,
+                        padding: 0,
                         fieldset: {
                             transition: "all 0.2s ease-in-out",
                             borderColor: "var(--input-border-color)",

@@ -26,8 +26,8 @@ const StyledFileInfo = styled("div")`
         flex-shrink: 0;
 
         img {
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             object-fit: cover;
         }
     }
