@@ -7,6 +7,7 @@ import { UserInfoDialog, useUserInfoDialog } from "@modules/User";
 import { DeleteOutline, DescriptionOutlined, FilterList } from "@mui/icons-material";
 import { Box, IconButton, Link, Table, TableBody, TableContainer, TableHead, Typography } from "@mui/material";
 import eventService from "@services/event";
+import { useConfirm } from "@store/useConfirm";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
 
@@ -30,6 +31,7 @@ export const VideoCapturePage = () => {
     const { openDialog } = useEventDialog();
     const { openDialog: showUserInfo } = useUserInfoDialog();
     const { openDialog: showSnapshot } = useSnapshotDialogDialog();
+    const { startConfirm } = useConfirm();
 
     //Delete list
     const [deleteIds, setDeleteIds] = useState([]);
@@ -76,15 +78,13 @@ export const VideoCapturePage = () => {
     }, [fetchDataList]);
 
     const handleDeleteItems = async (ids: string[]) => {
-        if (!confirm("Are you sure you want to delete the selected: " + ids.join(", "))) {
-            return;
-        }
-
         setIsFetching(true);
+
         try {
             await eventService.deleteEvents({
                 ids: ids
             });
+
             handleSearch();
             setDeleteIds([]);
         } catch (error) {
@@ -92,6 +92,14 @@ export const VideoCapturePage = () => {
         } finally {
             setIsFetching(false);
         }
+    };
+
+    const startDeleteItems = (ids: string[]) => {
+        startConfirm({
+            onConfirm: () => {
+                handleDeleteItems(ids);
+            }
+        });
     };
 
     const handleSearch = useCallback(() => {
@@ -242,7 +250,7 @@ export const VideoCapturePage = () => {
                     <Button
                         disabled={isFetching || deleteIds.length === 0}
                         startIcon={DeleteOutline}
-                        onClick={() => handleDeleteItems(deleteIds)}
+                        onClick={() => startDeleteItems(deleteIds)}
                     >
                         {tCommon("Delete")}
                     </Button>
