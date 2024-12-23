@@ -8,7 +8,7 @@ import { Paper } from "@components/Paper";
 import { type Column, Table } from "@components/Table";
 import { User } from "@interfaces/user";
 import { AddCircleOutlineOutlined, DeleteOutline, FilterList, Search } from "@mui/icons-material";
-import { Box, IconButton, TextField } from "@mui/material";
+import { Box, IconButton, Link, TextField } from "@mui/material";
 import userService from "@services/user";
 import { toast } from "@store/toastStore";
 import { useConfirm } from "@store/useConfirm";
@@ -109,7 +109,18 @@ export const UserPage = () => {
                 dataIndex: "userId",
                 align: "center",
                 width: 200,
-                render: (value) => value
+                render: (text, record) => (
+                    <Link
+                        component='button'
+                        variant='body2'
+                        fontWeight={500}
+                        onClick={() => {
+                            openDialog(record, true);
+                        }}
+                    >
+                        {text}
+                    </Link>
+                )
             },
             {
                 key: "roleId",

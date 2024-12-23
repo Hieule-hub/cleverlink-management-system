@@ -67,6 +67,8 @@
         "PW": "PW",
         "KakaoTalk ID": "KakaoTalk ID",
         "Telegram ID": "Telegram ID",
+        "Address": "Address",
+        "Website": "Website",
         "Notice note": "※This is the contact information input field for receiving risk notifications.",
         "Delete record confirm": "The selected users will be deleted."
     },
@@ -152,7 +154,8 @@
         "Phone number": "Phone number",
         "Email": "Email",
         "Connected camera information": "Connected camera information",
-        "Delete record confirm": "The selected devices will be deleted."
+        "Delete record confirm": "The selected devices will be deleted.",
+        "Connecting to the device": "Connecting to the device"
     },
 
     "CameraPage": {

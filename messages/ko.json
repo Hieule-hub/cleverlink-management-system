@@ -67,6 +67,8 @@
         "PW": "PW",
         "KakaoTalk ID": "카카오 ID",
         "Telegram ID": "텔레그램 ID",
+        "Address": "주소",
+        "Website": "홈페이지",
         "Notice note": "※위험을 알림받기 위한 연락처 입력란 입니다.",
         "Delete record confirm": "선택한 사용자가 삭제 됩니다."
     },
@@ -152,7 +154,8 @@
         "Phone number": "전화번호",
         "Email": "이메일",
         "Connected camera information": "연결 카메라 정보",
-        "Delete record confirm": "선택한 장치를 삭제하겠습니다."
+        "Delete record confirm": "선택한 장치를 삭제하겠습니다.",
+        "Connecting to the device": "장비 접속하기"
     },
 
     "CameraPage": {

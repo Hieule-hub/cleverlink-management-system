@@ -35,10 +35,11 @@ const StyledFileInfo = styled("div")`
 
 interface FileInfoProps {
     file: File | CamFile;
+    disabled?: boolean;
     onDelete?: () => void;
     onDownload?: () => void;
 }
-export const FileInfo = ({ file, onDelete, onDownload }: FileInfoProps) => {
+export const FileInfo = ({ file, onDelete, onDownload, disabled }: FileInfoProps) => {
     let url = "";
     let fileName = "";
     let fileType = "";
@@ -93,7 +94,7 @@ export const FileInfo = ({ file, onDelete, onDownload }: FileInfoProps) => {
             )}
 
             {onDelete && (
-                <IconButton onClick={onDelete} size='small'>
+                <IconButton disabled={disabled} onClick={onDelete} size='small'>
                     <Cancel fontSize='small' />
                 </IconButton>
             )}

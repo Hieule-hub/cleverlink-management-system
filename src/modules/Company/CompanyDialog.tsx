@@ -62,17 +62,25 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
     });
 
     const { organizations } = useAppStore((state) => state);
-    const { item, open, closeDialog } = useCompanyDialog();
+    const { item, open, closeDialog, readonly } = useCompanyDialog();
 
     const [isLoading, setIsLoading] = useState(false);
     const [isFetchingId, setIsFetchingId] = useState(false);
 
     const editMode = useMemo(() => Boolean(item), [item]);
+    const dialogTitle = useMemo(() => {
+        if (readonly) {
+            return t("Detail record");
+        }
+
+        return editMode ? t("Edit record") : t("Add new record");
+    }, [editMode, t, readonly]);
+
     const organizationOptions = useMemo(
         () =>
             organizations.map((o) => ({
                 value: o._id,
-                label: `${o.code} - ${o.name}`
+                label: `${o.code} (${o.name})`
             })),
         [organizations]
     );
@@ -210,11 +218,12 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
                 }
             }}
             open={open}
-            title={item ? t("Edit record") : t("Add new record")}
+            title={dialogTitle}
             onClose={handleClose}
             onCancel={handleClose}
             onOk={handleSave}
             loading={isLoading}
+            hiddenOk={readonly}
         >
             <Grid padding={2} width='100%' gap={2} container spacing={2} columns={24} alignItems='center'>
                 {/* Name Field */}
@@ -222,7 +231,7 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
                     <Label required label={t("Name")} htmlFor='name' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput control={control} keyName='name' placeholder={t("Name")} />
+                    <ControllerInput control={control} keyName='name' placeholder={t("Name")} disabled={readonly} />
                 </Grid>
 
                 {/* Address Field */}
@@ -230,7 +239,12 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
                     <Label label={t("Address")} htmlFor='address' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput control={control} keyName='address' placeholder={t("Address")} />
+                    <ControllerInput
+                        control={control}
+                        keyName='address'
+                        placeholder={t("Address")}
+                        disabled={readonly}
+                    />
                 </Grid>
 
                 {/* Organization ID Field */}
@@ -239,7 +253,7 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
                 </Grid>
                 <Grid size={inputSize}>
                     <ControllerSelect
-                        disabled={editMode}
+                        disabled={readonly || editMode}
                         control={control}
                         keyName='organizationId'
                         placeholder={t("Organization")}
@@ -254,7 +268,12 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
                     <Label label={t("Phone number")} htmlFor='phone' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput control={control} keyName='phone' placeholder={t("Phone number")} />
+                    <ControllerInput
+                        control={control}
+                        keyName='phone'
+                        placeholder={t("Phone number")}
+                        disabled={readonly}
+                    />
                 </Grid>
 
                 {/* Company ID Field */}
@@ -270,7 +289,12 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
                     <Label label={t("Website")} htmlFor='website' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput control={control} keyName='website' placeholder={t("Website")} />
+                    <ControllerInput
+                        control={control}
+                        keyName='website'
+                        placeholder={t("Website")}
+                        disabled={readonly}
+                    />
                 </Grid>
 
                 {/* User ID Field */}
@@ -287,7 +311,7 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
                             width: "100%"
                         }}
                         height='51px'
-                        disabled={editMode}
+                        disabled={readonly || editMode}
                         onClick={fetchId}
                         loading={isFetchingId}
                     >

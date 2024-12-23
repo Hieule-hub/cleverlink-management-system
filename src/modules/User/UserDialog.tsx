@@ -83,9 +83,25 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isFetchingId, setIsFetchingId] = useState(false);
 
-    const { item, open, closeDialog } = useUserDialog();
+    const { item, open, closeDialog, readonly } = useUserDialog();
 
     const editMode = useMemo(() => Boolean(item), [item]);
+    const dialogTitle = useMemo(() => {
+        if (readonly) {
+            return t("Detail record");
+        }
+
+        return editMode ? t("Edit record") : t("Add new record");
+    }, [editMode, t, readonly]);
+
+    const roleOptions = useMemo(
+        () =>
+            roles.map((org) => ({
+                value: org.code,
+                label: `${org.code} (${org.name})`
+            })),
+        [roles]
+    );
 
     const resolver = yup.object({
         userId: yup.string().required(translateRequiredMessage("User ID")),
@@ -223,7 +239,9 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                 const { userId, password, token } = response.data;
                 // setUserForm(response.data);
                 setValue("userId", userId);
+                clearErrors("userId");
                 setValue("password", password);
+                clearErrors("password");
                 setValue("token", token);
             }
         } catch (error) {
@@ -286,11 +304,12 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                 }
             }}
             open={open}
-            title={editMode ? t("Edit record") : t("Add new record")}
+            title={dialogTitle}
             onClose={handleClose}
             onCancel={handleClose}
             onOk={handleSave}
             loading={isLoading}
+            hiddenOk={readonly}
         >
             <Grid padding={2} width='100%' gap={2} container spacing={2} columns={24} alignItems='center'>
                 {/* Company Field */}
@@ -299,7 +318,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                 </Grid>
                 <Grid size={inputSize}>
                     <ControllerAsyncSearchSelect
-                        disabled={editMode || roleSelected === "CIP"}
+                        disabled={readonly || editMode || roleSelected === "CIP"}
                         control={control}
                         keyName='company'
                         placeholder={t("Company")}
@@ -320,7 +339,12 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                     <Label required label={t("User Name")} htmlFor='name' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput control={control} keyName='name' placeholder={t("User Name")} />
+                    <ControllerInput
+                        control={control}
+                        keyName='name'
+                        placeholder={t("User Name")}
+                        disabled={readonly}
+                    />
                 </Grid>
 
                 {/* Company ID Field */}
@@ -337,15 +361,12 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                 </Grid>
                 <Grid size={inputSize}>
                     <ControllerSelect
-                        disabled={editMode}
+                        disabled={editMode || readonly}
                         control={control}
                         keyName='role'
                         placeholder={t("Role")}
                         selectProps={{
-                            options: roles.map((org) => ({
-                                value: org.code,
-                                label: org.name
-                            }))
+                            options: roleOptions
                         }}
                         onChangeField={(value) => {
                             setValue("roleId", value);
@@ -376,7 +397,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                 <Grid size={inputSize}>
                     <ControllerAsyncSearchSelect
                         control={control}
-                        disabled={!companySelected || ["CIP", "TU"].includes(roleSelected)}
+                        disabled={!companySelected || ["CIP", "TU"].includes(roleSelected) || readonly}
                         keyName='scene'
                         placeholder={t("Scene")}
                         request={fetchScenes}
@@ -402,7 +423,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                     <Label label={t("Task")} htmlFor='task' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput control={control} keyName='task' placeholder={t("Task")} />
+                    <ControllerInput control={control} keyName='task' placeholder={t("Task")} disabled={readonly} />
                 </Grid>
 
                 {/* User ID Field */}
@@ -443,7 +464,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                             width: "100%"
                         }}
                         height='51px'
-                        disabled={editMode}
+                        disabled={editMode || readonly}
                         onClick={fetchingUserId}
                         loading={isFetchingId}
                     >
@@ -460,7 +481,12 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                     <Label label={t("Phone number")} htmlFor='phone' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput control={control} keyName='phone' placeholder={t("Phone number")} />
+                    <ControllerInput
+                        control={control}
+                        keyName='phone'
+                        placeholder={t("Phone number")}
+                        disabled={readonly}
+                    />
                 </Grid>
 
                 {/* ID Kakao Field */}
@@ -468,7 +494,12 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                     <Label label={t("KakaoTalk ID")} htmlFor='kakao' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput control={control} keyName='kakao' placeholder={t("KakaoTalk ID")} />
+                    <ControllerInput
+                        control={control}
+                        keyName='kakao'
+                        placeholder={t("KakaoTalk ID")}
+                        disabled={readonly}
+                    />
                 </Grid>
 
                 {/* Email Field */}
@@ -476,7 +507,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                     <Label label={t("Email")} htmlFor='email' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput control={control} keyName='email' placeholder={t("Email")} />
+                    <ControllerInput control={control} keyName='email' placeholder={t("Email")} disabled={readonly} />
                 </Grid>
 
                 {/* Telegram Field */}
@@ -484,11 +515,22 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                     <Label label={t("Telegram ID")} htmlFor='telegram' />
                 </Grid>
                 <Grid size={inputSize}>
-                    <ControllerInput control={control} keyName='telegram' placeholder={t("Telegram ID")} />
+                    <ControllerInput
+                        control={control}
+                        keyName='telegram'
+                        placeholder={t("Telegram ID")}
+                        disabled={readonly}
+                    />
                 </Grid>
 
                 {/* Token Field */}
-                <ControllerInput hidden control={control} keyName='token' placeholder={t("Token")} />
+                <ControllerInput
+                    hidden
+                    control={control}
+                    keyName='token'
+                    placeholder={t("Token")}
+                    disabled={readonly}
+                />
 
                 {editMode && (
                     <Grid size={24} textAlign={"end"}>

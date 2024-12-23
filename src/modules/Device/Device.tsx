@@ -104,7 +104,18 @@ export const DevicePage = () => {
                 dataIndex: "activate",
                 align: "center",
                 width: 200,
-                render: (value) => value?.boxId
+                render: (value, record) => (
+                    <Link
+                        component='button'
+                        variant='body2'
+                        fontWeight={500}
+                        onClick={() => {
+                            openDialog(record, true);
+                        }}
+                    >
+                        {value?.boxId}
+                    </Link>
+                )
             },
             {
                 key: "installDate",

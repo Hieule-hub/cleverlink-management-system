@@ -99,7 +99,18 @@ export const CompanyPage = () => {
                 title: t("Company ID"),
                 dataIndex: "companyId",
                 width: 200,
-                render: (text) => text
+                render: (text, record) => (
+                    <Link
+                        component='button'
+                        variant='body2'
+                        fontWeight={500}
+                        onClick={() => {
+                            openDialog(record, true);
+                        }}
+                    >
+                        {text}
+                    </Link>
+                )
             },
             {
                 key: "name",

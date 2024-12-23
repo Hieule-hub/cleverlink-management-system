@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import { Button } from "@components/Button";
 import { ControllerAsyncSearchSelect, ControllerInput, Option } from "@components/Controller";
 import { Dialog } from "@components/Dialog";
 import { Label } from "@components/Label";
 import { useYupLocale } from "@configs/yupConfig";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Device } from "@interfaces/device";
-import { Divider, Grid2 as Grid, Stack, Zoom } from "@mui/material";
+import { CastOutlined } from "@mui/icons-material";
+import { Box, Divider, Grid2 as Grid, Stack, Zoom } from "@mui/material";
 import companyService from "@services/company";
 import deviceService from "@services/device";
 import sceneService from "@services/scene";
@@ -15,6 +17,8 @@ import { dialogStore } from "@store/dialogStore";
 import { toast } from "@store/toastStore";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
+
+import { triggerToastDev } from "@/utils";
 
 export const useDeviceDialog = dialogStore<Device>();
 
@@ -53,15 +57,24 @@ const initFormValues: FormDeviceValues = {
 
 export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
     const t = useTranslations("DevicePage");
+    const tCommon = useTranslations("Common");
+
     const { yup, translateRequiredMessage } = useYupLocale({
         page: "DevicePage"
     });
 
-    const { item, open, closeDialog } = useDeviceDialog();
+    const { item, open, closeDialog, readonly } = useDeviceDialog();
 
     const [isLoading, setIsLoading] = useState(false);
 
     const editMode = useMemo(() => Boolean(item), [item]);
+    const dialogTitle = useMemo(() => {
+        if (readonly) {
+            return t("Detail record");
+        }
+
+        return editMode ? t("Edit record") : t("Add new record");
+    }, [editMode, t, readonly]);
 
     const resolver = yup.object({
         company: yup.object().required(translateRequiredMessage("Company")),
@@ -171,6 +184,7 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
     };
 
     const companySelected = watch("company");
+    const sceneSelected = watch("scene");
 
     const fetchScenes = useCallback(
         (query: string) => {
@@ -226,23 +240,38 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
         });
     }, []);
 
-    const fetchUsers = useCallback((query: string) => {
-        return userService.getUserList({ filters: query, limit: 10, page: 1 }).then((res) => {
-            if (!res.err) {
-                return res.data.users.map((user) => ({
-                    label: user.name,
-                    value: user._id,
-                    id: JSON.stringify({
-                        userId: user.userId,
-                        phone: user.phone,
-                        email: user.email
-                    })
-                }));
-            } else {
-                return [];
+    const fetchUsers = useCallback(
+        (query: string) => {
+            if (!companySelected || !sceneSelected) {
+                return Promise.resolve([]);
             }
-        });
-    }, []);
+
+            return userService
+                .getUserList({
+                    filters: query,
+                    limit: 10,
+                    page: 1,
+                    companyId: companySelected?.value as string,
+                    sceneId: sceneSelected?.value as string
+                })
+                .then((res) => {
+                    if (!res.err) {
+                        return res.data.users.map((user) => ({
+                            label: user.name,
+                            value: user._id,
+                            id: JSON.stringify({
+                                userId: user.userId,
+                                phone: user.phone,
+                                email: user.email
+                            })
+                        }));
+                    } else {
+                        return [];
+                    }
+                });
+        },
+        [companySelected, sceneSelected]
+    );
 
     return (
         <Dialog
@@ -257,11 +286,35 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
                 }
             }}
             open={open}
-            title={editMode ? t("Edit record") : t("Add new record")}
+            title={dialogTitle}
             onClose={handleClose}
             onCancel={handleClose}
             onOk={handleSave}
             loading={isLoading}
+            footer={
+                <Box display='flex' width='100%' alignItems='center' justifyContent='space-between'>
+                    <Button color='primary' startIcon={CastOutlined} height='36px' onClick={triggerToastDev}>
+                        {t("Connecting to the device")}
+                    </Button>
+                    <Box>
+                        <Button onClick={() => handleClose()} height='36px'>
+                            {tCommon("Cancel")}
+                        </Button>
+                        {readonly ? null : (
+                            <Button
+                                color='primary'
+                                height='36px'
+                                onClick={handleSave}
+                                style={{
+                                    marginLeft: "8px"
+                                }}
+                            >
+                                {tCommon("Save")}
+                            </Button>
+                        )}
+                    </Box>
+                </Box>
+            }
         >
             <Stack
                 direction={{ xs: "column", sm: "row" }}
@@ -276,6 +329,7 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
                     <Grid size={inputSize}>
                         <ControllerAsyncSearchSelect
                             control={control}
+                            disabled={readonly}
                             keyName='company'
                             placeholder={t("Company")}
                             request={fetchCompanies}
@@ -283,6 +337,13 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
                                 //reset scene
                                 setValue("scene", null);
                                 clearErrors("scene");
+
+                                //reset manager
+                                setValue("manager", null);
+                                clearErrors("manager");
+                                setValue("phone", "");
+                                setValue("email", "");
+                                setValue("userId", "");
                             }}
                         />
                     </Grid>
@@ -294,10 +355,18 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
                     <Grid size={inputSize}>
                         <ControllerAsyncSearchSelect
                             control={control}
-                            disabled={!companySelected}
+                            disabled={!companySelected || readonly}
                             keyName='scene'
                             placeholder={t("Scene")}
                             request={fetchScenes}
+                            onchangeField={() => {
+                                //reset manager
+                                setValue("manager", null);
+                                clearErrors("manager");
+                                setValue("phone", "");
+                                setValue("email", "");
+                                setValue("userId", "");
+                            }}
                         />
                         <ControllerInput hidden control={control} keyName='sceneId' placeholder={t("Scene ID")} />
                     </Grid>
@@ -307,7 +376,12 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
                         <Label label={t("Emplacement")} htmlFor='place' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='place' placeholder={t("Emplacement")} />
+                        <ControllerInput
+                            control={control}
+                            keyName='place'
+                            placeholder={t("Emplacement")}
+                            disabled={readonly}
+                        />
                     </Grid>
 
                     {/* Device ID Field */}
@@ -317,6 +391,7 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
                     <Grid size={inputSize}>
                         <ControllerAsyncSearchSelect
                             control={control}
+                            disabled={readonly}
                             keyName='active'
                             placeholder={t("Device ID")}
                             request={fetchActivates}
@@ -395,6 +470,7 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
                     <Grid size={inputSize}>
                         <ControllerAsyncSearchSelect
                             control={control}
+                            disabled={!companySelected || !sceneSelected || readonly}
                             keyName='manager'
                             placeholder={t("Manager")}
                             request={fetchUsers}

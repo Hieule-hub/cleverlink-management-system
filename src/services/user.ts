@@ -38,6 +38,12 @@ const getUserInfo = async () => {
 };
 
 const getUserList = async (params: GetUserListReq) => {
+    if (params.companyId && params.sceneId) {
+        return apiClient.get<unknown, GetUserListRes>("/user/findByCompanyIdAndSceneId", {
+            params
+        });
+    }
+
     return apiClient.get<unknown, GetUserListRes>("/user/findAll", {
         params
     });

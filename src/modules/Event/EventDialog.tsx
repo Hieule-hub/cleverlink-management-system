@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { ControllerInput } from "@components/Controller";
 import { Dialog } from "@components/Dialog";
@@ -46,10 +46,17 @@ const initFormValues: FormValues = {
 export const EventDialog = ({ onClose = () => "" }: EventDialogProps) => {
     const t = useTranslations("EventPage");
 
-    const { item, open, closeDialog, setItem } = useEventDialog();
+    const { item, open, closeDialog, readonly } = useEventDialog();
     const [isLoading, setIsLoading] = useState(false);
 
     // const editMode = useMemo(() => Boolean(item), [item]);
+    const dialogTitle = useMemo(() => {
+        if (readonly) {
+            return t("Detail record");
+        }
+
+        return t("Edit record");
+    }, [t, readonly]);
 
     const { handleSubmit, control, reset, watch } = useForm<FormValues>({
         defaultValues: initFormValues
@@ -79,10 +86,6 @@ export const EventDialog = ({ onClose = () => "" }: EventDialogProps) => {
     const handleClose = (status?: string) => {
         onClose(status);
         closeDialog();
-    };
-
-    const handleReset = () => {
-        setItem(null);
     };
 
     const handleSave = () => {
@@ -124,11 +127,12 @@ export const EventDialog = ({ onClose = () => "" }: EventDialogProps) => {
                 }
             }}
             open={open}
-            title={item ? t("Edit record") : t("Add new record")}
+            title={dialogTitle}
             onClose={handleClose}
             onCancel={handleClose}
             onOk={handleSave}
             loading={isLoading}
+            hiddenOk={readonly}
         >
             <Stack
                 direction={{ xs: "column", sm: "row" }}
@@ -199,6 +203,7 @@ export const EventDialog = ({ onClose = () => "" }: EventDialogProps) => {
                     <Grid size={"grow"}>
                         <ControllerInput
                             control={control}
+                            disabled={readonly}
                             keyName='solve'
                             placeholder={t("Action taken")}
                             inputProps={{

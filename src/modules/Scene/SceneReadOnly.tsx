@@ -124,7 +124,7 @@ export const SceneReadOnly = () => {
                             size='small'
                             color='info'
                             onClick={() => {
-                                openDialog(record);
+                                openDialog(record, true);
                             }}
                         >
                             <DescriptionOutlined fontSize='inherit' />
@@ -155,7 +155,7 @@ export const SceneReadOnly = () => {
                 )}
             </Box>
 
-            <SceneDialog readonly />
+            <SceneDialog />
             <UserInfoDialog />
         </React.Fragment>
     );

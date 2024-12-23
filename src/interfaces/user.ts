@@ -78,7 +78,12 @@ export type UserUpdatePasswordReq = {
 export type UserUpdatePasswordRes = DataResponse<unknown>;
 
 //User list request
-export type GetUserListReq = Partial<GetParams>;
+export type GetUserListReq = Partial<
+    GetParams & {
+        companyId?: string;
+        sceneId?: string;
+    }
+>;
 
 export type GetUserListRes = DataResponse<{
     paging: Pagination;

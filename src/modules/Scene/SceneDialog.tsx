@@ -22,7 +22,6 @@ export const useSceneDialog = dialogStore<Scene>();
 
 interface SceneDialogProps {
     onClose?: (status?: string) => void;
-    readonly?: boolean;
 }
 
 const labelSize = 4;
@@ -70,7 +69,7 @@ const initFormValues: FormValues = {
     pEmail: ""
 };
 
-export const SceneDialog = ({ onClose = () => "", readonly }: SceneDialogProps) => {
+export const SceneDialog = ({ onClose = () => "" }: SceneDialogProps) => {
     const t = useTranslations("ScenePage");
     const tCommon = useTranslations("Common");
 
@@ -79,14 +78,22 @@ export const SceneDialog = ({ onClose = () => "", readonly }: SceneDialogProps) 
     });
 
     const { areas } = useAppStore((state) => state);
-    const { item, open, closeDialog } = useSceneDialog();
+    const { item, open, closeDialog, readonly } = useSceneDialog();
 
     const [isLoading, setIsLoading] = useState(false);
     const [isFetchingId, setIsFetchingId] = useState(false);
 
     const editMode = useMemo(() => Boolean(item), [item]);
+    const dialogTitle = useMemo(() => {
+        if (readonly) {
+            return t("Detail record");
+        }
+
+        return editMode ? t("Edit record") : t("Add new record");
+    }, [editMode, t, readonly]);
+
     const areaOptions = useMemo(
-        () => areas.map((area) => ({ label: `${area.code} - ${area.name}`, value: area._id })),
+        () => areas.map((area) => ({ label: `${area.code} (${area.name})`, value: area._id })),
         [areas]
     );
 
@@ -255,7 +262,7 @@ export const SceneDialog = ({ onClose = () => "", readonly }: SceneDialogProps) 
                 }
             }}
             open={open}
-            title={editMode ? t("Edit record") : t("Add new record")}
+            title={dialogTitle}
             onClose={handleClose}
             onCancel={handleClose}
             onOk={handleSave}

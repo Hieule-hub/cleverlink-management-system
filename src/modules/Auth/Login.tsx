@@ -138,7 +138,6 @@ export const LoginPage = () => {
                 if (!response.err) {
                     // login success
                     const { data } = response;
-                    // console.log("🚀 ~ handleSubmit ~ data:", data);
 
                     localStorage.setItem("access-token", data.access);
                     Cookies.set("refresh-token", data.refresh, { expires: 7 });

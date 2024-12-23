@@ -71,12 +71,20 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
     });
 
     const { categories, protocols } = useAppStore((state) => state);
-    const { item, open, closeDialog } = useCameraDialog();
+    const { item, open, closeDialog, readonly } = useCameraDialog();
 
     const [isLoading, setIsLoading] = useState(false);
     const [isFetchingId, setIsFetchingId] = useState(false);
 
     const editMode = useMemo(() => Boolean(item), [item]);
+    const dialogTitle = useMemo(() => {
+        if (readonly) {
+            return t("Detail record");
+        }
+
+        return editMode ? t("Edit record") : t("Add new record");
+    }, [editMode, t, readonly]);
+
     const resolutionOptions = useMemo(() => {
         return cameraResolutionOptions.reduce((acc, cur) => {
             acc.push({
@@ -256,11 +264,12 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
                 }
             }}
             open={open}
-            title={editMode ? t("Edit record") : t("Add new record")}
+            title={dialogTitle}
             onClose={handleClose}
             onCancel={handleClose}
             onOk={handleSave}
             loading={isLoading}
+            hiddenOk={readonly}
         >
             <Stack
                 direction={{ xs: "column", sm: "row" }}
@@ -273,7 +282,12 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
                         <Label label={t("Model name")} htmlFor='name' required />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='name' placeholder={t("Model name")} />
+                        <ControllerInput
+                            control={control}
+                            keyName='name'
+                            placeholder={t("Model name")}
+                            disabled={readonly}
+                        />
                     </Grid>
 
                     {/* Camera type Field */}
@@ -282,7 +296,7 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
                     </Grid>
                     <Grid size={inputSize}>
                         <ControllerSelect
-                            disabled={editMode}
+                            disabled={editMode || readonly}
                             control={control}
                             keyName='categoryId'
                             placeholder={t("Camera type")}
@@ -310,7 +324,7 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
                                 width: "100%"
                             }}
                             height='51px'
-                            disabled={editMode}
+                            disabled={editMode || readonly}
                             onClick={fetchId}
                             loading={isFetchingId}
                         >
@@ -323,7 +337,12 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
                         <Label label={t("Factory")} htmlFor='factory' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='factory' placeholder={t("Factory")} />
+                        <ControllerInput
+                            control={control}
+                            keyName='factory'
+                            placeholder={t("Factory")}
+                            disabled={readonly}
+                        />
                     </Grid>
 
                     {/* Protocol Field */}
@@ -332,7 +351,7 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
                     </Grid>
                     <Grid size={inputSize}>
                         <ControllerSelect
-                            disabled={editMode}
+                            disabled={editMode || readonly}
                             control={control}
                             keyName='protocolId'
                             placeholder={t("Protocol")}
@@ -351,7 +370,7 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
                     </Grid>
                     <Grid size={inputSize}>
                         <ControllerSelect
-                            disabled={editMode}
+                            disabled={editMode || readonly}
                             control={control}
                             keyName='poe'
                             placeholder={t("POE")}
@@ -381,7 +400,7 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
                     </Grid>
                     <Grid size={inputSize}>
                         <ControllerSelect
-                            disabled={editMode}
+                            disabled={editMode || readonly}
                             control={control}
                             keyName='resolution'
                             placeholder={t("Maximum resolution")}
@@ -397,7 +416,7 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
                     </Grid>
                     <Grid size={inputSize}>
                         <ControllerSelect
-                            disabled={editMode}
+                            disabled={editMode || readonly}
                             control={control}
                             keyName='input'
                             placeholder={t("Voltage")}
@@ -411,6 +430,7 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
                     <Grid size={"grow"}>
                         <ControllerInput
                             control={control}
+                            disabled={readonly}
                             keyName='description'
                             placeholder={t("Description")}
                             inputProps={{
@@ -435,12 +455,17 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
                 alignContent={"start"}
             >
                 {/* Maximum resolution Field */}
-                <Grid size={labelSize}>
-                    <Label label={t("Upload file")} htmlFor='path' />
-                </Grid>
-                <Grid size={24 - labelSize}>
-                    <UploadInput onFileChange={handleChangeFiles} placeholder={t("Upload placeholder")} />
-                </Grid>
+
+                {!readonly && (
+                    <>
+                        <Grid size={labelSize}>
+                            <Label label={t("Upload file")} htmlFor='path' />
+                        </Grid>
+                        <Grid size={24 - labelSize}>
+                            <UploadInput onFileChange={handleChangeFiles} placeholder={t("Upload placeholder")} />
+                        </Grid>
+                    </>
+                )}
 
                 {/* Show file list */}
                 <Grid size={labelSize}>

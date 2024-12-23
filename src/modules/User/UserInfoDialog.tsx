@@ -52,7 +52,9 @@ const initFormValues: FormValues = {
 };
 
 export const UserInfoDialog = ({ onClose = () => "" }: UserInfoDialogProps) => {
-    const t = useTranslations();
+    const t = useTranslations("UserPage");
+    const tCommon = useTranslations("Common");
+
     const { item, open, closeDialog } = useUserInfoDialog();
 
     const [isFetching, setIsFetching] = useState(false);
@@ -129,12 +131,12 @@ export const UserInfoDialog = ({ onClose = () => "" }: UserInfoDialogProps) => {
                 }
             }}
             open={open}
-            title={t("UserPage.Record information")}
+            title={t("Record information")}
             onClose={handleClose}
             onCancel={handleClose}
             footer={
                 <Button height='36px' onClick={() => handleClose()}>
-                    {t("Common.Cancel")}
+                    {tCommon("Cancel")}
                 </Button>
             }
         >
@@ -152,47 +154,57 @@ export const UserInfoDialog = ({ onClose = () => "" }: UserInfoDialogProps) => {
                 <Grid padding={2} width='100%' gap={2} container spacing={2} columns={12} alignItems='center'>
                     {/* Company Field */}
                     <Grid size={labelSize}>
-                        <Label label='Company' htmlFor='company' />
+                        <Label label={t("Company")} htmlFor='company' />
                     </Grid>
                     <Grid size={inputSize}>
                         <ControllerAsyncSearchSelect
                             disabled
                             control={control}
                             keyName='company'
-                            placeholder='Company'
+                            placeholder={t("Company")}
                         />
                     </Grid>
 
                     {/* Scene Field */}
                     <Grid size={labelSize}>
-                        <Label label='Scene' htmlFor='scene' />
+                        <Label label={t("Scene")} htmlFor='scene' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerAsyncSearchSelect disabled control={control} keyName='scene' placeholder='Scene' />
+                        <ControllerAsyncSearchSelect
+                            disabled
+                            control={control}
+                            keyName='scene'
+                            placeholder={t("Scene")}
+                        />
                     </Grid>
 
                     {/* Address Field */}
                     <Grid size={labelSize}>
-                        <Label label='Address' htmlFor='address' />
+                        <Label label={t("Address")} htmlFor='address' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='address' placeholder='Address' disabled />
+                        <ControllerInput control={control} keyName='address' placeholder={t("Address")} disabled />
                     </Grid>
 
                     {/* Website Field */}
                     <Grid size={labelSize}>
-                        <Label label='Website' htmlFor='website' />
+                        <Label label={t("Website")} htmlFor='website' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='website' placeholder='Website' disabled />
+                        <ControllerInput control={control} keyName='website' placeholder={t("Website")} disabled />
                     </Grid>
 
                     {/* Register Date Field */}
                     <Grid size={labelSize}>
-                        <Label label='Register date' htmlFor='startDate' />
+                        <Label label={t("Register date")} htmlFor='startDate' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='startDate' placeholder='Register Date' disabled />
+                        <ControllerInput
+                            control={control}
+                            keyName='startDate'
+                            placeholder={t("Register Date")}
+                            disabled
+                        />
                     </Grid>
                 </Grid>
 
@@ -208,45 +220,45 @@ export const UserInfoDialog = ({ onClose = () => "" }: UserInfoDialogProps) => {
                 >
                     {/* Name Field */}
                     <Grid size={labelSize}>
-                        <Label label='Name' htmlFor='name' />
+                        <Label label={t("Name")} htmlFor='name' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='name' placeholder='Name' disabled />
+                        <ControllerInput control={control} keyName='name' placeholder={t("Name")} disabled />
                     </Grid>
 
                     {/* Phone number Field */}
                     <Grid size={labelSize}>
-                        <Label label='Phone number' htmlFor='phone' />
+                        <Label label={t("Phone number")} htmlFor='phone' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='phone' placeholder='Phone number' disabled />
+                        <ControllerInput control={control} keyName='phone' placeholder={t("Phone number")} disabled />
                     </Grid>
 
                     {/* PEmail Field */}
                     <Grid size={labelSize}>
-                        <Label label='Email' htmlFor='email' />
+                        <Label label={t("Email")} htmlFor='email' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='email' placeholder='Email' disabled />
+                        <ControllerInput control={control} keyName='email' placeholder={t("Email")} disabled />
                     </Grid>
 
                     {/* User ID Field */}
                     <Grid size={labelSize}>
-                        <Label label='User ID' htmlFor='userId' />
+                        <Label label={t("User ID")} htmlFor='userId' />
                     </Grid>
                     <Grid size={inputSize}>
-                        <ControllerInput control={control} keyName='userId' placeholder='User ID' disabled />
+                        <ControllerInput control={control} keyName='userId' placeholder={t("User ID")} disabled />
                     </Grid>
 
                     {/* Password Field */}
                     <Grid size={labelSize}>
-                        <Label label='PW' htmlFor='password' />
+                        <Label label={t("PW")} htmlFor='password' />
                     </Grid>
                     <Grid size={inputSize}>
                         <ControllerInput
                             control={control}
                             keyName='password'
-                            placeholder='Password'
+                            placeholder={t("Password")}
                             disabled
                             inputProps={{
                                 type: "password"
