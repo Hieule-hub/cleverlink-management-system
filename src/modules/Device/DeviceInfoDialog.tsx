@@ -128,30 +128,34 @@ export const DeviceInfoDialog = ({ onClose = () => "" }: DeviceInfoDialogProps) 
     };
 
     const fetchScenes = useCallback((query: string) => {
-        return sceneService.getSceneList({ filters: query, limit: 10, page: 1 }).then((res) => {
-            if (!res.err) {
-                return res.data.scenes.map((scene) => ({
-                    label: scene.name,
-                    value: scene._id
-                }));
-            } else {
-                return [];
-            }
-        });
+        return sceneService
+            .getSceneList({ filters: query, limit: 10, page: 1, sortField: "name", sortOrder: "asc" })
+            .then((res) => {
+                if (!res.err) {
+                    return res.data.scenes.map((scene) => ({
+                        label: scene.name,
+                        value: scene._id
+                    }));
+                } else {
+                    return [];
+                }
+            });
     }, []);
 
     const fetchCompanies = useCallback((query: string) => {
-        return companyService.getCompanyList({ filters: query, limit: 10, page: 1 }).then((res) => {
-            if (!res.err) {
-                return res.data.companies.map((company) => ({
-                    label: company.name,
-                    value: company._id,
-                    id: company.companyId
-                }));
-            } else {
-                return [];
-            }
-        });
+        return companyService
+            .getCompanyList({ filters: query, limit: 10, page: 1, sortField: "name", sortOrder: "asc" })
+            .then((res) => {
+                if (!res.err) {
+                    return res.data.companies.map((company) => ({
+                        label: company.name,
+                        value: company._id,
+                        id: company.companyId
+                    }));
+                } else {
+                    return [];
+                }
+            });
     }, []);
 
     const fetchActivates = useCallback((query: string) => {
@@ -172,21 +176,23 @@ export const DeviceInfoDialog = ({ onClose = () => "" }: DeviceInfoDialogProps) 
     }, []);
 
     const fetchUsers = useCallback((query: string) => {
-        return userService.getUserList({ filters: query, limit: 10, page: 1 }).then((res) => {
-            if (!res.err) {
-                return res.data.users.map((user) => ({
-                    label: user.name,
-                    value: user._id,
-                    id: JSON.stringify({
-                        userId: user.userId,
-                        phone: user.phone,
-                        email: user.email
-                    })
-                }));
-            } else {
-                return [];
-            }
-        });
+        return userService
+            .getUserList({ filters: query, limit: 10, page: 1, sortField: "name", sortOrder: "asc" })
+            .then((res) => {
+                if (!res.err) {
+                    return res.data.users.map((user) => ({
+                        label: user.name,
+                        value: user._id,
+                        id: JSON.stringify({
+                            userId: user.userId,
+                            phone: user.phone,
+                            email: user.email
+                        })
+                    }));
+                } else {
+                    return [];
+                }
+            });
     }, []);
 
     return (

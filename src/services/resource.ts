@@ -5,11 +5,37 @@ import { Area, Category, DataResponse, GetParams, Organization, Pagination, Prot
 const getResources = async () => {
     const roles = apiClient.get<unknown, DataResponse<Role[]>>("/resource/roles").then((res) => res.data);
     const organizations = apiClient
-        .get<unknown, DataResponse<Organization[]>>("/resource/organizations")
+        .get<unknown, DataResponse<Organization[]>>("/resource/organizations", {
+            params: {
+                sortField: "code",
+                sortOrder: "asc"
+            }
+        })
         .then((res) => res.data);
-    const areas = apiClient.get<unknown, DataResponse<Area[]>>("/resource/areas").then((res) => res.data);
-    const protocols = apiClient.get<unknown, DataResponse<Protocol[]>>("/resource/protocols").then((res) => res.data);
-    const categories = apiClient.get<unknown, DataResponse<Category[]>>("/resource/categories").then((res) => res.data);
+    const areas = apiClient
+        .get<unknown, DataResponse<Area[]>>("/resource/areas", {
+            params: {
+                sortField: "code",
+                sortOrder: "asc"
+            }
+        })
+        .then((res) => res.data);
+    const protocols = apiClient
+        .get<unknown, DataResponse<Protocol[]>>("/resource/protocols", {
+            params: {
+                sortField: "code",
+                sortOrder: "asc"
+            }
+        })
+        .then((res) => res.data);
+    const categories = apiClient
+        .get<unknown, DataResponse<Category[]>>("/resource/categories", {
+            params: {
+                sortField: "code",
+                sortOrder: "asc"
+            }
+        })
+        .then((res) => res.data);
 
     return Promise.all([roles, organizations, areas, protocols, categories]);
 };

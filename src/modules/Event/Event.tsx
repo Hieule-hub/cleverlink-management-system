@@ -7,13 +7,15 @@ import { Pagination } from "@components/Pagination";
 import { Paper } from "@components/Paper";
 import { type Column, Table } from "@components/Table";
 import { UserInfoDialog, useUserInfoDialog } from "@modules/User";
-import { DeleteOutline, DescriptionOutlined, FilterList, PhotoCameraBackOutlined, Search } from "@mui/icons-material";
+import { DeleteOutline, FilterList, PhotoCameraBackOutlined, Search } from "@mui/icons-material";
 import { Box, IconButton, Link, TextField, Tooltip, Typography } from "@mui/material";
 import eventService from "@services/event";
 import { toast } from "@store/toastStore";
 import { useConfirm } from "@store/useConfirm";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
+
+import { EditIcon } from "@/components/Icon";
 
 import { EventDialog, useEventDialog } from "./EventDialog";
 import { SnapshotDialog, useSnapshotDialogDialog } from "./SnapshotDialog";
@@ -200,7 +202,7 @@ export const EventPage = () => {
                                 openDialog(record);
                             }}
                         >
-                            <DescriptionOutlined fontSize='inherit' />
+                            <EditIcon fontSize='inherit' />
                         </IconButton>
                         <IconButton
                             size='small'

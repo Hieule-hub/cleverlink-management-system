@@ -122,7 +122,6 @@ export const SnapshotDialog = ({ onClose = () => "" }: SnapshotDialogProps) => {
         >
             <Box
                 sx={{
-                    bgcolor: "primary.main",
                     height: "400px",
                     margin: "16px",
                     backgroundImage: `url(${imageSelected})`,

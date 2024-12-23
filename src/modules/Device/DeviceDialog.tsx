@@ -152,7 +152,8 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
                         companyId: data.company?.value as string,
                         sceneId: data.scene?.value as string,
                         userId: data.manager?.value as string,
-                        place: data.place
+                        place: data.place,
+                        activateId: data.active?.value as string
                     });
                     if (!response.err) {
                         toast.success({ title: t("Edit record success") });
@@ -193,7 +194,9 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
                     filters: query,
                     limit: 10,
                     page: 1,
-                    companyId: (companySelected?.value || "") as string
+                    companyId: (companySelected?.value || "") as string,
+                    sortField: "name",
+                    sortOrder: "asc"
                 })
                 .then((res) => {
                     if (!res.err) {
@@ -210,17 +213,19 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
     );
 
     const fetchCompanies = useCallback((query: string) => {
-        return companyService.getCompanyList({ filters: query, limit: 10, page: 1 }).then((res) => {
-            if (!res.err) {
-                return res.data.companies.map((company) => ({
-                    label: company.name,
-                    value: company._id,
-                    id: company.companyId
-                }));
-            } else {
-                return [];
-            }
-        });
+        return companyService
+            .getCompanyList({ filters: query, limit: 10, page: 1, sortField: "name", sortOrder: "asc" })
+            .then((res) => {
+                if (!res.err) {
+                    return res.data.companies.map((company) => ({
+                        label: company.name,
+                        value: company._id,
+                        id: company.companyId
+                    }));
+                } else {
+                    return [];
+                }
+            });
     }, []);
 
     const fetchActivates = useCallback((query: string) => {
@@ -252,7 +257,9 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
                     limit: 10,
                     page: 1,
                     companyId: companySelected?.value as string,
-                    sceneId: sceneSelected?.value as string
+                    sceneId: sceneSelected?.value as string,
+                    sortField: "name",
+                    sortOrder: "asc"
                 })
                 .then((res) => {
                     if (!res.err) {

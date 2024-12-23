@@ -106,6 +106,7 @@ export type EditDeviceReq = {
     sceneId: string;
     userId: string;
     place: string;
+    activateId: string;
 };
 
 export type DeleteDevicesReq = {

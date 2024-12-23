@@ -85,6 +85,24 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
         return editMode ? t("Edit record") : t("Add new record");
     }, [editMode, t, readonly]);
 
+    const protocolOptions = useMemo(
+        () =>
+            protocols.map((org) => ({
+                value: org._id,
+                label: `${org.code} (${org.name})`
+            })),
+        [protocols]
+    );
+
+    const categoryOptions = useMemo(
+        () =>
+            categories.map((org) => ({
+                value: org._id,
+                label: `${org.code} (${org.name})`
+            })),
+        [categories]
+    );
+
     const resolutionOptions = useMemo(() => {
         return cameraResolutionOptions.reduce((acc, cur) => {
             acc.push({
@@ -301,10 +319,7 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
                             keyName='categoryId'
                             placeholder={t("Camera type")}
                             selectProps={{
-                                options: categories.map((org) => ({
-                                    value: org._id,
-                                    label: org.name
-                                }))
+                                options: categoryOptions
                             }}
                         />
                     </Grid>
@@ -356,10 +371,7 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
                             keyName='protocolId'
                             placeholder={t("Protocol")}
                             selectProps={{
-                                options: protocols.map((org) => ({
-                                    value: org._id,
-                                    label: org.name
-                                }))
+                                options: protocolOptions
                             }}
                         />
                     </Grid>

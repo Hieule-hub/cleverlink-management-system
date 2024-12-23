@@ -236,17 +236,19 @@ export const SceneDialog = ({ onClose = () => "" }: SceneDialogProps) => {
     };
 
     const fetchCompanies = useCallback((query: string) => {
-        return companyService.getCompanyList({ filters: query, limit: 10, page: 1 }).then((res) => {
-            if (!res.err) {
-                return res.data.companies.map((company) => ({
-                    label: company.name,
-                    value: company._id,
-                    id: company.companyId
-                }));
-            } else {
-                return [];
-            }
-        });
+        return companyService
+            .getCompanyList({ filters: query, limit: 10, page: 1, sortField: "name", sortOrder: "asc" })
+            .then((res) => {
+                if (!res.err) {
+                    return res.data.companies.map((company) => ({
+                        label: company.name,
+                        value: company._id,
+                        id: company.companyId
+                    }));
+                } else {
+                    return [];
+                }
+            });
     }, []);
 
     return (

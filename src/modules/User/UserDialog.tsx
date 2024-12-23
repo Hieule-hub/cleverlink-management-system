@@ -227,6 +227,11 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
     const fetchingUserId = async () => {
         const roleId = getValues("roleId");
 
+        if (!roleId) {
+            toast.error({ title: translateRequiredMessage("Role") });
+            return;
+        }
+
         //get role code
         setIsFetchingId(true);
 
@@ -261,7 +266,9 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                     filters: query,
                     limit: 10,
                     page: 1,
-                    companyId: (companySelected?.value || "") as string
+                    companyId: (companySelected?.value || "") as string,
+                    sortField: "name",
+                    sortOrder: "asc"
                 })
                 .then((res) => {
                     if (!res.err) {
@@ -278,17 +285,19 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
     );
 
     const fetchCompanies = useCallback((query: string) => {
-        return companyService.getCompanyList({ filters: query, limit: 10, page: 1 }).then((res) => {
-            if (!res.err) {
-                return res.data.companies.map((company) => ({
-                    label: company.name,
-                    value: company._id,
-                    id: company.companyId
-                }));
-            } else {
-                return [];
-            }
-        });
+        return companyService
+            .getCompanyList({ filters: query, limit: 10, page: 1, sortField: "name", sortOrder: "asc" })
+            .then((res) => {
+                if (!res.err) {
+                    return res.data.companies.map((company) => ({
+                        label: company.name,
+                        value: company._id,
+                        id: company.companyId
+                    }));
+                } else {
+                    return [];
+                }
+            });
     }, []);
 
     return (
