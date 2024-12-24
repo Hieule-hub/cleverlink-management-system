@@ -343,7 +343,7 @@ export const CameraDialog = ({ onClose = () => "" }: CameraDialogProps) => {
                             onClick={fetchId}
                             loading={isFetchingId}
                         >
-                            {tCommon("Init")}
+                            {tCommon("Create ID")}
                         </Button>
                     </Grid>
 

@@ -357,7 +357,7 @@ export const SceneDialog = ({ onClose = () => "" }: SceneDialogProps) => {
                             onClick={fetchId}
                             loading={isFetchingId}
                         >
-                            {tCommon("Init")}
+                            {tCommon("Create ID")}
                         </Button>
                     </Grid>
 

@@ -19,6 +19,7 @@
         "No": "아니오",
         "Reset": "리셋",
         "Init": "계정 생성",
+        "Create ID": "ID 생성",
         "Detail": "상세",
         "Camera": "카메라",
         "Snapshot": "스냅샷",
@@ -124,7 +125,7 @@
         "Phone number": "전화번호",
         "Website": "홈페이지",
         "Register date": "등록일자",
-        "User ID": "관리 담당자",
+        "User ID": "관리자 ID",
         "Delete record confirm": "선택한 기관을 삭제하겠습니다."
     },
 
@@ -150,7 +151,7 @@
         "Emplacement": "설치 장소",
         "IP Address": "IP 주소",
         "MAC": "MAC",
-        "User ID": "관리 담당자",
+        "User ID": "관리자 ID",
         "Phone number": "전화번호",
         "Email": "이메일",
         "Connected camera information": "연결 카메라 정보",
@@ -171,6 +172,8 @@
         "Create record failed": "카메라 생성 실패했습니다",
         "Delete record success": "삭제 성공했습니다",
         "Model ID": "모델 ID",
+        "Emplacement": "설치장소",
+        "IP Address": "IP 주소",
         "Model name": "모델명",
         "Type": "종류",
         "Factory": "제조사",
@@ -223,7 +226,7 @@
     "LoginPage": {
         "title": "로그인",
         "Clever link": "클레버링크",
-        "Login title": "CLEVER-LINK 클라우드 서비스",
+        "Login title": "클레버링크 통합관리시스템",
         "Login": "로그인",
         "Password": "비밀번호",
         "Thank you for your visit": "방문해 주셔서 감사합니다.",

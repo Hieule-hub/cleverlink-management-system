@@ -4,6 +4,7 @@ import { Label } from "@components/Label";
 import { TitleTag } from "@components/TitleTag";
 import { Channel } from "@interfaces/device";
 import { Grid2 as Grid, Grid2Props, TextField } from "@mui/material";
+import { useTranslations } from "next-intl";
 
 const labelSize = 4;
 const inputSize = 8;
@@ -14,6 +15,8 @@ interface ChannelInfoProps extends Grid2Props {
 }
 
 export const ChannelInfo = ({ channel, channelId }: ChannelInfoProps) => {
+    const t = useTranslations("CameraPage");
+
     return (
         <Grid container spacing={2} columns={12} alignItems={"center"}>
             <Grid size={12}>
@@ -22,7 +25,7 @@ export const ChannelInfo = ({ channel, channelId }: ChannelInfoProps) => {
 
             {/* Model Id Field */}
             <Grid size={labelSize}>
-                <Label label='Model ID' />
+                <Label label={t("Model ID")} />
             </Grid>
 
             <Grid size={inputSize}>
@@ -31,7 +34,7 @@ export const ChannelInfo = ({ channel, channelId }: ChannelInfoProps) => {
 
             {/* Model name Field */}
             <Grid size={labelSize}>
-                <Label label='Model name' />
+                <Label label={t("Model name")} />
             </Grid>
             <Grid size={inputSize}>
                 <TextField fullWidth value={channel?.modelName || ""} disabled />
@@ -39,7 +42,7 @@ export const ChannelInfo = ({ channel, channelId }: ChannelInfoProps) => {
 
             {/* IP Field */}
             <Grid size={labelSize}>
-                <Label label='IP' />
+                <Label label={t("IP Address")} />
             </Grid>
             <Grid size={inputSize}>
                 <TextField fullWidth value={channel?.ip || ""} disabled />
@@ -47,7 +50,7 @@ export const ChannelInfo = ({ channel, channelId }: ChannelInfoProps) => {
 
             {/* Emplacement Field */}
             <Grid size={labelSize}>
-                <Label label='Emplacement' htmlFor='place' />
+                <Label label={t("Emplacement")} htmlFor='place' />
             </Grid>
             <Grid size={inputSize}>
                 <TextField fullWidth value={channel?.place || ""} disabled />
@@ -55,7 +58,7 @@ export const ChannelInfo = ({ channel, channelId }: ChannelInfoProps) => {
 
             {/* Factory Field */}
             <Grid size={labelSize}>
-                <Label label='Factory' />
+                <Label label={t("Factory")} />
             </Grid>
             <Grid size={inputSize}>
                 <TextField fullWidth value={channel?.factory || ""} disabled />

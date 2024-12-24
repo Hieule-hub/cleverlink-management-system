@@ -315,7 +315,7 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
                         onClick={fetchId}
                         loading={isFetchingId}
                     >
-                        {tCommon("Init")}
+                        {tCommon("Create ID")}
                     </Button>
                 </Grid>
 
