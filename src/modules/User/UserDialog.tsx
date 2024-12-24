@@ -4,6 +4,7 @@ import { Button } from "@components/Button";
 import { ControllerAsyncSearchSelect, ControllerInput, ControllerSelect, type Option } from "@components/Controller";
 import { Dialog } from "@components/Dialog";
 import { Label } from "@components/Label";
+import { DEFAULT_PASSWORD } from "@configs/app";
 import { useYupLocale } from "@configs/yupConfig";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { User } from "@interfaces/user";
@@ -245,8 +246,6 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                 // setUserForm(response.data);
                 setValue("userId", userId);
                 clearErrors("userId");
-                setValue("password", password);
-                clearErrors("password");
                 setValue("token", token);
             }
         } catch (error) {
@@ -439,8 +438,22 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                 <Grid size={labelSize}>
                     <Label required label={t("User ID")} htmlFor='userId' />
                 </Grid>
-                <Grid size={inputSize}>
+                <Grid size={inputSize - 3}>
                     <ControllerInput control={control} keyName='userId' placeholder={t("User ID")} disabled />
+                </Grid>
+                <Grid size={3} alignSelf={"start"}>
+                    <Button
+                        color='primary'
+                        style={{
+                            width: "100%"
+                        }}
+                        height='51px'
+                        disabled={editMode || readonly}
+                        onClick={fetchingUserId}
+                        loading={isFetchingId}
+                    >
+                        {tCommon("Create ID")}
+                    </Button>
                 </Grid>
 
                 {/* Register date Field */}
@@ -455,7 +468,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                 <Grid size={labelSize}>
                     <Label required label={t("PW")} htmlFor='password' />
                 </Grid>
-                <Grid size={5}>
+                <Grid size={inputSize - 3}>
                     <ControllerInput
                         control={control}
                         keyName='password'
@@ -474,8 +487,10 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                         }}
                         height='51px'
                         disabled={editMode || readonly}
-                        onClick={fetchingUserId}
-                        loading={isFetchingId}
+                        onClick={() => {
+                            setValue("password", DEFAULT_PASSWORD);
+                            clearErrors("password");
+                        }}
                     >
                         {tCommon("Init")}
                     </Button>

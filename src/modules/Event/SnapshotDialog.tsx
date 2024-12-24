@@ -143,7 +143,7 @@ export const SnapshotDialog = ({ onClose = () => "" }: SnapshotDialogProps) => {
 
             <Divider />
 
-            <Grid padding={2} width='100%' container spacing={"5px"} columns={10} maxHeight={"300px"} overflow={"auto"}>
+            <Grid padding={2} width='100%' container spacing={"5px"} columns={10} maxHeight={"240px"} overflow={"auto"}>
                 {item?.images.map((image, index) => {
                     return (
                         <Grid size={2} key={index}>

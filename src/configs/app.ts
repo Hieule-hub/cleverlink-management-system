@@ -3,6 +3,8 @@ export const host = process.env.VERCEL_PROJECT_PRODUCTION_URL
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
     : `http://localhost:${port}`;
 
+export const DEFAULT_PASSWORD = "a123456789";
+
 export const poeOptions = [
     {
         value: 0,
