@@ -61,7 +61,7 @@ export const CompanyDialog = ({ onClose = () => "" }: CompanyDialogProps) => {
         page: "CompanyPage"
     });
 
-    const { organizations } = useAppStore((state) => state);
+    const organizations = useAppStore((state) => state.organizations);
     const { item, open, closeDialog, readonly } = useCompanyDialog();
 
     const [isLoading, setIsLoading] = useState(false);

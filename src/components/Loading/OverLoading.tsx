@@ -75,7 +75,7 @@ interface OverLoadingProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const OverLoading = ({ title = "CLEVER-LINK SYSTEM", ...props }: OverLoadingProps) => {
-    const { isFetching } = useAppStore((state) => state);
+    // const isFetching = useAppStore((state) => state.isFetching);
 
     return (
         <StyledOverLoading {...props}>

@@ -32,7 +32,7 @@ export const SnapshotDialog = ({ onClose = () => "" }: SnapshotDialogProps) => {
         if (isPlaying) {
             timer = setInterval(() => {
                 handleNextImage();
-            }, 2000);
+            }, 500);
         } else {
             if (timer) clearInterval(timer);
         }

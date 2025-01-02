@@ -2,7 +2,7 @@
 
 import React, { type ReactNode, useEffect } from "react";
 
-import { useAppStore } from "@/providers/AppStoreProvider";
+import { useAppStore } from "@providers/AppStoreProvider";
 
 import { Loading } from "./Loading";
 

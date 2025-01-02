@@ -3,6 +3,7 @@ import React from "react";
 
 import { Button } from "@components/Button";
 import { ConfirmDialog } from "@components/Dialog";
+import { EditIcon } from "@components/Icon";
 import { Pagination } from "@components/Pagination";
 import { Paper } from "@components/Paper";
 import { type Column, Table } from "@components/Table";
@@ -15,8 +16,7 @@ import { useConfirm } from "@store/useConfirm";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
 
-import { EditIcon } from "@/components/Icon";
-
+import { DeviceInfoDialog, useDeviceInfoDialog } from "../Device";
 import { EventDialog, useEventDialog } from "./EventDialog";
 import { SnapshotDialog, useSnapshotDialogDialog } from "./SnapshotDialog";
 
@@ -29,6 +29,7 @@ export const EventPage = () => {
 
     //Store controller
     const { openDialog } = useEventDialog();
+    const { openDialog: showDeviceInfo } = useDeviceInfoDialog();
     const { openDialog: showUserInfo } = useUserInfoDialog();
     const { openDialog: showSnapshot } = useSnapshotDialogDialog();
     const { startConfirm } = useConfirm();
@@ -121,13 +122,13 @@ export const EventPage = () => {
                 title: t("Device ID"),
                 dataIndex: "activate",
                 width: 200,
-                render: (value, record) => (
+                render: (value) => (
                     <Link
                         component='button'
                         variant='body2'
                         fontWeight={500}
                         onClick={() => {
-                            openDialog(record, true);
+                            showDeviceInfo(value, true);
                         }}
                     >
                         {value?.boxId}
@@ -287,6 +288,8 @@ export const EventPage = () => {
 
             <UserInfoDialog />
 
+            <DeviceInfoDialog />
+
             <EventDialog
                 onClose={(status) => {
                     if (status === "success") {
@@ -297,7 +300,12 @@ export const EventPage = () => {
 
             <SnapshotDialog />
 
-            <ConfirmDialog title={tCommon("Delete")} description={t("Delete record confirm")} color='error' />
+            <ConfirmDialog
+                title={tCommon("Delete")}
+                description={t("Delete record confirm")}
+                color='error'
+                confirmText={tCommon("Continue")}
+            />
         </React.Fragment>
     );
 };

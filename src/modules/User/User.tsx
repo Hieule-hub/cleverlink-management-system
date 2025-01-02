@@ -253,7 +253,12 @@ export const UserPage = () => {
                 }}
             />
 
-            <ConfirmDialog title={tCommon("Delete")} description={t("Delete record confirm")} color='error' />
+            <ConfirmDialog
+                title={tCommon("Delete")}
+                description={t("Delete record confirm")}
+                color='error'
+                confirmText={tCommon("Continue")}
+            />
         </React.Fragment>
     );
 };

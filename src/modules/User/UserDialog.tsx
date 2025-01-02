@@ -79,7 +79,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
         page: "UserPage"
     });
 
-    const { roles } = useAppStore((state) => state);
+    const roles = useAppStore((state) => state.roles);
 
     const [isLoading, setIsLoading] = useState(false);
     const [isFetchingId, setIsFetchingId] = useState(false);

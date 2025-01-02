@@ -18,10 +18,6 @@ import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 
-interface CompanyInfoProps {
-    companyId?: string;
-}
-
 const labelSize = 4;
 const inputSize = 8;
 
@@ -53,7 +49,7 @@ const initFormValues: FormCompanyValues = {
     startDate: dayjs().format("YYYY-MM-DD")
 };
 
-export const CompanyInfo = ({ companyId }: CompanyInfoProps) => {
+export const CompanyInfo = () => {
     const t = useTranslations("CompanyPage");
     const tCommon = useTranslations("Common");
 
@@ -61,7 +57,7 @@ export const CompanyInfo = ({ companyId }: CompanyInfoProps) => {
         page: "CompanyPage"
     });
 
-    const { organizations } = useAppStore((state) => state);
+    const organizations = useAppStore((state) => state.organizations);
     const [item, setItem] = useState<Company>(null as Company);
 
     const [isLoading, setIsLoading] = useState(false);

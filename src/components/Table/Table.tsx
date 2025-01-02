@@ -46,6 +46,7 @@ interface DataType {
 }
 
 interface TableProps {
+    maxHeight?: number | string;
     columns: Column[];
     data: DataType[];
     isLoading?: boolean;
@@ -77,7 +78,7 @@ interface TableProps {
     };
 }
 
-export const Table = ({ columns, data, isLoading = false, rowSelection, border }: TableProps) => {
+export const Table = ({ columns, data, isLoading = false, rowSelection, border, maxHeight = "auto" }: TableProps) => {
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
     useEffect(() => {
@@ -135,8 +136,8 @@ export const Table = ({ columns, data, isLoading = false, rowSelection, border }
             sx={{
                 border: border ? "1px solid #e0e0e0" : "none",
                 borderRadius: "12px",
-                overflow: "hidden",
-                position: "relative"
+                position: "relative",
+                maxHeight: maxHeight || "auto"
             }}
         >
             {isLoading && (
@@ -144,7 +145,7 @@ export const Table = ({ columns, data, isLoading = false, rowSelection, border }
                     <Spinner />
                 </div>
             )}
-            <TableMui stickyHeader>
+            <TableMui stickyHeader={maxHeight !== "auto"}>
                 <TableHead>
                     <StyledTableRow>
                         {rowSelection && (

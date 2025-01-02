@@ -22,6 +22,7 @@ export interface Device {
         _id: string;
         sceneId: string;
         name: string;
+        createdAt: string;
     };
     user: User;
 }

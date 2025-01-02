@@ -8,7 +8,7 @@ import { CssBaseline, ThemeProvider as ThemeProviderMui } from "@mui/material";
 import { useAppStore } from "@providers/AppStoreProvider";
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-    const { role } = useAppStore((state) => state);
+    const role = useAppStore((state) => state.role);
 
     const theme = userThemes[role];
 

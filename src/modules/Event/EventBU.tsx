@@ -1,34 +1,41 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import React from "react";
 
 import { Button } from "@components/Button";
 import { ConfirmDialog } from "@components/Dialog";
 import { EditIcon } from "@components/Icon";
 import { Pagination } from "@components/Pagination";
 import { Paper } from "@components/Paper";
+import { Slider } from "@components/Slider";
 import { type Column, Table } from "@components/Table";
 import { UserInfoDialog, useUserInfoDialog } from "@modules/User";
-import { AddCircleOutlineOutlined, DeleteOutline, FilterList, Search, VideocamOutlined } from "@mui/icons-material";
-import { Box, IconButton, Link, TextField } from "@mui/material";
-import deviceService from "@services/device";
+import { DeleteOutline, FilterList, PhotoCameraBackOutlined, Search } from "@mui/icons-material";
+import { Box, IconButton, Link, TextField, Tooltip, Typography } from "@mui/material";
+import eventService from "@services/event";
 import { toast } from "@store/toastStore";
 import { useConfirm } from "@store/useConfirm";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
 
-import { CameraLinkInfo, useCameraLinkDialog } from "./CameraLinkInfo";
-import { DeviceDialog, useDeviceDialog } from "./DeviceDialog";
+import { Event } from "@/interfaces/event";
 
-export const DevicePage = () => {
-    const t = useTranslations("DevicePage");
+import { DeviceDialog, useDeviceDialog } from "../Device/DeviceDialog";
+import { EventCard } from "./EventCard";
+import { EventDialog, useEventDialog } from "./EventDialog";
+import { SnapshotDialog, useSnapshotDialogDialog } from "./SnapshotDialog";
+
+export const EventBU = () => {
+    const t = useTranslations("EventPage");
     const tCommon = useTranslations("Common");
 
     const [isFetching, setIsFetching] = useState(false);
     const [dataList, setDataList] = useState([]);
 
     //Store controller
-    const { openDialog } = useDeviceDialog();
-    const { openDialog: showCameraLinkInfo } = useCameraLinkDialog();
+    const { openDialog } = useEventDialog();
+    const { openDialog: showDeviceInfo } = useDeviceDialog();
     const { openDialog: showUserInfo } = useUserInfoDialog();
+    const { openDialog: showSnapshot } = useSnapshotDialogDialog();
     const { startConfirm } = useConfirm();
 
     //Delete list
@@ -46,10 +53,10 @@ export const DevicePage = () => {
     const fetchDataList = useCallback(async (params: typeof filter) => {
         setIsFetching(true);
         try {
-            const listRes = await deviceService.getDeviceList(params);
+            const listRes = await eventService.getEventList(params);
 
             if (!listRes.err) {
-                setDataList(listRes.data.devices);
+                setDataList(listRes.data.events);
                 setTotal(listRes.data.paging.totalItems);
             }
         } catch (error) {
@@ -68,9 +75,10 @@ export const DevicePage = () => {
         setIsFetching(true);
 
         try {
-            await deviceService.deleteDevices({
+            await eventService.deleteEvents({
                 ids: ids
             });
+
             fetchDataList(filter);
             setDeleteIds([]);
 
@@ -99,18 +107,32 @@ export const DevicePage = () => {
     const columns = useMemo((): Column[] => {
         return [
             {
+                key: "time",
+                title: t("Event time"),
+                dataIndex: "time",
+                width: 200,
+                render: (value) => dayjs(value).format("YYYY.MM.DD HH:mm:ss")
+            },
+            {
+                key: "emplacement",
+                title: t("Emplacement"),
+                dataIndex: "device",
+                width: 200,
+                render: (value) => value?.place
+            },
+
+            {
                 key: "deviceId",
                 title: t("Device ID"),
                 dataIndex: "activate",
-                align: "center",
                 width: 200,
-                render: (value, record) => (
+                render: (value) => (
                     <Link
                         component='button'
                         variant='body2'
                         fontWeight={500}
                         onClick={() => {
-                            openDialog(record, true);
+                            showDeviceInfo(value, true);
                         }}
                     >
                         {value?.boxId}
@@ -118,30 +140,30 @@ export const DevicePage = () => {
                 )
             },
             {
-                key: "installDate",
-                title: t("Install date"),
-                dataIndex: "createdAt",
+                key: "notifyCode",
+                title: t("Warning device"),
+                dataIndex: "notifyCode",
+                align: "center",
+                width: 200,
+                render: (value) => value
+            },
+            {
+                key: "receiver",
+                title: t("Receiver"),
+                dataIndex: "receiver",
                 align: "center",
                 width: 200,
                 render: (value) => {
-                    return dayjs(value).format("YYYY-MM-DD");
+                    const title = (value || []).join(", ");
+                    return (
+                        <Tooltip title={title}>
+                            <Typography width={"200px"} noWrap>
+                                {title}
+                            </Typography>
+                        </Tooltip>
+                    );
                 }
             },
-            {
-                key: "companyName",
-                title: t("Company name"),
-                dataIndex: "company",
-                width: 200,
-                render: (value) => value?.name
-            },
-            {
-                key: "sceneName",
-                title: t("Scene name"),
-                dataIndex: "scene",
-                width: 200,
-                render: (value) => value?.name
-            },
-
             {
                 key: "user",
                 title: t("Manager"),
@@ -164,19 +186,19 @@ export const DevicePage = () => {
                 }
             },
             {
-                title: tCommon("Camera") + "/" + tCommon("Edit") + "/" + tCommon("Delete"),
+                title: tCommon("Snapshot") + "/" + tCommon("Edit") + "/" + tCommon("Delete"),
                 key: "action",
                 align: "right",
                 render: (_, record) => (
                     <Box display='flex' justifyContent='end' gap={2}>
                         <IconButton
                             size='small'
-                            color='success'
+                            color='warning'
                             onClick={() => {
-                                showCameraLinkInfo(record);
+                                showSnapshot(record);
                             }}
                         >
-                            <VideocamOutlined fontSize='inherit' />
+                            <PhotoCameraBackOutlined fontSize='inherit' />
                         </IconButton>
                         <IconButton
                             size='small'
@@ -204,6 +226,12 @@ export const DevicePage = () => {
 
     return (
         <React.Fragment>
+            <Slider
+                items={dataList}
+                render={(item) => {
+                    return <EventCard item={item as Event} />;
+                }}
+            />
             <Paper title={t("title")}>
                 <Box display='flex' alignItems='center' gap='12px' marginBottom={"12px"}>
                     <div>{tCommon("Search")}</div>
@@ -219,26 +247,10 @@ export const DevicePage = () => {
                     <Button height='48px' startIcon={Search} onClick={handleSearch}>
                         {tCommon("Search")}
                     </Button>
-                    {/* <Button height='48px' startIcon={FilterList} onClick={triggerToastDev}>
-                        {tCommon("Filter")}
-                    </Button> */}
-
-                    <Button
-                        style={{
-                            marginLeft: "auto"
-                        }}
-                        height='48px'
-                        color='primary'
-                        startIcon={AddCircleOutlineOutlined}
-                        onClick={() => {
-                            openDialog();
-                        }}
-                    >
-                        {t("Add new record")}
-                    </Button>
                 </Box>
 
                 <Table
+                    maxHeight={400}
                     border
                     isLoading={isFetching}
                     columns={columns}
@@ -282,7 +294,11 @@ export const DevicePage = () => {
                 )}
             </Box>
 
-            <DeviceDialog
+            <UserInfoDialog />
+
+            <DeviceDialog />
+
+            <EventDialog
                 onClose={(status) => {
                     if (status === "success") {
                         handleSearch();
@@ -290,9 +306,7 @@ export const DevicePage = () => {
                 }}
             />
 
-            <UserInfoDialog />
-
-            <CameraLinkInfo />
+            <SnapshotDialog />
 
             <ConfirmDialog
                 title={tCommon("Delete")}

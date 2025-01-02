@@ -107,15 +107,15 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
 
                 place: item.place,
                 active: {
-                    value: item.activate.boxId as string,
-                    label: item.activate.boxId as string,
+                    value: item.activate?.boxId as string,
+                    label: item.activate?.boxId as string,
                     id: JSON.stringify({
-                        ipAddress: item.activate.ip,
-                        mac: item.activate.mac
+                        ipAddress: item.activate?.ip,
+                        mac: item.activate?.mac
                     })
                 },
-                mac: item.activate.mac,
-                ipAddress: item.activate.ip,
+                mac: item.activate?.mac,
+                ipAddress: item.activate?.ip,
                 manager: {
                     value: item.user?._id as string,
                     label: item.user?.name as string,
@@ -300,7 +300,13 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
             loading={isLoading}
             footer={
                 <Box display='flex' width='100%' alignItems='center' justifyContent='space-between'>
-                    <Button color='primary' startIcon={CastOutlined} height='36px' onClick={triggerToastDev}>
+                    <Button
+                        color='primary'
+                        startIcon={CastOutlined}
+                        height='36px'
+                        disabled={!item}
+                        onClick={triggerToastDev}
+                    >
                         {t("Connecting to the device")}
                     </Button>
                     <Box>

@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 import { LanguageButton } from "@components/Button/LanguageButton";
 import { DateTimeGroup } from "@components/DateTimeGroup";
 import { Profile } from "@components/Profile";
@@ -5,6 +7,8 @@ import { Toolbar, Typography as TypographyMUI, useMediaQuery } from "@mui/materi
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import { Theme, styled } from "@mui/material/styles";
 import { useTranslations } from "next-intl";
+
+import { useAppStore } from "@/providers/AppStoreProvider";
 
 import { sideBarWidth } from "../Sidebar";
 
@@ -51,6 +55,22 @@ const AppBar = styled(MuiAppBar, {
 
 export const Header = ({ isMenuCollapse }: CProps) => {
     const t = useTranslations("App");
+    const userInfo = useAppStore((state) => state.userInfo);
+
+    const companyName = useMemo(() => {
+        if (userInfo?.roleId?.code === "CIP") return "";
+
+        if (userInfo?.roleId?.code === "TU" && userInfo?.companyId?.name) {
+            return "\xa0".repeat(2) + `[${userInfo?.companyId?.name}]`;
+        }
+
+        if (userInfo?.roleId?.code === "BU" && userInfo?.sceneId?.name) {
+            return "\xa0".repeat(2) + `[${userInfo?.sceneId?.name}]`;
+        }
+
+        return "";
+    }, [userInfo]);
+
     const matches = useMediaQuery((theme: Theme) => theme.breakpoints.up("md"));
 
     return (
@@ -67,7 +87,7 @@ export const Header = ({ isMenuCollapse }: CProps) => {
                     height: "4.5rem"
                 }}
             >
-                <Typography noWrap>{t("logo-text")}</Typography>
+                <Typography noWrap>{t("logo-text") + companyName}</Typography>
 
                 <DateTimeGroup
                     sx={{

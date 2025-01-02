@@ -7,13 +7,16 @@ import { useParams } from "next/navigation";
 import { Dropdown } from "@components/Dropdown";
 import { Locale, routing, usePathname, useRouter } from "@libs/i18n/routing";
 import { ExpandMoreOutlined } from "@mui/icons-material";
-import { Button, styled } from "@mui/material";
+import { styled } from "@mui/material";
 import { useLocale, useTranslations } from "next-intl";
+
+import { Button } from "./Button";
 
 const LgButton = styled(Button)`
     font-size: 0.8rem;
-    text-transform: none;
-    border-radius: 30px;
+    height: 38px;
+    border-color: var(--palette-primary-main) !important;
+    color: var(--palette-primary-main) !important;
 `;
 
 export const LanguageButton = () => {
@@ -70,7 +73,7 @@ export const LanguageButton = () => {
                     }
                 }}
             >
-                <LgButton disabled={isPending} variant='outlined' endIcon={<ExpandMoreOutlined />}>
+                <LgButton disabled={isPending} endIcon={ExpandMoreOutlined}>
                     {getLanguageLabel(locale)}
                 </LgButton>
             </Dropdown>

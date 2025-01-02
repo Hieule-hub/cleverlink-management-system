@@ -1,14 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
-import { Button } from "@components/Button";
 import { ConfirmDialog } from "@components/Dialog";
 import { EditIcon } from "@components/Icon";
-import { Pagination } from "@components/Pagination";
 import { Paper } from "@components/Paper";
 import { type Column, Table } from "@components/Table";
+import { Device } from "@interfaces/device";
 import { UserInfoDialog, useUserInfoDialog } from "@modules/User";
-import { AddCircleOutlineOutlined, DeleteOutline, FilterList, Search, VideocamOutlined } from "@mui/icons-material";
-import { Box, IconButton, Link, TextField } from "@mui/material";
+import { DeleteOutline, VideocamOutlined } from "@mui/icons-material";
+import { Box, IconButton, Link } from "@mui/material";
 import deviceService from "@services/device";
 import { toast } from "@store/toastStore";
 import { useConfirm } from "@store/useConfirm";
@@ -18,12 +17,20 @@ import { useTranslations } from "next-intl";
 import { CameraLinkInfo, useCameraLinkDialog } from "./CameraLinkInfo";
 import { DeviceDialog, useDeviceDialog } from "./DeviceDialog";
 
-export const DevicePage = () => {
+interface DeviceGroupData {
+    _id: string;
+    sceneId: string;
+    sceneName: string;
+    createdAt: string;
+    devices: Device[];
+}
+
+export const DeviceTU = () => {
     const t = useTranslations("DevicePage");
     const tCommon = useTranslations("Common");
 
     const [isFetching, setIsFetching] = useState(false);
-    const [dataList, setDataList] = useState([]);
+    const [dataList, setDataList] = useState<DeviceGroupData[]>([]);
 
     //Store controller
     const { openDialog } = useDeviceDialog();
@@ -31,29 +38,45 @@ export const DevicePage = () => {
     const { openDialog: showUserInfo } = useUserInfoDialog();
     const { startConfirm } = useConfirm();
 
-    //Delete list
-    const [deleteIds, setDeleteIds] = useState([]);
-
-    // Filter
-    const [total, setTotal] = useState(0);
-    const [keyword, setKeyword] = useState("");
-    const [filter, setFilter] = useState({
-        page: 1,
-        limit: 10,
-        filters: ""
-    });
-
-    const fetchDataList = useCallback(async (params: typeof filter) => {
+    const fetchDataList = useCallback(async () => {
         setIsFetching(true);
         try {
-            const listRes = await deviceService.getDeviceList(params);
+            const listRes = await deviceService.getDeviceList({
+                page: 1,
+                limit: 999999,
+                filters: ""
+            });
 
             if (!listRes.err) {
-                setDataList(listRes.data.devices);
-                setTotal(listRes.data.paging.totalItems);
+                const devices = listRes.data?.devices || [];
+
+                const groupData: DeviceGroupData[] = devices.reduce((acc: DeviceGroupData[], device) => {
+                    const sceneIndex = acc.findIndex((item) => item.sceneId === device.scene?._id);
+
+                    if (sceneIndex !== -1) {
+                        acc[sceneIndex].devices.push(device);
+                    } else {
+                        acc.push({
+                            _id: device.scene?._id,
+                            sceneId: device.scene?._id,
+                            sceneName: device.scene?.name,
+                            createdAt: device.scene?.createdAt,
+                            devices: [device]
+                        });
+                    }
+
+                    return acc;
+                }, []);
+
+                //sort by scene createdAt
+                groupData.sort((a, b) => {
+                    return dayjs(a.createdAt).unix() - dayjs(b.createdAt).unix();
+                });
+
+                setDataList(groupData);
             }
         } catch (error) {
-            console.error(error);
+            console.log("🚀 ~ fetchDataList ~ error:", error);
         } finally {
             setIsFetching(false);
         }
@@ -61,8 +84,8 @@ export const DevicePage = () => {
 
     useEffect(() => {
         // Fetch data
-        fetchDataList(filter);
-    }, [filter, fetchDataList]);
+        fetchDataList();
+    }, [fetchDataList]);
 
     const handleDeleteItems = async (ids: string[]) => {
         setIsFetching(true);
@@ -71,8 +94,7 @@ export const DevicePage = () => {
             await deviceService.deleteDevices({
                 ids: ids
             });
-            fetchDataList(filter);
-            setDeleteIds([]);
+            fetchDataList();
 
             toast.success({ title: t("Delete record success") });
         } catch (error) {
@@ -89,12 +111,6 @@ export const DevicePage = () => {
             }
         });
     };
-
-    const handleSearch = useCallback(() => {
-        setFilter((pre) => {
-            return { ...pre, page: 1, filters: keyword };
-        });
-    }, [keyword]);
 
     const columns = useMemo((): Column[] => {
         return [
@@ -204,88 +220,24 @@ export const DevicePage = () => {
 
     return (
         <React.Fragment>
-            <Paper title={t("title")}>
-                <Box display='flex' alignItems='center' gap='12px' marginBottom={"12px"}>
-                    <div>{tCommon("Search")}</div>
-                    <TextField
-                        sx={{
-                            minWidth: 320
-                        }}
-                        size='small'
-                        value={keyword}
-                        onChange={(e) => setKeyword(e.target.value)}
-                        placeholder={t("Placeholder search")}
-                    />
-                    <Button height='48px' startIcon={Search} onClick={handleSearch}>
-                        {tCommon("Search")}
-                    </Button>
-                    {/* <Button height='48px' startIcon={FilterList} onClick={triggerToastDev}>
-                        {tCommon("Filter")}
-                    </Button> */}
-
-                    <Button
-                        style={{
-                            marginLeft: "auto"
-                        }}
-                        height='48px'
-                        color='primary'
-                        startIcon={AddCircleOutlineOutlined}
-                        onClick={() => {
-                            openDialog();
-                        }}
-                    >
-                        {t("Add new record")}
-                    </Button>
-                </Box>
-
-                <Table
-                    border
-                    isLoading={isFetching}
-                    columns={columns}
-                    data={dataList}
-                    rowSelection={{
-                        keyName: "_id",
-                        selectedRowKeys: [],
-                        onChange: (selectedRowKeys) => {
-                            setDeleteIds(selectedRowKeys);
-                        }
-                    }}
-                />
-            </Paper>
-
-            <Box marginTop='12px' display='flex' gap='12px' alignItems='center'>
-                <Button
-                    disabled={isFetching || deleteIds.length === 0}
-                    height='40px'
-                    startIcon={DeleteOutline}
-                    onClick={() => startDeleteItems(deleteIds)}
-                >
-                    {tCommon("Delete")}
-                </Button>
-                <Box flex={1}>
-                    ({deleteIds.length}) {tCommon("selected")}
-                </Box>
-                {Math.ceil(total / 10) > 1 && (
-                    <Pagination
-                        count={Math.ceil(total / 10)}
-                        page={filter.page}
-                        onChange={(e, page) =>
-                            setFilter((pre) => {
-                                return { ...pre, page };
-                            })
-                        }
-                        sx={{
-                            marginLeft: "auto",
-                            flex: 1
-                        }}
-                    />
-                )}
-            </Box>
+            {dataList.map((groupData) => {
+                return (
+                    <Paper title={groupData.sceneName} key={groupData.sceneId}>
+                        <Table
+                            maxHeight={300}
+                            border
+                            isLoading={isFetching}
+                            columns={columns}
+                            data={groupData.devices}
+                        />
+                    </Paper>
+                );
+            })}
 
             <DeviceDialog
                 onClose={(status) => {
                     if (status === "success") {
-                        handleSearch();
+                        fetchDataList();
                     }
                 }}
             />

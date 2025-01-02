@@ -202,7 +202,7 @@ const renderMenuItems = (
 // eslint-disable-next-line react/display-name
 export const MenuSidebar = memo(() => {
     const t = useTranslations("Sidebar");
-    const { role } = useAppStore((state) => state);
+    const role = useAppStore((state) => state.role);
     const pathName = usePathname();
 
     const router = useRouter();

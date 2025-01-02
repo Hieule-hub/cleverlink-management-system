@@ -8,7 +8,7 @@ import { useAppStore } from "@providers/AppStoreProvider";
 
 const withProtectedRoute = (Component: React.ComponentType) => {
     const WrappedComponent = (props) => {
-        const { userInfo } = useAppStore((state) => state);
+        const userInfo = useAppStore((state) => state.userInfo);
 
         useEffect(() => {
             if (!userInfo) {

@@ -77,7 +77,7 @@ export const SceneDialog = ({ onClose = () => "" }: SceneDialogProps) => {
         page: "ScenePage"
     });
 
-    const { areas } = useAppStore((state) => state);
+    const areas = useAppStore((state) => state.areas);
     const { item, open, closeDialog, readonly } = useSceneDialog();
 
     const [isLoading, setIsLoading] = useState(false);

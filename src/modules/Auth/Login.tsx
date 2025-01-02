@@ -109,7 +109,7 @@ export const LoginPage = () => {
     const [errorMsg, setErrorMsg] = useState("");
 
     //Store controller
-    const { fetUserInfo } = useAppStore((state) => state);
+    const fetUserInfo = useAppStore((state) => state.fetUserInfo);
     const { openDialog } = useChangePasswordDialog();
 
     const validateSchema = yup.object({

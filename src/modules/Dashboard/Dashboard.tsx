@@ -108,7 +108,7 @@ export const DashboardPage = () => {
                             size='small'
                             color='info'
                             onClick={() => {
-                                openDialog(record);
+                                openDialog(record, true);
                             }}
                         >
                             <DescriptionOutlined fontSize='inherit' />

@@ -11,7 +11,7 @@ import { useAppStore } from "@providers/AppStoreProvider";
 import { Breadcrumbs } from "@/components/Layout/Breadcrumbs";
 
 const CompanyPageRole = () => {
-    const { role } = useAppStore((state) => state);
+    const role = useAppStore((state) => state.role);
 
     if (role !== "TU" && role !== "CIP") {
         return redirect("/404");

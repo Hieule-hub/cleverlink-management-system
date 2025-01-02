@@ -3,7 +3,6 @@ import { useCallback, useEffect, useState } from "react";
 import { ControllerAsyncSearchSelect, ControllerInput, Option } from "@components/Controller";
 import { Dialog } from "@components/Dialog";
 import { Label } from "@components/Label";
-import { Device } from "@interfaces/device";
 import { Divider, Grid2 as Grid, Stack, Zoom } from "@mui/material";
 import companyService from "@services/company";
 import deviceService from "@services/device";
@@ -13,7 +12,14 @@ import { dialogStore } from "@store/dialogStore";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 
-export const useDeviceInfoDialog = dialogStore<Device>();
+import { Spinner } from "@/components/Spiner";
+
+export const useDeviceInfoDialog = dialogStore<{
+    boxId: string;
+    createdAt: string;
+    status: string;
+    serial: string;
+}>();
 
 interface DeviceInfoDialogProps {
     onClose?: (status?: string) => void;
@@ -76,47 +82,65 @@ export const DeviceInfoDialog = ({ onClose = () => "" }: DeviceInfoDialogProps) 
     });
 
     useEffect(() => {
+        const fetchDeviceInfo = async (deviceId: string) => {
+            try {
+                setIsLoading(true);
+
+                const deviceRes = await deviceService.getDeviceList({ filters: deviceId, limit: 1, page: 1 });
+
+                if (!deviceRes.err && deviceRes.data.devices.length > 0) {
+                    const deviceInfo = deviceRes.data.devices[0];
+
+                    const newValue: FormDeviceValues = {
+                        ...initFormValues,
+                        company: {
+                            value: deviceInfo.company?._id as string,
+                            label: deviceInfo.company?.name as string,
+                            id: deviceInfo.company?.companyId as string
+                        },
+                        scene: {
+                            value: deviceInfo.scene?._id as string,
+                            label: deviceInfo.scene?.name as string,
+                            id: deviceInfo.scene?.sceneId as string
+                        },
+
+                        place: deviceInfo.place,
+                        active: {
+                            value: deviceInfo.activate.boxId as string,
+                            label: deviceInfo.activate.boxId as string,
+                            id: JSON.stringify({
+                                ipAddress: deviceInfo.activate.ip,
+                                mac: deviceInfo.activate.mac
+                            })
+                        },
+                        mac: deviceInfo.activate.mac,
+                        ipAddress: deviceInfo.activate.ip,
+                        manager: {
+                            value: deviceInfo.user?._id as string,
+                            label: deviceInfo.user?.name as string,
+                            id: JSON.stringify({
+                                userId: deviceInfo.user?.userId,
+                                phone: deviceInfo.user?.phone || "",
+                                email: deviceInfo.user?.email || ""
+                            })
+                        },
+                        userId: deviceInfo.user?.userId as string,
+                        phone: deviceInfo.user?.phone || "",
+                        email: deviceInfo.user?.email || ""
+                    };
+                    reset(newValue);
+                }
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
         //fill form with user data
         if (item) {
             console.log("🚀 ~ useEffect ~ item:", item);
-            const newValue: FormDeviceValues = {
-                ...initFormValues,
-                company: {
-                    value: item.company?._id as string,
-                    label: item.company?.name as string,
-                    id: item.company?.companyId as string
-                },
-                scene: {
-                    value: item.scene?._id as string,
-                    label: item.scene?.name as string,
-                    id: item.scene?.sceneId as string
-                },
-
-                place: item.place,
-                active: {
-                    value: item.activate.boxId as string,
-                    label: item.activate.boxId as string,
-                    id: JSON.stringify({
-                        ipAddress: item.activate.ip,
-                        mac: item.activate.mac
-                    })
-                },
-                mac: item.activate.mac,
-                ipAddress: item.activate.ip,
-                manager: {
-                    value: item.user?._id as string,
-                    label: item.user?.name as string,
-                    id: JSON.stringify({
-                        userId: item.user?.userId,
-                        phone: item.user?.phone || "",
-                        email: item.user?.email || ""
-                    })
-                },
-                userId: item.user?.userId as string,
-                phone: item.user?.phone || "",
-                email: item.user?.email || ""
-            };
-            reset(newValue);
+            fetchDeviceInfo(item.boxId);
         } else {
             reset(initFormValues);
         }
@@ -218,7 +242,13 @@ export const DeviceInfoDialog = ({ onClose = () => "" }: DeviceInfoDialogProps) 
                 direction={{ xs: "column", sm: "row" }}
                 divider={<Divider orientation='vertical' flexItem />}
                 spacing={2}
+                position='relative'
             >
+                {isLoading && (
+                    <div className='loading-view'>
+                        <Spinner />
+                    </div>
+                )}
                 <Grid padding={2} width='100%' gap={2} container spacing={2} columns={12} alignItems='center'>
                     {/* Company Field */}
                     <Grid size={labelSize}>
