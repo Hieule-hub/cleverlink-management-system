@@ -344,5 +344,41 @@
     "Validation": {
         "required": "{path} is required.",
         "invalid": "{path} is invalid."
+    },
+
+    "AiCode": {
+        "E001": "Approach warning",
+        "E002": "Suspicious person detection",
+        "E003": "Virtual perimeter",
+        "E004": "Stay and move detection",
+        "E005": "Standstill detection",
+        "E006": "Counting people in area",
+        "E007": "Body approach detection",
+        "E008": "Orientation and posture analysis",
+        "E009": "Emergency detection",
+        "E010": "Fire and smoke notification",
+        "E011": "Animal approach detection",
+        "E012": "Counting occupied people",
+        "E013": "Counting people",
+        "E014": "Counting vehicles",
+        "E015": "Advanced visitor statistics",
+        "E016": "Vehicle Type Distinction",
+        "E017": "Object Mosaic",
+        "E018": "Queue Management",
+        "E019": "Fall Detection",
+        "E020": "Crowding Detection",
+        "E021": "Heat Sensing Approach Warning",
+        "E022": "Heat Sensing Activity Distribution",
+        "E023": "Safety Equipment Wear Detection",
+        "E024": "Group Assault Detection",
+        "E025": "Violent Behavior Monitoring",
+        "E026": "Illegal Waste Monitoring",
+        "E027": "European License Plate Recognition",
+        "E028": "Japanese License Plate Recognition",
+        "E029": "US License Plate Recognition",
+        "E030": "Korean License Plate Recognition",
+        "E031": "Long Staying Person Detection",
+        "E032": "Illegal Parking Detection",
+        "E033": "Advanced Thermal Detection Activity Distribution"
     }
 }

@@ -7,6 +7,7 @@ import CardActions from "@mui/material/CardActions";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import dayjs from "dayjs";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/Button";
 import { Event } from "@/interfaces/event";
@@ -52,14 +53,15 @@ const StyledCard = styled(Card)`
 `;
 
 export const EventCard = ({ item, onDoubleClickImage = () => "", onClickButton = () => "" }: EventCardProps) => {
-    console.log("🚀 ~ EventCard ~ item:", item);
+    const tAiCode = useTranslations("AiCode");
+
     return (
         <StyledCard>
             <CardHeader
                 sx={{
                     padding: "14px"
                 }}
-                action={<div className='tag'>{item.aiCode}</div>}
+                action={<div className='tag'>{tAiCode(item.aiCode)}</div>}
                 title={<div className='title'>{item.device?.place}</div>}
             />
             <CardMedia

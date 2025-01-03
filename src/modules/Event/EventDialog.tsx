@@ -49,7 +49,6 @@ export const EventDialog = ({ onClose = () => "" }: EventDialogProps) => {
     const { item, open, closeDialog, readonly } = useEventDialog();
     const [isLoading, setIsLoading] = useState(false);
 
-    // const editMode = useMemo(() => Boolean(item), [item]);
     const dialogTitle = useMemo(() => {
         if (readonly) {
             return t("Detail record");

@@ -34,23 +34,15 @@ export const routeConfig: RouteConfig[] = [
         breadcrumbRole: []
     },
     {
-        path: "/company",
-        key: "company",
-        label: "Company",
+        path: "/event",
+        key: "event",
+        label: "Event",
         private: false,
-        icon: BusinessSharp,
-        roles: ["CIP", "TU"],
-        breadcrumbRole: ["CIP"]
-    },
-    {
-        path: "/scene",
-        key: "scene",
-        label: "Scene",
-        private: false,
-        icon: MapSharp,
+        icon: BugReportSharp,
         roles: ["CIP", "TU", "BU"],
-        breadcrumbRole: ["CIP", "TU"]
+        breadcrumbRole: []
     },
+
     {
         path: "/user",
         key: "user",
@@ -79,12 +71,21 @@ export const routeConfig: RouteConfig[] = [
         breadcrumbRole: ["CIP"]
     },
     {
-        path: "/event",
-        key: "event",
-        label: "Event",
+        path: "/company",
+        key: "company",
+        label: "Company",
         private: false,
-        icon: BugReportSharp,
+        icon: BusinessSharp,
+        roles: ["CIP", "TU"],
+        breadcrumbRole: ["CIP"]
+    },
+    {
+        path: "/scene",
+        key: "scene",
+        label: "Scene",
+        private: false,
+        icon: MapSharp,
         roles: ["CIP", "TU", "BU"],
-        breadcrumbRole: []
+        breadcrumbRole: ["CIP", "TU"]
     }
 ];

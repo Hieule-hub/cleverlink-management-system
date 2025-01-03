@@ -104,10 +104,9 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
                     label: item.scene?.name as string,
                     id: item.scene?.sceneId as string
                 },
-
                 place: item.place,
                 active: {
-                    value: item.activate?.boxId as string,
+                    value: item.activate?._id as string,
                     label: item.activate?.boxId as string,
                     id: JSON.stringify({
                         ipAddress: item.activate?.ip,
@@ -305,7 +304,13 @@ export const DeviceDialog = ({ onClose = () => "" }: DeviceDialogProps) => {
                         startIcon={CastOutlined}
                         height='36px'
                         disabled={!item}
-                        onClick={triggerToastDev}
+                        onClick={() => {
+                            //new tab with url to device
+                            if (item) {
+                                const port = item.activate?.port || 3000;
+                                window.open(`http://${item.activate?.ip}:${port}`, "_blank");
+                            }
+                        }}
                     >
                         {t("Connecting to the device")}
                     </Button>

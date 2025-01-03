@@ -12,6 +12,8 @@ export interface Device {
         serial: string;
         ip: string;
         channels: Channel[];
+        _id: string;
+        port?: number;
     };
     company: {
         _id: string;

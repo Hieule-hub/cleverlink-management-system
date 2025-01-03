@@ -3,7 +3,8 @@ import { useCallback, useEffect, useState } from "react";
 import { ControllerAsyncSearchSelect, ControllerInput, Option } from "@components/Controller";
 import { Dialog } from "@components/Dialog";
 import { Label } from "@components/Label";
-import { Divider, Grid2 as Grid, Stack, Zoom } from "@mui/material";
+import { CastOutlined } from "@mui/icons-material";
+import { Box, Divider, Grid2 as Grid, Stack, Zoom } from "@mui/material";
 import companyService from "@services/company";
 import deviceService from "@services/device";
 import sceneService from "@services/scene";
@@ -12,6 +13,7 @@ import { dialogStore } from "@store/dialogStore";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 
+import { Button } from "@/components/Button";
 import { Spinner } from "@/components/Spiner";
 
 export const useDeviceInfoDialog = dialogStore<{
@@ -19,6 +21,9 @@ export const useDeviceInfoDialog = dialogStore<{
     createdAt: string;
     status: string;
     serial: string;
+    ip: string;
+    mac: string;
+    port?: number;
 }>();
 
 interface DeviceInfoDialogProps {
@@ -72,6 +77,7 @@ const initFormValues: FormDeviceValues = {
 
 export const DeviceInfoDialog = ({ onClose = () => "" }: DeviceInfoDialogProps) => {
     const t = useTranslations("DevicePage");
+    const tCommon = useTranslations("Common");
 
     const { item, open, closeDialog } = useDeviceInfoDialog();
 
@@ -237,6 +243,29 @@ export const DeviceInfoDialog = ({ onClose = () => "" }: DeviceInfoDialogProps) 
             onCancel={handleClose}
             hiddenOk
             loading={isLoading}
+            footer={
+                <Box display='flex' width='100%' alignItems='center' justifyContent='space-between'>
+                    <Button
+                        color='primary'
+                        startIcon={CastOutlined}
+                        height='36px'
+                        disabled={!item}
+                        onClick={() => {
+                            if (!item) return;
+
+                            const port = item?.port || 3000;
+                            window.open(`http://${item.ip}:${port}`, "_blank");
+                        }}
+                    >
+                        {t("Connecting to the device")}
+                    </Button>
+                    <Box>
+                        <Button onClick={() => handleClose()} height='36px'>
+                            {tCommon("Cancel")}
+                        </Button>
+                    </Box>
+                </Box>
+            }
         >
             <Stack
                 direction={{ xs: "column", sm: "row" }}
