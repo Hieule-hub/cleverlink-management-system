@@ -52,6 +52,8 @@
         "Create record success": "The task is completed.",
         "Create record failed": "Create user failed",
         "Delete record success": "The task is completed.",
+        "Reset password success": "The task is completed.",
+        "Reset password": "Reset password",
         "ID": "ID",
         "Name": "Name",
         "Scene name": "Scene name",
@@ -216,7 +218,8 @@
         "Recipient list": "Recipient list",
         "View snapshot": "View snapshot",
         "Snapshot note": "※Download the snapshot you are currently viewing.",
-        "Delete record confirm": "The selected events will be deleted."
+        "Delete record confirm": "The selected events will be deleted.",
+        "Event note": "※Double click to view in video format."
     },
 
     "VideoCapturePage": {

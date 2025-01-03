@@ -11,6 +11,7 @@ import {
     UserLoginRes,
     UserRefreshTokenReq,
     UserRefreshTokenRes,
+    UserResetPasswordReq,
     UserUpdatePasswordReq,
     UserUpdatePasswordRes
 } from "@interfaces/user";
@@ -31,6 +32,12 @@ const userUpdatePassword = async (data: UserUpdatePasswordReq) => {
 
 const userRefreshToken = async (params: UserRefreshTokenReq) => {
     return apiClient.post<UserRefreshTokenReq, UserRefreshTokenRes>("/user/refresh", params);
+};
+
+const userResetPassword = async (params: UserResetPasswordReq) => {
+    const { userId } = params;
+
+    return apiClient.put<UserResetPasswordReq, DataResponse<unknown>>(`/user/reset/${userId}`);
 };
 
 const getUserInfo = async () => {
@@ -87,7 +94,8 @@ const userService = {
     createUser,
     editUser,
     userUpdatePassword,
-    userRefreshToken
+    userRefreshToken,
+    userResetPassword
 };
 
 export default userService;

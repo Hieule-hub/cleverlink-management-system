@@ -8,6 +8,16 @@ export type Themes = {
 };
 
 export const theme: ThemeOptions = {
+    breakpoints: {
+        values: {
+            xs: 0,
+            sm: 600,
+            md: 900,
+            lg: 1200,
+            xl: 1536,
+            xxl: 1920
+        }
+    },
     typography: {
         dashboardTitleCard: {
             fontSize: "1rem",

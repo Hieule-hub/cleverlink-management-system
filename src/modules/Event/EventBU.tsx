@@ -7,7 +7,9 @@ import { EditIcon } from "@components/Icon";
 import { Pagination } from "@components/Pagination";
 import { Paper } from "@components/Paper";
 import { Slider } from "@components/Slider";
+import { Spinner } from "@components/Spiner";
 import { type Column, Table } from "@components/Table";
+import { Event } from "@interfaces/event";
 import { UserInfoDialog, useUserInfoDialog } from "@modules/User";
 import { DeleteOutline, FilterList, PhotoCameraBackOutlined, Search } from "@mui/icons-material";
 import { Box, IconButton, Link, TextField, Tooltip, Typography } from "@mui/material";
@@ -16,8 +18,6 @@ import { toast } from "@store/toastStore";
 import { useConfirm } from "@store/useConfirm";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
-
-import { Event } from "@/interfaces/event";
 
 import { DeviceDialog, useDeviceDialog } from "../Device/DeviceDialog";
 import { EventCard } from "./EventCard";
@@ -226,12 +226,52 @@ export const EventBU = () => {
 
     return (
         <React.Fragment>
-            <Slider
-                items={dataList}
-                render={(item) => {
-                    return <EventCard item={item as Event} />;
-                }}
-            />
+            <Box display='flex' alignItems='center' gap='12px' marginRight={"56px"}>
+                <Typography
+                    sx={{
+                        marginLeft: "auto"
+                    }}
+                    variant='body1'
+                    color='info'
+                >
+                    {t("Event note")}
+                </Typography>
+            </Box>
+            <Box marginTop={"16px"} position={"relative"} width={"100%"} height={"316px"}>
+                {isFetching && (
+                    <div className='loading-view'>
+                        <Spinner />
+                    </div>
+                )}
+                <Box
+                    sx={{
+                        position: "absolute",
+                        inset: 0,
+                        zIndex: 1,
+                        borderRadius: 4,
+                        backgroundColor: isFetching ? "rgba(255,255,255,0.5)" : "transparent"
+                    }}
+                >
+                    <Slider
+                        items={dataList}
+                        render={(item) => {
+                            return (
+                                <Box paddingRight={1}>
+                                    <EventCard
+                                        item={item as Event}
+                                        onClickButton={() => {
+                                            showDeviceInfo(item, true);
+                                        }}
+                                        onDoubleClickImage={() => {
+                                            showSnapshot(item as Event);
+                                        }}
+                                    />
+                                </Box>
+                            );
+                        }}
+                    />
+                </Box>
+            </Box>
             <Paper title={t("title")}>
                 <Box display='flex' alignItems='center' gap='12px' marginBottom={"12px"}>
                     <div>{tCommon("Search")}</div>

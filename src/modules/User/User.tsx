@@ -82,6 +82,9 @@ export const UserPage = () => {
 
     const startDeleteItems = (ids: string[]) => {
         startConfirm({
+            title: tCommon("Delete"),
+            description: t("Delete record confirm"),
+            color: "error",
             onConfirm: () => {
                 handleDeleteItems(ids);
             }
@@ -254,9 +257,9 @@ export const UserPage = () => {
             />
 
             <ConfirmDialog
-                title={tCommon("Delete")}
-                description={t("Delete record confirm")}
-                color='error'
+                // title={tCommon("Delete")}
+                // description={t("Delete record confirm")}
+                // color='error'
                 confirmText={tCommon("Continue")}
             />
         </React.Fragment>

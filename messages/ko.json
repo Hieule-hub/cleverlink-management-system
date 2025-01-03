@@ -52,6 +52,8 @@
         "Create record success": "작업이 완료되었습니다.",
         "Create record failed": "사용자를 생성 실패했습니다",
         "Delete record success": "작업이 완료되었습니다.",
+        "Reset password success": "작업이 완료되었습니다.",
+        "Reset password": "비밀번호 초기화",
         "ID": "ID",
         "Name": "이름",
         "Scene name": "현장명",
@@ -216,7 +218,8 @@
         "Recipient list": "수신자 목록",
         "View snapshot": "스냅샷 보기",
         "Snapshot note": "※현재 보고있는 스냅샷을 다운로드 합니다.",
-        "Delete record confirm": "선택한 이벤트를 삭제하겠습니다."
+        "Delete record confirm": "선택한 이벤트를 삭제하겠습니다.",
+        "Event note": "※더블 클릭하면 동영상 형태로 보실 수 있습니다."
     },
 
     "VideoCapturePage": {

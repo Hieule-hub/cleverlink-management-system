@@ -16,6 +16,15 @@ declare module "@mui/material/styles" {
         body3?: React.CSSProperties;
         body4?: React.CSSProperties;
     }
+
+    interface BreakpointOverrides {
+        xxl: true;
+        xs: true;
+        sm: true;
+        md: true;
+        lg: true;
+        xl: true;
+    }
 }
 
 // Update the Typography's variant prop options

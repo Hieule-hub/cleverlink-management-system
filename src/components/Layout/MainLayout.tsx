@@ -51,7 +51,7 @@ export default function MainLayout({ children, title }: Props) {
             >
                 <DrawerHeader />
                 <Container
-                    maxWidth='xl'
+                    maxWidth='xxl'
                     sx={{
                         my: 3
                     }}

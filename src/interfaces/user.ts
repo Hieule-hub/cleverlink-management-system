@@ -77,6 +77,10 @@ export type UserUpdatePasswordReq = {
 
 export type UserUpdatePasswordRes = DataResponse<unknown>;
 
+export type UserResetPasswordReq = {
+    userId: string;
+};
+
 //User list request
 export type GetUserListReq = Partial<
     GetParams & {

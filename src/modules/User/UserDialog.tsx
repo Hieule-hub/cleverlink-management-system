@@ -20,6 +20,8 @@ import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 
+import { useConfirm } from "@/store/useConfirm";
+
 export const useUserDialog = dialogStore<User>();
 
 interface UserDialogProps {
@@ -85,6 +87,7 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
     const [isFetchingId, setIsFetchingId] = useState(false);
 
     const { item, open, closeDialog, readonly } = useUserDialog();
+    const { startConfirm } = useConfirm();
 
     const editMode = useMemo(() => Boolean(item), [item]);
     const dialogTitle = useMemo(() => {
@@ -299,6 +302,40 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
             });
     }, []);
 
+    const handleResetPassword = async () => {
+        if (!item) {
+            setValue("password", DEFAULT_PASSWORD);
+            clearErrors("password");
+            return;
+        }
+
+        startConfirm({
+            title: t("Reset password"),
+            color: "primary",
+            onConfirm: async () => {
+                try {
+                    setIsLoading(true);
+
+                    const response = await userService.userResetPassword({
+                        userId: item._id
+                    });
+
+                    if (!response.err) {
+                        toast.success({ title: t("Reset password success") });
+                        setValue("password", DEFAULT_PASSWORD);
+                        clearErrors("password");
+                    } else {
+                        // toast.error({ title: t("Reset password failed") });
+                    }
+                } catch (error) {
+                    console.log("🚀 ~ handleResetPassword ~ error:", error);
+                } finally {
+                    setIsLoading(false);
+                }
+            }
+        });
+    };
+
     return (
         <Dialog
             aria-describedby='user-dialog-description'
@@ -486,11 +523,8 @@ export const UserDialog = ({ onClose = () => "" }: UserDialogProps) => {
                             width: "100%"
                         }}
                         height='51px'
-                        disabled={editMode || readonly}
-                        onClick={() => {
-                            setValue("password", DEFAULT_PASSWORD);
-                            clearErrors("password");
-                        }}
+                        disabled={readonly}
+                        onClick={handleResetPassword}
                     >
                         {tCommon("Init")}
                     </Button>

@@ -13,10 +13,12 @@ import { Event } from "@/interfaces/event";
 
 interface EventCardProps {
     item: Event;
+    onDoubleClickImage?: () => void;
+    onClickButton?: () => void;
 }
 
 const StyledCard = styled(Card)`
-    /* max-width: 345; */
+    /* height: 280px; */
     width: 100%;
     box-shadow: none;
     border: 1px solid var(--input-border-color);
@@ -49,7 +51,7 @@ const StyledCard = styled(Card)`
     }
 `;
 
-export const EventCard = ({ item }: EventCardProps) => {
+export const EventCard = ({ item, onDoubleClickImage = () => "", onClickButton = () => "" }: EventCardProps) => {
     console.log("🚀 ~ EventCard ~ item:", item);
     return (
         <StyledCard>
@@ -60,16 +62,32 @@ export const EventCard = ({ item }: EventCardProps) => {
                 action={<div className='tag'>{item.aiCode}</div>}
                 title={<div className='title'>{item.device?.place}</div>}
             />
-            <CardMedia component='img' height='194' image={item.images[0]} alt='Paella dish' />
+            <CardMedia
+                onDoubleClick={onDoubleClickImage}
+                component='img'
+                height='194'
+                sx={{
+                    cursor: "pointer"
+                }}
+                image={item.images[0]}
+                alt='Snapshot image'
+            />
             <CardActions
                 sx={{
                     height: 48
                 }}
             >
-                <Button className='btn' color='primary' endIcon={KeyboardArrowRight}>
+                <Button className='btn' color='primary' endIcon={KeyboardArrowRight} onClick={onClickButton}>
                     {item.activate.boxId}
                 </Button>
-                <div className='tag'>{`CH ` + item.channel}</div>
+                <div
+                    className='tag'
+                    style={{
+                        marginLeft: "auto"
+                    }}
+                >
+                    {`CH ` + item.channel}
+                </div>
                 <div className='tag'>{dayjs(item.time).format("YYYY/MM/DD - HH:mm:ss")}</div>
             </CardActions>
         </StyledCard>
