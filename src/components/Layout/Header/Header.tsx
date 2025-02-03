@@ -103,13 +103,14 @@ export const Header = ({ isMenuCollapse }: CProps) => {
                         display: matches ? "flex" : "none",
                         borderRadius: "30px",
                         fontSize: "0.8rem",
-                        height: "32px"
+                        height: "32px",
+                        minWidth: "112px"
                     }}
                     color='primary'
                     startIcon={Monitor}
                     onClick={triggerToastDev}
                 >
-                    <p>{t("Integrated Monitor")}</p>
+                    {t("Integrated Monitor")}
                 </Button>
 
                 <Profile />
