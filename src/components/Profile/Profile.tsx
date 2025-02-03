@@ -1,10 +1,10 @@
-import React, { use, useCallback } from "react";
+import React, { useCallback } from "react";
 
 import { redirect } from "next/navigation";
 
 import { Dropdown, IDropdownOption } from "@components/Dropdown";
 import { PowerSettingsNew, SettingsOutlined } from "@mui/icons-material";
-import { Avatar, Badge, Box, IconButton, Tooltip, Typography, styled } from "@mui/material";
+import { Avatar, Badge, Box, Tooltip, styled } from "@mui/material";
 import { useAppStore } from "@providers/AppStoreProvider";
 import userService from "@services/user";
 import { triggerToastDev } from "@utils/index";
@@ -90,7 +90,7 @@ export const Profile = () => {
                             <Avatar
                                 alt='avatar'
                                 // src='https://avatarfiles.alphacoders.com/851/thumb-1920-85184.png'
-                                src='https://i.pinimg.com/736x/fd/dc/65/fddc658081a920fd45f0d2c657bdf6cd.jpg'
+                                // src='https://i.pinimg.com/736x/fd/dc/65/fddc658081a920fd45f0d2c657bdf6cd.jpg'
                                 sx={{ width: 32, height: 32 }}
                             />
                         </StyledBadge>

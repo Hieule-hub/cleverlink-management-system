@@ -2,7 +2,7 @@ import React, { memo } from "react";
 
 import { CipLogoIcon } from "@components/Icon";
 import { ArrowBackOutlined, ArrowForwardOutlined } from "@mui/icons-material";
-import { Box, Divider as MuiDivider } from "@mui/material";
+import { Divider as MuiDivider } from "@mui/material";
 import MuiDrawer from "@mui/material/Drawer";
 import { CSSObject, Theme, styled } from "@mui/material/styles";
 
@@ -44,19 +44,25 @@ export const DrawerHeader = styled("div")(({ theme }) => ({
         justifyContent: "center",
         alignItems: "center",
         fontSize: "2.8rem"
+    },
+
+    ".text-logo": {
+        color: "white",
+        fontSize: "2rem",
+        fontWeight: "bold"
     }
 }));
 
-const BoxImageLogo = styled(Box)`
-    transition: all 0.3s;
-    background-image: url("/assets/images/cipsystems_logo.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position-y: center;
-    background-position-x: 12px;
-    flex: 1;
-    height: 23px;
-`;
+// const BoxImageLogo = styled(Box)`
+//     transition: all 0.3s;
+//     background-image: url("/assets/images/cipsystems_logo.png");
+//     background-size: contain;
+//     background-repeat: no-repeat;
+//     background-position-y: center;
+//     background-position-x: 12px;
+//     flex: 1;
+//     height: 23px;
+// `;
 
 const CollapseButton = styled("div")`
     display: flex;
@@ -122,7 +128,15 @@ export const Sidebar = memo(({ isMenuCollapse, toggleCollapseMenu }: SidebarProp
                     <div className='logo-cip'>
                         <CipLogoIcon fontSize='inherit' color='inherit' />
                     </div>
-                    <BoxImageLogo />
+                    {/* <BoxImageLogo /> */}
+                    <div
+                        className='text-logo'
+                        style={{
+                            width: !isMenuCollapse ? "0" : "calc(100% - 4rem)"
+                        }}
+                    >
+                        CleverLink
+                    </div>
                 </DrawerHeader>
 
                 <Divider />

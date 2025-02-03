@@ -1,14 +1,17 @@
 import { useMemo } from "react";
 
+import { Button } from "@components/Button";
 import { LanguageButton } from "@components/Button/LanguageButton";
 import { DateTimeGroup } from "@components/DateTimeGroup";
 import { Profile } from "@components/Profile";
+import { Monitor } from "@mui/icons-material";
 import { Toolbar, Typography as TypographyMUI, useMediaQuery } from "@mui/material";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import { Theme, styled } from "@mui/material/styles";
+import { useAppStore } from "@providers/AppStoreProvider";
 import { useTranslations } from "next-intl";
 
-import { useAppStore } from "@/providers/AppStoreProvider";
+import { triggerToastDev } from "@/utils";
 
 import { sideBarWidth } from "../Sidebar";
 
@@ -95,15 +98,19 @@ export const Header = ({ isMenuCollapse }: CProps) => {
                     }}
                 />
 
-                {/* <DocumentButton
-                    sx={{
-                        display: matches ? "flex" : "none"
+                <Button
+                    style={{
+                        display: matches ? "flex" : "none",
+                        borderRadius: "30px",
+                        fontSize: "0.8rem",
+                        height: "32px"
                     }}
-                    startIcon={<ContentCopy />}
+                    color='primary'
+                    startIcon={Monitor}
                     onClick={triggerToastDev}
                 >
-                    <p>{t("Threat response procedures manual")}</p>
-                </DocumentButton> */}
+                    <p>{t("Integrated Monitor")}</p>
+                </Button>
 
                 <Profile />
                 <LanguageButton />

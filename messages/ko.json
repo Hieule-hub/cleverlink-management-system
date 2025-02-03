@@ -1,6 +1,7 @@
 {
     "App": {
-        "logo-text": "AI CLEVER-LINK 통합 관리 시스템"
+        "logo-text": "AI CLEVER-LINK 통합 관리 시스템",
+        "Integrated Monitor": "통합 모니터"
     },
 
     "Common": {
@@ -163,7 +164,7 @@
     },
 
     "CameraPage": {
-        "title": "카메라 관리",
+        "title": "카메라 모델 관리",
         "Placeholder search": "모델 ID, 모델명, 종류, 제조사, 통신방식",
         "Record information": "카메라 세부 정보",
         "Add new record": "새 카메라 추가",
@@ -304,7 +305,7 @@
         "Scene": "현장 관리",
         "Company": "기관 관리",
         "Device": "장비 관리",
-        "Camera": "카메라 관리",
+        "Camera": "카메라 모델 관리",
         "Event": "이벤트 관리",
         "Video capture": "캡쳐영상"
     },
