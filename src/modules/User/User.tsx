@@ -36,7 +36,9 @@ export const UserPage = () => {
     const [filter, setFilter] = useState({
         page: 1,
         limit: 10,
-        filters: ""
+        filters: "",
+        sortField: "",
+        sortOrder: "desc"
     });
 
     const fetchDataList = useCallback(async (params: typeof filter) => {
@@ -97,6 +99,14 @@ export const UserPage = () => {
         });
     }, [keyword]);
 
+    const handleRequestSort = (property: string) => {
+        const isAsc = filter.sortField === property && filter.sortOrder === "asc";
+
+        setFilter((pre) => {
+            return { ...pre, sortField: property, sortOrder: isAsc ? "desc" : "asc" };
+        });
+    };
+
     const columns = useMemo((): Column[] => {
         return [
             {
@@ -104,7 +114,35 @@ export const UserPage = () => {
                 title: t("Name"),
                 dataIndex: "name",
                 width: 200,
+                sorter: true,
                 render: (value) => value
+            },
+            {
+                key: "company.name",
+                title: t("Company name"),
+                dataIndex: "company",
+                width: 200,
+                sorter: true,
+                render: (value) => value?.name
+            },
+            {
+                key: "scene.name",
+                title: t("Scene name"),
+                dataIndex: "scene",
+                width: 200,
+                sorter: true,
+                render: (value) => value?.name
+            },
+            {
+                key: "roleId.name",
+                title: t("Role"),
+                dataIndex: "roleId",
+                align: "center",
+                width: 200,
+                sorter: true,
+                render: (value) => {
+                    return `${value?.code} (${value?.name})`;
+                }
             },
             {
                 key: "userId",
@@ -112,6 +150,7 @@ export const UserPage = () => {
                 dataIndex: "userId",
                 align: "center",
                 width: 200,
+                sorter: true,
                 render: (text, record) => (
                     <Link
                         component='button'
@@ -124,21 +163,6 @@ export const UserPage = () => {
                         {text}
                     </Link>
                 )
-            },
-            {
-                key: "roleId",
-                title: t("Role"),
-                dataIndex: "roleId",
-                align: "center",
-                width: 200,
-                render: (value) => value?.code
-            },
-            {
-                key: "scene",
-                title: t("Scene name"),
-                dataIndex: "scene",
-                width: 200,
-                render: (value) => value?.name
             },
             {
                 title: tCommon("Edit") + "/" + tCommon("Delete"),
@@ -216,6 +240,9 @@ export const UserPage = () => {
                             setDeleteIds(selectedRowKeys);
                         }
                     }}
+                    order={filter.sortOrder}
+                    orderBy={filter.sortField}
+                    onRequestSort={handleRequestSort}
                 />
             </Paper>
 

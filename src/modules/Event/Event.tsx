@@ -7,22 +7,22 @@ import { EditIcon } from "@components/Icon";
 import { Pagination } from "@components/Pagination";
 import { Paper } from "@components/Paper";
 import { type Column, Table } from "@components/Table";
-import { UserInfoDialog, useUserInfoDialog } from "@modules/User";
-import { DeleteOutline, FilterList, PhotoCameraBackOutlined, Search } from "@mui/icons-material";
-import { Box, IconButton, Link, TextField, Tooltip, Typography } from "@mui/material";
+import { CastOutlined, DeleteOutline, MovieCreationOutlined, Search } from "@mui/icons-material";
+import { Box, IconButton, Link, TextField } from "@mui/material";
 import eventService from "@services/event";
 import { toast } from "@store/toastStore";
 import { useConfirm } from "@store/useConfirm";
-import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
 
 import { DeviceInfoDialog, useDeviceInfoDialog } from "../Device";
 import { EventDialog, useEventDialog } from "./EventDialog";
+import { EventImage } from "./EventImage";
 import { SnapshotDialog, useSnapshotDialogDialog } from "./SnapshotDialog";
 
 export const EventPage = () => {
     const t = useTranslations("EventPage");
     const tCommon = useTranslations("Common");
+    const tAiCode = useTranslations("AiCode");
 
     const [isFetching, setIsFetching] = useState(false);
     const [dataList, setDataList] = useState([]);
@@ -30,7 +30,6 @@ export const EventPage = () => {
     //Store controller
     const { openDialog } = useEventDialog();
     const { openDialog: showDeviceInfo } = useDeviceInfoDialog();
-    const { openDialog: showUserInfo } = useUserInfoDialog();
     const { openDialog: showSnapshot } = useSnapshotDialogDialog();
     const { startConfirm } = useConfirm();
 
@@ -43,7 +42,9 @@ export const EventPage = () => {
     const [filter, setFilter] = useState({
         page: 1,
         limit: 10,
-        filters: ""
+        filters: "",
+        sortField: "time",
+        sortOrder: "desc"
     });
 
     const fetchDataList = useCallback(async (params: typeof filter) => {
@@ -100,23 +101,85 @@ export const EventPage = () => {
         });
     }, [keyword]);
 
+    const handleRequestSort = (property: string) => {
+        const isAsc = filter.sortField === property && filter.sortOrder === "asc";
+
+        setFilter((pre) => {
+            return { ...pre, sortField: property, sortOrder: isAsc ? "desc" : "asc" };
+        });
+    };
+
     const columns = useMemo((): Column[] => {
         return [
             {
                 key: "time",
-                title: t("Event time"),
+                title: t("Event snapshot"),
                 dataIndex: "time",
                 width: 200,
-                render: (value) => dayjs(value).format("YYYY.MM.DD HH:mm:ss")
+                sorter: true,
+                render: (_, record) => <EventImage item={record} />
             },
             {
-                key: "emplacement",
+                key: "aiCode",
+                title: t("Occurrence"),
+                dataIndex: "aiCode",
+                width: 200,
+                render: (value) => tAiCode(value)
+            },
+            {
+                key: "device.place",
                 title: t("Emplacement"),
                 dataIndex: "device",
                 width: 200,
+                sorter: true,
                 render: (value) => value?.place
             },
-
+            {
+                key: "notifyCode",
+                title: t("Warning device"),
+                dataIndex: "notifyCode",
+                align: "center",
+                width: 200,
+                render: (value) => value
+            },
+            // {
+            //     key: "receiver",
+            //     title: t("Receiver"),
+            //     dataIndex: "receiver",
+            //     align: "center",
+            //     width: 200,
+            //     render: (value) => {
+            //         const title = (value || []).join(", ");
+            //         return (
+            //             <Tooltip title={title}>
+            //                 <Typography width={"200px"} noWrap>
+            //                     {title}
+            //                 </Typography>
+            //             </Tooltip>
+            //         );
+            //     }
+            // },
+            // {
+            //     key: "user",
+            //     title: t("Manager"),
+            //     dataIndex: "user",
+            //     align: "center",
+            //     width: 200,
+            //     render: (value) => {
+            //         return (
+            //             <Link
+            //                 component='button'
+            //                 variant='body2'
+            //                 fontWeight={500}
+            //                 onClick={() => {
+            //                     showUserInfo(value);
+            //                 }}
+            //             >
+            //                 {value?.name}
+            //             </Link>
+            //         );
+            //     }
+            // },
             {
                 key: "deviceId",
                 title: t("Device ID"),
@@ -136,50 +199,25 @@ export const EventPage = () => {
                 )
             },
             {
-                key: "notifyCode",
-                title: t("Warning device"),
-                dataIndex: "notifyCode",
+                key: "connecting",
+                title: t("Equipment access"),
+                dataIndex: "activate",
                 align: "center",
                 width: 200,
-                render: (value) => value
-            },
-            {
-                key: "receiver",
-                title: t("Receiver"),
-                dataIndex: "receiver",
-                align: "center",
-                width: 200,
-                render: (value) => {
-                    const title = (value || []).join(", ");
-                    return (
-                        <Tooltip title={title}>
-                            <Typography width={"200px"} noWrap>
-                                {title}
-                            </Typography>
-                        </Tooltip>
-                    );
-                }
-            },
-            {
-                key: "user",
-                title: t("Manager"),
-                dataIndex: "user",
-                align: "center",
-                width: 200,
-                render: (value) => {
-                    return (
-                        <Link
-                            component='button'
-                            variant='body2'
-                            fontWeight={500}
-                            onClick={() => {
-                                showUserInfo(value);
-                            }}
-                        >
-                            {value?.name}
-                        </Link>
-                    );
-                }
+                render: (value, item) => (
+                    <Button
+                        color='primary'
+                        startIcon={CastOutlined}
+                        height='34px'
+                        onClick={() => {
+                            //new tab with url to device
+                            if (item) {
+                                const port = item.activate?.port || 3000;
+                                window.open(`http://${item.activate?.ip}:${port}`, "_blank");
+                            }
+                        }}
+                    />
+                )
             },
             {
                 title: tCommon("Snapshot") + "/" + tCommon("Edit") + "/" + tCommon("Delete"),
@@ -194,7 +232,7 @@ export const EventPage = () => {
                                 showSnapshot(record);
                             }}
                         >
-                            <PhotoCameraBackOutlined fontSize='inherit' />
+                            <MovieCreationOutlined fontSize='inherit' />
                         </IconButton>
                         <IconButton
                             size='small'
@@ -254,6 +292,9 @@ export const EventPage = () => {
                             setDeleteIds(selectedRowKeys);
                         }
                     }}
+                    order={filter.sortOrder}
+                    orderBy={filter.sortField}
+                    onRequestSort={handleRequestSort}
                 />
             </Paper>
 
@@ -285,8 +326,6 @@ export const EventPage = () => {
                     />
                 )}
             </Box>
-
-            <UserInfoDialog />
 
             <DeviceInfoDialog />
 

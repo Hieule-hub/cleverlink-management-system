@@ -43,6 +43,7 @@
 
     "UserPage": {
         "title": "사용자 관리",
+        "Company name": "기관명",
         "Placeholder search": "이름, ID, 분류, 근무현장",
         "Record information": "사용자의 정보 상세",
         "Add new record": "새 사용자 추가",
@@ -90,7 +91,7 @@
         "Create record success": "작업이 완료되었습니다.",
         "Create record failed": "Create scene failed화면을 생성 실패하였습니다",
         "Delete record success": "작업이 완료되었습니다.",
-        "Manager": "관리자",
+        "Manager": "요금청구 담당자",
         "Scene ID": "현장 ID",
         "Scene name": "현장명",
         "Company name": "기관명",
@@ -160,14 +161,15 @@
         "Email": "이메일",
         "Connected camera information": "연결 카메라 정보",
         "Delete record confirm": "선택한 장치를 삭제하겠습니다.",
-        "Connecting to the device": "장비 접속하기"
+        "Connecting to the device": "장비 접속하기",
+        "Equipment access": "장비 접속"
     },
 
     "CameraPage": {
         "title": "카메라 모델 관리",
         "Placeholder search": "모델 ID, 모델명, 종류, 제조사, 통신방식",
         "Record information": "카메라 세부 정보",
-        "Add new record": "새 카메라 추가",
+        "Add new record": "신규 모델 추가",
         "Detail record": "디테일 카메라",
         "Edit record": "카메라 수정",
         "Edit record success": "작업이 완료되었습니다.",
@@ -207,12 +209,15 @@
         "Create record failed": "이벤트 생성 실패하였습니다",
         "Delete record success": "작업이 완료되었습니다.",
         "Event time": "발생 시간",
+        "Event snapshot": "발생 당시 사진",
+        "Equipment access": "장비 접속",
         "Emplacement": "설치",
         "Device ID": "장비 ID",
         "Warning device": "경고장치",
         "Receiver": "수신자",
         "Manager": "관리자",
         "AI Code": "AI 기능 코드",
+        "Occurrence": "발생 이벤트",
         "Channel": "발생 채널",
         "Action taken": "조치 내용",
         "Warning device/location": "경고장치/장소",
@@ -220,7 +225,8 @@
         "View snapshot": "스냅샷 보기",
         "Snapshot note": "※현재 보고있는 스냅샷을 다운로드 합니다.",
         "Delete record confirm": "선택한 이벤트를 삭제하겠습니다.",
-        "Event note": "※더블 클릭하면 동영상 형태로 보실 수 있습니다."
+        "Event note": "※더블 클릭하면 동영상 형태로 보실 수 있습니다.",
+        "No event": "이벤트가 없습니다."
     },
 
     "VideoCapturePage": {

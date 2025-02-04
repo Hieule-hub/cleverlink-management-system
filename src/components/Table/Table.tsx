@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from "react";
 
-import { Checkbox, TableBody, TableContainer, TableHead, Table as TableMui, TableRow, styled } from "@mui/material";
+import {
+    Checkbox,
+    TableBody,
+    TableContainer,
+    TableHead,
+    Table as TableMui,
+    TableRow,
+    TableSortLabel,
+    styled
+} from "@mui/material";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 
 import { Empty } from "../Empty";
@@ -16,6 +25,7 @@ export interface Column<T = any> {
     format?: (value: number) => string;
     render?: (value: T, row?: any, index?: number) => React.ReactNode;
     colSpan?: number;
+    sorter?: boolean;
 }
 
 export const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -29,13 +39,13 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
         // fontSize: "16px",
         fontWeight: 500,
         whiteSpace: "nowrap",
-        padding: "18px 16px",
+        padding: "12px 6px",
         background: "#FCFCFC"
     },
     [`&.${tableCellClasses.body}`]: {
         // fontSize: "16px",
         fontWeight: 500,
-        padding: "18px 16px"
+        padding: "6px 6px"
     }
 }));
 
@@ -68,7 +78,7 @@ interface TableProps {
     };
     onHeaderRow?: (
         columns: Column[],
-        index
+        index: number
     ) => {
         onClick?: () => void;
         onDoubleClick?: () => void;
@@ -76,9 +86,61 @@ interface TableProps {
         onMouseEnter?: () => void;
         onMouseLeave?: () => void;
     };
+    onRequestSort?: (property: string) => void;
+    orderBy?: string;
+    order?: string;
 }
 
-export const Table = ({ columns, data, isLoading = false, rowSelection, border, maxHeight = "auto" }: TableProps) => {
+const EnhancedTableHead = (props) => {
+    const { columns, rowSelection, handleSelectAllClick, orderBy, order, onRequestSort } = props;
+
+    const createSortHandler = (property) => (event) => {
+        onRequestSort(property);
+    };
+
+    return (
+        <TableHead>
+            <StyledTableRow>
+                {rowSelection && (
+                    <StyledTableCell key='selection-column-header' align='center' style={{ width: 50 }}>
+                        <StyledCheckbox size='small' onChange={handleSelectAllClick} />
+                    </StyledTableCell>
+                )}
+                {columns.map((column) => (
+                    <StyledTableCell
+                        key={column.key}
+                        align={column.align}
+                        style={{ minWidth: column.minWidth, width: column.width }}
+                    >
+                        {column.sorter ? (
+                            <TableSortLabel
+                                active={orderBy === column.key}
+                                direction={orderBy === column.key ? order : "asc"}
+                                onClick={createSortHandler(column.key)}
+                            >
+                                {column.title}
+                            </TableSortLabel>
+                        ) : (
+                            column.title
+                        )}
+                    </StyledTableCell>
+                ))}
+            </StyledTableRow>
+        </TableHead>
+    );
+};
+
+export const Table = ({
+    columns,
+    data,
+    isLoading = false,
+    rowSelection,
+    border,
+    maxHeight = "auto",
+    orderBy,
+    order = "asc",
+    onRequestSort = () => {}
+}: TableProps) => {
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
     useEffect(() => {
@@ -131,6 +193,13 @@ export const Table = ({ columns, data, isLoading = false, rowSelection, border, 
         setSelectedRowKeys(newSelected);
     };
 
+    // const onRequestSort = (property) => {
+    //     console.log("🚀 ~ onRequestSort ~ property:", property);
+    //     const isAsc = orderBy === property && order === "asc";
+    //     setOrder(isAsc ? "desc" : "asc");
+    //     setOrderBy(property);
+    // };
+
     return (
         <TableContainer
             sx={{
@@ -146,7 +215,15 @@ export const Table = ({ columns, data, isLoading = false, rowSelection, border, 
                 </div>
             )}
             <TableMui stickyHeader={maxHeight !== "auto"}>
-                <TableHead>
+                <EnhancedTableHead
+                    columns={columns}
+                    rowSelection={rowSelection}
+                    handleSelectAllClick={handleSelectAllClick}
+                    onRequestSort={onRequestSort}
+                    orderBy={orderBy}
+                    order={order}
+                />
+                {/* <TableHead>
                     <StyledTableRow>
                         {rowSelection && (
                             <StyledTableCell key='selection-column-header' align='center' style={{ width: 50 }}>
@@ -163,7 +240,7 @@ export const Table = ({ columns, data, isLoading = false, rowSelection, border, 
                             </StyledTableCell>
                         ))}
                     </StyledTableRow>
-                </TableHead>
+                </TableHead> */}
                 <TableBody>
                     {data.map((item, index) => {
                         return (

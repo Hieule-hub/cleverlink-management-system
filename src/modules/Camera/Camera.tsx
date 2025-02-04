@@ -35,7 +35,9 @@ export const CameraPage = () => {
     const [filter, setFilter] = useState({
         page: 1,
         limit: 10,
-        filters: ""
+        filters: "",
+        sortField: "name",
+        sortOrder: "desc"
     });
 
     const fetchDataList = useCallback(async (params: typeof filter) => {
@@ -91,14 +93,66 @@ export const CameraPage = () => {
         });
     }, [keyword]);
 
+    const handleRequestSort = (property: string) => {
+        const isAsc = filter.sortField === property && filter.sortOrder === "asc";
+
+        setFilter((pre) => {
+            return { ...pre, sortField: property, sortOrder: isAsc ? "desc" : "asc" };
+        });
+    };
+
     const columns = useMemo((): Column[] => {
         return [
             {
-                key: "modelId",
+                key: "name",
+                title: t("Model name"),
+                dataIndex: "name",
+                width: 200,
+                sorter: true,
+                render: (value) => value
+            },
+            {
+                key: "category.name",
+                title: t("Type"),
+                dataIndex: "category",
+                width: 200,
+                sorter: true,
+                render: (value) => value?.name
+            },
+            {
+                key: "factory",
+                title: t("Factory"),
+                dataIndex: "factory",
+                width: 200,
+                sorter: true,
+                render: (value) => value
+            },
+
+            {
+                key: "protocol.name",
+                title: t("Protocol"),
+                dataIndex: "protocol",
+                width: 200,
+                sorter: true,
+                render: (value) => value?.name
+            },
+            {
+                key: "poe",
+                title: t("POE"),
+                dataIndex: "poe",
+                align: "center",
+                width: 200,
+                render: (value) => {
+                    return value ? tCommon("Yes") : tCommon("No");
+                }
+            },
+            {
+                key: "cameraId",
                 title: t("Model ID"),
                 dataIndex: "cameraId",
                 align: "center",
                 width: 200,
+                sorter: true,
                 render: (text, record) => (
                     <Link
                         component='button'
@@ -111,45 +165,6 @@ export const CameraPage = () => {
                         {text}
                     </Link>
                 )
-            },
-            {
-                key: "modelName",
-                title: t("Model name"),
-                dataIndex: "name",
-                width: 200,
-                render: (value) => value
-            },
-            {
-                key: "type",
-                title: t("Type"),
-                dataIndex: "category",
-                width: 200,
-                render: (value) => value?.name
-            },
-            {
-                key: "factory",
-                title: t("Factory"),
-                dataIndex: "factory",
-                width: 200,
-                render: (value) => value
-            },
-
-            {
-                key: "protocol",
-                title: t("Protocol"),
-                dataIndex: "protocol",
-                width: 200,
-                render: (value) => value?.name
-            },
-            {
-                key: "poe",
-                title: t("POE"),
-                dataIndex: "poe",
-                align: "center",
-                width: 200,
-                render: (value) => {
-                    return value ? tCommon("Yes") : tCommon("No");
-                }
             },
             {
                 title: tCommon("Edit") + "/" + tCommon("Delete"),
@@ -230,6 +245,9 @@ export const CameraPage = () => {
                             setDeleteIds(selectedRowKeys);
                         }
                     }}
+                    order={filter.sortOrder}
+                    orderBy={filter.sortField}
+                    onRequestSort={handleRequestSort}
                 />
             </Paper>
 

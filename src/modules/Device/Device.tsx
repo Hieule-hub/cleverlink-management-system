@@ -7,7 +7,14 @@ import { Pagination } from "@components/Pagination";
 import { Paper } from "@components/Paper";
 import { type Column, Table } from "@components/Table";
 import { UserInfoDialog, useUserInfoDialog } from "@modules/User";
-import { AddCircleOutlineOutlined, DeleteOutline, FilterList, Search, VideocamOutlined } from "@mui/icons-material";
+import {
+    AddCircleOutlineOutlined,
+    CastOutlined,
+    DeleteOutline,
+    FilterList,
+    Search,
+    VideocamOutlined
+} from "@mui/icons-material";
 import { Box, IconButton, Link, TextField } from "@mui/material";
 import deviceService from "@services/device";
 import { toast } from "@store/toastStore";
@@ -40,7 +47,9 @@ export const DevicePage = () => {
     const [filter, setFilter] = useState({
         page: 1,
         limit: 10,
-        filters: ""
+        filters: "",
+        sortField: "createdAt",
+        sortOrder: "desc"
     });
 
     const fetchDataList = useCallback(async (params: typeof filter) => {
@@ -96,58 +105,50 @@ export const DevicePage = () => {
         });
     }, [keyword]);
 
+    const handleRequestSort = (property: string) => {
+        const isAsc = filter.sortField === property && filter.sortOrder === "asc";
+
+        setFilter((pre) => {
+            return { ...pre, sortField: property, sortOrder: isAsc ? "desc" : "asc" };
+        });
+    };
+
     const columns = useMemo((): Column[] => {
         return [
             {
-                key: "deviceId",
-                title: t("Device ID"),
-                dataIndex: "activate",
-                align: "center",
-                width: 200,
-                render: (value, record) => (
-                    <Link
-                        component='button'
-                        variant='body2'
-                        fontWeight={500}
-                        onClick={() => {
-                            openDialog(record, true);
-                        }}
-                    >
-                        {value?.boxId}
-                    </Link>
-                )
-            },
-            {
-                key: "installDate",
+                key: "createdAt",
                 title: t("Install date"),
                 dataIndex: "createdAt",
                 align: "center",
                 width: 200,
+                sorter: true,
                 render: (value) => {
                     return dayjs(value).format("YYYY-MM-DD");
                 }
             },
             {
-                key: "companyName",
+                key: "company.name",
                 title: t("Company name"),
                 dataIndex: "company",
                 width: 200,
+                sorter: true,
                 render: (value) => value?.name
             },
             {
-                key: "sceneName",
+                key: "scene.name",
                 title: t("Scene name"),
                 dataIndex: "scene",
                 width: 200,
+                sorter: true,
                 render: (value) => value?.name
             },
-
             {
-                key: "user",
+                key: "user.name",
                 title: t("Manager"),
                 dataIndex: "user",
                 align: "center",
                 width: 200,
+                sorter: true,
                 render: (value) => {
                     return (
                         <Link
@@ -162,6 +163,47 @@ export const DevicePage = () => {
                         </Link>
                     );
                 }
+            },
+            {
+                key: "deviceId",
+                title: t("Device ID"),
+                dataIndex: "activate",
+                align: "center",
+                width: 200,
+                sorter: true,
+                render: (value, record) => (
+                    <Link
+                        component='button'
+                        variant='body2'
+                        fontWeight={500}
+                        onClick={() => {
+                            openDialog(record, true);
+                        }}
+                    >
+                        {value?.boxId}
+                    </Link>
+                )
+            },
+            {
+                key: "connecting",
+                title: t("Equipment access"),
+                dataIndex: "activate",
+                align: "center",
+                width: 200,
+                render: (value, item) => (
+                    <Button
+                        color='primary'
+                        startIcon={CastOutlined}
+                        height='34px'
+                        onClick={() => {
+                            //new tab with url to device
+                            if (item) {
+                                const port = item.activate?.port || 3000;
+                                window.open(`http://${item.activate?.ip}:${port}`, "_blank");
+                            }
+                        }}
+                    />
+                )
             },
             {
                 title: tCommon("Camera") + "/" + tCommon("Edit") + "/" + tCommon("Delete"),
@@ -250,6 +292,9 @@ export const DevicePage = () => {
                             setDeleteIds(selectedRowKeys);
                         }
                     }}
+                    order={filter.sortOrder}
+                    orderBy={filter.sortField}
+                    onRequestSort={handleRequestSort}
                 />
             </Paper>
 

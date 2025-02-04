@@ -1,7 +1,7 @@
 {
     "App": {
         "logo-text": "AI CLEVER-LINK Integrated Management System",
-        "Integrated Monitor": "통합 모니터"
+        "Integrated Monitor": "Integrated monitor"
     },
 
     "Common": {
@@ -43,6 +43,7 @@
 
     "UserPage": {
         "title": "User Management",
+        "Company name": "Company name",
         "Placeholder search": "Name, ID, classification, work site",
         "Record information": "User details",
         "Add new record": "Add new user",
@@ -160,7 +161,8 @@
         "Email": "Email",
         "Connected camera information": "Connected camera information",
         "Delete record confirm": "The selected devices will be deleted.",
-        "Connecting to the device": "Connecting to the device"
+        "Connecting to the device": "Connecting to the device",
+        "Equipment access": "Equipment access"
     },
 
     "CameraPage": {
@@ -207,12 +209,15 @@
         "Create record failed": "Create event failed",
         "Delete record success": "The task is completed.",
         "Event time": "Event time",
+        "Event snapshot": "Event snapshot",
+        "Equipment access": "Equipment access",
         "Emplacement": "Emplacement",
         "Device ID": "Device ID",
         "Warning device": "Warning device",
         "Receiver": "Receiver",
         "Manager": "Manager",
         "AI Code": "AI Code",
+        "Occurrence": "Occurrence",
         "Channel": "Channel",
         "Action taken": "Action taken",
         "Warning device/location": "Warning device/location",
@@ -220,7 +225,8 @@
         "View snapshot": "View snapshot",
         "Snapshot note": "※Download the snapshot you are currently viewing.",
         "Delete record confirm": "The selected events will be deleted.",
-        "Event note": "※Double click to view in video format."
+        "Event note": "※Double click to view in video format.",
+        "No event": "No event"
     },
 
     "VideoCapturePage": {

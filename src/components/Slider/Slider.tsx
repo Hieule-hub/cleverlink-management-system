@@ -1,10 +1,11 @@
 // import required modules
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 import { styled } from "@mui/material";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper as TSwiper } from "swiper/types";
 
 // Import Swiper styles
 import "swiper/css";
@@ -31,7 +32,9 @@ interface SliderProps {
 }
 
 export const Slider = ({ items, render }: SliderProps) => {
-    const swiperRef = useRef<any>();
+    const swiperRef = useRef<TSwiper>();
+    const [isBeginning, setIsBeginning] = useState(true);
+    const [isEnd, setIsEnd] = useState(false);
 
     return (
         <SliderContainer
@@ -39,16 +42,20 @@ export const Slider = ({ items, render }: SliderProps) => {
                 opacity: items.length > 0 ? 1 : 0
             }}
         >
-            <ActionButton onClick={() => swiperRef.current?.slidePrev()}>
+            <ActionButton disabled={isBeginning} onClick={() => swiperRef.current?.slidePrev()}>
                 <KeyboardArrowLeft />
             </ActionButton>
             <Swiper
                 onBeforeInit={(swiper) => {
                     swiperRef.current = swiper;
                 }}
+                onSlideChange={(swiper) => {
+                    setIsBeginning(swiper.isBeginning);
+                    setIsEnd(swiper.isEnd);
+                }}
                 spaceBetween={10}
                 slidesPerView={1}
-                loop={true}
+                loop={false}
                 breakpointsBase='container'
                 navigation={true}
                 breakpoints={{
@@ -63,7 +70,7 @@ export const Slider = ({ items, render }: SliderProps) => {
                 ))}
             </Swiper>
 
-            <ActionButton onClick={() => swiperRef.current?.slideNext()}>
+            <ActionButton disabled={isEnd} onClick={() => swiperRef.current?.slideNext()}>
                 <KeyboardArrowRight />
             </ActionButton>
         </SliderContainer>
