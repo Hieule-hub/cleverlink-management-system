@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Button } from "@components/Button";
 import { Dialog } from "@components/Dialog";
+import { ViewPlayer } from "@components/ViewPlayer";
 import type { Event } from "@interfaces/event";
-import { Download, InfoOutlined, PauseCircle, PlayCircle, SkipNext, SkipPrevious } from "@mui/icons-material";
-import { Box, Divider, Grid2 as Grid, IconButton, Typography, Zoom } from "@mui/material";
+import { CastOutlined, Download } from "@mui/icons-material";
+import { Box, Divider, Grid2 as Grid, Typography, Zoom, styled } from "@mui/material";
 import { dialogStore } from "@store/dialogStore";
 import { downloadFile } from "@utils/downloadImage";
+import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
 
 export const useSnapshotDialogDialog = dialogStore<Event>();
@@ -15,38 +17,40 @@ interface SnapshotDialogProps {
     onClose?: (status?: string) => void;
 }
 
+const GridContainerStyled = styled(Grid)`
+    border-bottom: 1px solid rgba(220, 220, 220, 1);
+    font-size: 15px;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    .grid-item {
+        border-left: 1px solid rgba(220, 220, 220, 1);
+        padding: 0 8px;
+        min-height: 30px;
+        display: flex;
+        align-items: center;
+    }
+
+    .grid-item:first-child {
+        border-left: none;
+    }
+
+    .grid-item:nth-child(odd) {
+        background-color: rgba(220, 220, 220, 0.3);
+    }
+`;
+
 export const SnapshotDialog = ({ onClose = () => "" }: SnapshotDialogProps) => {
     const t = useTranslations();
+    const tAiCode = useTranslations("AiCode");
     const { item, open, closeDialog } = useSnapshotDialogDialog();
     const [imageSelected, setImageSelected] = useState(item?.images[0] || "");
-    const [isPlaying, setIsPlaying] = useState(false);
-
-    useEffect(() => {
-        setImageSelected(item?.images[0]);
-        setIsPlaying(false);
-    }, [item]);
-
-    useEffect(() => {
-        let timer: NodeJS.Timeout | undefined;
-
-        if (isPlaying) {
-            timer = setInterval(() => {
-                handleNextImage();
-            }, 500);
-        } else {
-            if (timer) clearInterval(timer);
-        }
-
-        return () => {
-            if (timer) clearInterval(timer);
-        };
-    }, [isPlaying, imageSelected]);
 
     const handleClose = (status?: string) => {
         onClose(status);
         closeDialog();
-        setImageSelected("");
-        setIsPlaying(false); // Stop playing on close
     };
 
     const handleDownloadImage = async () => {
@@ -55,22 +59,6 @@ export const SnapshotDialog = ({ onClose = () => "" }: SnapshotDialogProps) => {
         }
 
         downloadFile(imageSelected, "image-snapshot");
-    };
-
-    const handleNextImage = () => {
-        const currentIndex = item?.images.indexOf(imageSelected) ?? 0;
-        const nextIndex = (currentIndex + 1) % item?.images.length;
-        setImageSelected(item?.images[nextIndex]);
-    };
-
-    const handlePreviousImage = () => {
-        const currentIndex = item?.images.indexOf(imageSelected) ?? 0;
-        const prevIndex = (currentIndex - 1 + item?.images.length) % item?.images.length;
-        setImageSelected(item?.images[prevIndex]);
-    };
-
-    const togglePlayPause = () => {
-        setIsPlaying((prev) => !prev);
     };
 
     return (
@@ -88,18 +76,28 @@ export const SnapshotDialog = ({ onClose = () => "" }: SnapshotDialogProps) => {
             open={open}
             onClose={() => handleClose()}
             title={
-                <Box display='flex' alignItems='center'>
+                <>
                     {t("EventPage.View snapshot")}
-                    <InfoOutlined
-                        sx={{
-                            fontSize: "20px",
-                            marginLeft: "6px"
-                        }}
-                    />
-                </Box>
+                    {item?.aiCode && " | " + tAiCode(item?.aiCode)}
+                </>
             }
             footer={
                 <Box display='flex' width='100%' alignItems='center' gap='10px'>
+                    <Button
+                        color='primary'
+                        startIcon={CastOutlined}
+                        height='36px'
+                        disabled={!item}
+                        onClick={() => {
+                            //new tab with url to device
+                            if (item) {
+                                const port = item.activate?.port || 3000;
+                                window.open(`http://${item.activate?.ip}:${port}`, "_blank");
+                            }
+                        }}
+                    >
+                        {t("Connecting to the device")}
+                    </Button>
                     <Button disabled={!imageSelected} startIcon={Download} height='36px' onClick={handleDownloadImage}>
                         {t("Common.Download")}
                     </Button>
@@ -120,52 +118,71 @@ export const SnapshotDialog = ({ onClose = () => "" }: SnapshotDialogProps) => {
                 </Box>
             }
         >
-            <Box
+            <ViewPlayer
+                onChange={(index) => {
+                    setImageSelected(item?.images[index]);
+                }}
+                items={item?.images}
                 sx={{
-                    height: "400px",
-                    margin: "16px",
-                    backgroundImage: `url(${imageSelected})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center"
+                    margin: "16px"
                 }}
             />
-            <Box display='flex' justifyContent='center' gap={1} marginBottom={2} color={"black"} width={"100%"}>
-                <IconButton color='inherit' onClick={handlePreviousImage}>
-                    <SkipPrevious color='inherit' />
-                </IconButton>
-                <IconButton color='inherit' onClick={togglePlayPause}>
-                    {isPlaying ? <PauseCircle color='inherit' /> : <PlayCircle color='inherit' />}
-                </IconButton>
-                <IconButton color='inherit' onClick={handleNextImage}>
-                    <SkipNext color='inherit' />
-                </IconButton>
-            </Box>
 
             <Divider />
 
-            <Grid padding={2} width='100%' container spacing={"5px"} columns={10} maxHeight={"240px"} overflow={"auto"}>
-                {item?.images.map((image, index) => {
-                    return (
-                        <Grid size={2} key={index}>
-                            <Box
-                                sx={{
-                                    cursor: "pointer",
-                                    position: "relative",
-                                    width: "100%",
-                                    height: "104px",
-                                    overflow: "hidden",
-                                    backgroundImage: `url(${image})`,
-                                    backgroundSize: "cover",
-                                    backgroundPosition: "center",
-                                    border: "3px solid",
-                                    borderColor: imageSelected === image ? "red" : "transparent"
-                                }}
-                                onClick={() => setImageSelected(image)}
-                            />
+            {item && (
+                <Box
+                    sx={{
+                        margin: "16px",
+                        borderRadius: "8px",
+                        overflow: "hidden",
+                        border: "1px solid #e0e0e0"
+                    }}
+                >
+                    <GridContainerStyled container columns={12} alignItems='stretch'>
+                        <Grid className='grid-item' size={2}>
+                            {t("EventPage.Event time")}
                         </Grid>
-                    );
-                })}
-            </Grid>
+                        <Grid className='grid-item' size={4}>
+                            {dayjs(item?.time).format("YYYY-MM-DD HH:mm:ss")}
+                        </Grid>
+                        <Grid className='grid-item' size={2}>
+                            {t("EventPage.Emplacement")}
+                        </Grid>
+                        <Grid className='grid-item' size={4}>
+                            {item?.device?.place}
+                        </Grid>
+                    </GridContainerStyled>
+                    <GridContainerStyled container columns={12} alignItems='stretch'>
+                        <Grid className='grid-item' size={2}>
+                            {t("EventPage.Channel")}
+                        </Grid>
+                        <Grid className='grid-item' size={4}>
+                            {`CH ${item?.channel}`}
+                        </Grid>
+                        <Grid className='grid-item' size={2}>
+                            {t("EventPage.Device ID")}
+                        </Grid>
+                        <Grid className='grid-item' size={4}>
+                            {item.activate?.boxId}
+                        </Grid>
+                    </GridContainerStyled>
+                    <GridContainerStyled container columns={12} alignItems='stretch'>
+                        <Grid className='grid-item' size={2}>
+                            {t("EventPage.Warning device")}
+                        </Grid>
+                        <Grid className='grid-item' size={4}>
+                            {item?.notifyCode}
+                        </Grid>
+                        <Grid className='grid-item' size={2}>
+                            {t("EventPage.Occurrence")}
+                        </Grid>
+                        <Grid className='grid-item' size={4}>
+                            {tAiCode(item?.aiCode)}
+                        </Grid>
+                    </GridContainerStyled>
+                </Box>
+            )}
         </Dialog>
     );
 };

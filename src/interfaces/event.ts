@@ -12,6 +12,8 @@ export interface Event {
     notifyCode: string;
     activate: {
         boxId: string;
+        ip?: string;
+        port?: number;
     };
     device: {
         place: string;
