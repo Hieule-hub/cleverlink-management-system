@@ -196,7 +196,7 @@ export const GridEvent = ({
                             className={selectedRowKeys.includes(item[rowSelection.keyName]) ? "active" : ""}
                             style={{
                                 cursor: onRow ? "pointer" : "default",
-                                backgroundImage: `url(${image})`,
+                                backgroundImage: `url(${image}),linear-gradient(0deg, #000000 0%, rgba(0, 0, 0, 0.7) 30%, rgba(0, 0, 0, 0.5) 65%, rgba(0, 0, 0, 0.1) 100%) `,
                                 alignItems: itemSize === "small" ? "center" : "start"
                             }}
                         >
