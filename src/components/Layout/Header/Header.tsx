@@ -11,8 +11,6 @@ import { Theme, styled } from "@mui/material/styles";
 import { useAppStore } from "@providers/AppStoreProvider";
 import { useTranslations } from "next-intl";
 
-import { triggerToastDev } from "@/utils";
-
 import { sideBarWidth } from "../Sidebar";
 
 type CProps = {
@@ -104,11 +102,13 @@ export const Header = ({ isMenuCollapse }: CProps) => {
                         borderRadius: "30px",
                         fontSize: "0.8rem",
                         height: "32px",
-                        minWidth: "112px"
+                        minWidth: "150px"
                     }}
                     color='primary'
                     startIcon={Monitor}
-                    onClick={triggerToastDev}
+                    onClick={() => {
+                        window.open(`http://211.54.64.204:3000/login`, "_blank");
+                    }}
                 >
                     {t("Integrated Monitor")}
                 </Button>
