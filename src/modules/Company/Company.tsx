@@ -130,7 +130,6 @@ export const CompanyPage = () => {
                 dataIndex: "totalDevices",
                 align: "center",
                 width: 200,
-                sorter: true,
                 render: (text) => text
             },
             {
